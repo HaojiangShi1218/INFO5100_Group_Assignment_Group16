@@ -15,6 +15,8 @@ import info5100.university.example.Persona.Person;
 import info5100.university.example.Persona.PersonDirectory;
 import info5100.university.example.Persona.StudentDirectory;
 import info5100.university.example.Persona.StudentProfile;
+import info5100.university.example.Persona.Registrar.RegistrarDirectory;
+import info5100.university.example.Persona.Registrar.RegistrarProfile;
 
 /**
  *
@@ -47,6 +49,38 @@ public class Info5001UniversityExample {
         
         int total = department.calculateRevenuesBySemester("Fall2020");
         System.out.print("Total: " + total);
+        
+        
+        // ---------------- Registrar seed (minimal) ----------------
+// 放在 main(...) 里你之前的示例逻辑之后（打印 total 之前或之后均可）：
+RegistrarDirectory registrarDirectory = new RegistrarDirectory();
+
+// 1) 创建 Registrar 的 Person（用现有 PersonDirectory）
+Person regPerson = pd.newPerson("REG-0001");  // Person 只有 id
+
+// 2) 建立 Registrar 档案
+RegistrarProfile rp = registrarDirectory.newRegistrar(regPerson);
+rp.setEmail("registrar@example.edu");
+rp.setPhone("617-000-0000");
+rp.setOfficeHours("Mon 10:00-12:00");
+rp.setDepartment("Registrar Office");
+
+// 3) 打印验证（使用 getPersonId()，不要使用 setName）
+System.out.println("\nSeeded Registrar: " + regPerson.getPersonId() + " / " + rp.getEmail());
+
+
+// ---- TEMP preview: open Registrar UI without login ----
+javax.swing.SwingUtilities.invokeLater(() -> {
+    javax.swing.JFrame f = new javax.swing.JFrame("Registrar — Work Area Preview");
+    f.setDefaultCloseOperation(javax.swing.JFrame.DISPOSE_ON_CLOSE);
+    f.setContentPane(new info5100.university.example.workareas.RegistrarRole.RegistrarWorkAreaPanel());
+    f.setSize(1000, 650);
+    f.setLocationRelativeTo(null);
+    f.setVisible(true);
+});
+// -------------------------------------------------------
+
+
 
     }
 

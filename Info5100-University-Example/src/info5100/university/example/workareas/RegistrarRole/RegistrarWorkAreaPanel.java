@@ -26,19 +26,87 @@ public class RegistrarWorkAreaPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
-        );
+        jToolBar1 = new javax.swing.JToolBar();
+        btnOffering = new javax.swing.JButton();
+        btnReg = new javax.swing.JButton();
+        btnFinance = new javax.swing.JButton();
+        btnReports = new javax.swing.JButton();
+        btnProfile = new javax.swing.JButton();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        financialReconciliationPanel1 = new info5100.university.example.workareas.RegistrarRole.FinancialReconciliationPanel();
+        manageCourseOfferingPanel1 = new info5100.university.example.workareas.RegistrarRole.ManageCourseOfferingPanel();
+        registrarProfilePanel1 = new info5100.university.example.workareas.RegistrarRole.RegistrarProfilePanel();
+        registrarReportsPanel1 = new info5100.university.example.workareas.RegistrarRole.RegistrarReportsPanel();
+        studentRegistrationPanel1 = new info5100.university.example.workareas.RegistrarRole.StudentRegistrationPanel();
+
+        setLayout(new java.awt.BorderLayout());
+
+        jToolBar1.setOrientation(javax.swing.SwingConstants.VERTICAL);
+        jToolBar1.setRollover(true);
+
+        btnOffering.setText("Course Offering Management");
+        btnOffering.setFocusable(false);
+        btnOffering.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnOffering.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(btnOffering);
+
+        btnReg.setText("Student Enrollment / Drop");
+        btnReg.setFocusable(false);
+        btnReg.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnReg.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnReg.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btnReg);
+
+        btnFinance.setText("Financial Reconciliation");
+        btnFinance.setFocusable(false);
+        btnFinance.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnFinance.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(btnFinance);
+
+        btnReports.setText("Reports & Analytics");
+        btnReports.setFocusable(false);
+        btnReports.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnReports.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(btnReports);
+
+        btnProfile.setText("Profile Settings");
+        btnProfile.setFocusable(false);
+        btnProfile.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnProfile.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(btnProfile);
+
+        add(jToolBar1, java.awt.BorderLayout.LINE_START);
+
+        jTabbedPane1.addTab("Financial Reconciliation", financialReconciliationPanel1);
+        jTabbedPane1.addTab("Course Offering", manageCourseOfferingPanel1);
+        jTabbedPane1.addTab("Profile setting", registrarProfilePanel1);
+        jTabbedPane1.addTab("Report Analytics", registrarReportsPanel1);
+        jTabbedPane1.addTab("Student Enrollment", studentRegistrationPanel1);
+
+        add(jTabbedPane1, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnRegActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnRegActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnFinance;
+    private javax.swing.JButton btnOffering;
+    private javax.swing.JButton btnProfile;
+    private javax.swing.JButton btnReg;
+    private javax.swing.JButton btnReports;
+    private info5100.university.example.workareas.RegistrarRole.FinancialReconciliationPanel financialReconciliationPanel1;
+    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JToolBar jToolBar1;
+    private info5100.university.example.workareas.RegistrarRole.ManageCourseOfferingPanel manageCourseOfferingPanel1;
+    private info5100.university.example.workareas.RegistrarRole.RegistrarProfilePanel registrarProfilePanel1;
+    private info5100.university.example.workareas.RegistrarRole.RegistrarReportsPanel registrarReportsPanel1;
+    private info5100.university.example.workareas.RegistrarRole.StudentRegistrationPanel studentRegistrationPanel1;
     // End of variables declaration//GEN-END:variables
 }
