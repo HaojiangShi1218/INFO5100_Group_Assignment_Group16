@@ -3,7 +3,12 @@ package info5100.university.example.workareas.RegistrarRole.shared;
 import java.util.*;
 
 /** 全局共享的内存数据仓库（单例），供四个面板联动使用（Java 8 兼容） */
+
 public class RegistrarDataStore {
+// 学生 -> 项目（例如 MSIS / MSCS）
+private final java.util.Map<String, String> studentProgram = new java.util.HashMap<>();
+// 成绩记录
+private final java.util.List<GradeRecord> grades = new java.util.ArrayList<>();
 
     // ====== 模型 ======
     public static class Offering {
@@ -11,6 +16,20 @@ public class RegistrarDataStore {
         public int capacity, enrolled;
         public boolean open;
         public int fee; // 学费（每门课），便于财务联动
+        public static final String[] LETTER_BUCKETS =
+        new String[]{"A","A-","B+","B","B-","C+","C","C-","F"};
+        private static final java.util.Map<String, Double> GRADE_POINTS = new java.util.HashMap<>();
+static {
+    GRADE_POINTS.put("A", 4.0);
+    GRADE_POINTS.put("A-", 3.7);
+    GRADE_POINTS.put("B+", 3.3);
+    GRADE_POINTS.put("B", 3.0);
+    GRADE_POINTS.put("B-", 2.7);
+    GRADE_POINTS.put("C+", 2.3);
+    GRADE_POINTS.put("C", 2.0);
+    GRADE_POINTS.put("C-", 1.7);
+    GRADE_POINTS.put("F", 0.0);
+}
 
         public Offering(String term, String dept, String courseId, String title,
                         String faculty, String room, String time,
@@ -35,7 +54,29 @@ public class RegistrarDataStore {
             this.amount = amount; this.paid = paid;
         }
     }
+    public static class GradeRecord {
+    public String term;
+    public String studentId;
+    public String courseId;
+    public String program;  // MSIS / MSCS 等
+    public String letter;   // A, A-, B+ ...
 
+    public GradeRecord(String term, String studentId, String courseId, String program, String letter) {
+        this.term = term; this.studentId = studentId; this.courseId = courseId;
+        this.program = program; this.letter = letter;
+    }
+}
+    public static class GpaStat {
+    public String program;
+    public int A,Aminus,Bplus,B,Bminus,Cplus,C,Cminus,F;
+    public double avgGpa;
+
+    public Object[] toRow() {
+        return new Object[]{program, A,Aminus,Bplus,B,Bminus,Cplus,C,Cminus,F,
+                // 保留两位小数显示更友好
+                Double.valueOf(Math.round(avgGpa * 100.0) / 100.0)};
+    }
+}
     // ====== 单例 ======
     private static final RegistrarDataStore INSTANCE = new RegistrarDataStore();
     public static RegistrarDataStore getInstance() { return INSTANCE; }
@@ -97,8 +138,30 @@ public java.util.Set<String> getAllTerms() {
     }
     return terms;
 }
-
-
+public static class CourseStat {
+    public final String term, dept, courseId, title, faculty;
+    public final int enrolled;
+    public CourseStat(String term, String dept, String courseId,
+                      String title, String faculty, int enrolled) {
+        this.term = term; this.dept = dept; this.courseId = courseId;
+        this.title = title; this.faculty = faculty; this.enrolled = enrolled;
+    }
+}
+public java.util.List<CourseStat> getCourseStats(String termFilter) {
+    java.util.List<CourseStat> out = new java.util.ArrayList<>();
+    for (Offering o : offerings.values()) {
+        if (termFilter != null && !termFilter.equals(o.term)) continue;
+        int enrolled = 0;
+        java.util.Set<String> ss = courseToStudents.get(o.courseId);
+        if (ss != null) enrolled = ss.size();
+        out.add(new CourseStat(o.term, o.dept, o.courseId, o.title, o.faculty, enrolled));
+    }
+    out.sort(java.util.Comparator
+        .comparing((CourseStat c) -> c.term == null ? "" : c.term)
+        .thenComparing(c -> c.dept == null ? "" : c.dept)
+        .thenComparing(c -> c.courseId == null ? "" : c.courseId));
+    return out;
+}
     // ====== Enrollment API（带容量/open 校验，自动记账）======
     public String enroll(String studentId, String courseId) {
         Offering o = offerings.get(courseId);

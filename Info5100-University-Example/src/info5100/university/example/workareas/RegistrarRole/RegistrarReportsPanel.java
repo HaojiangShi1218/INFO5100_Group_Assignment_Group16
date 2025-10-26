@@ -3,12 +3,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package info5100.university.example.workareas.RegistrarRole;
+import info5100.university.example.workareas.RegistrarRole.shared.RegistrarDataStore;
 
 /**
  *
  * @author xuanliliu
  */
 public class RegistrarReportsPanel extends javax.swing.JPanel {
+    private final RegistrarDataStore ds = RegistrarDataStore.getInstance();
     
     static class CourseStat {
     String term, dept, cid, name, faculty;
@@ -27,23 +29,52 @@ private void warn(String s){ javax.swing.JOptionPane.showMessageDialog(this, s, 
      */
     public RegistrarReportsPanel() {
         initComponents();
-        if (cmbTermReport.getItemCount() == 0){
-    cmbTermReport.addItem("Fall 2025");
-    cmbTermReport.addItem("Spring 2026");
-}
+//        if (cmbTermReport.getItemCount() == 0){
+//    cmbTermReport.addItem("Fall 2025");
+//    cmbTermReport.addItem("Spring 2026");
+//}
+    cmbTermReport.setModel(new javax.swing.DefaultComboBoxModel<>());
+    reloadTermsFromDS();
+    tblEnrollByCourse.setDefaultEditor(Object.class, null);
+    tblGpaDist.setDefaultEditor(Object.class, null);
+    tblEnrollByCourse.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
     }
 
-    
-    private void refreshEnrollByCourse(String term){
-    javax.swing.table.DefaultTableModel m = (javax.swing.table.DefaultTableModel) tblEnrollByCourse.getModel();
-    m.setRowCount(0);
-    m.setColumnIdentifiers(new String[]{"Term","Department","Course ID","Course Name","Faculty","Enrollment Count"});
-    for (CourseStat cs : courseStats){
-        if (term.equals(cs.term)){
-            m.addRow(new Object[]{cs.term, cs.dept, cs.cid, cs.name, cs.faculty, cs.enrolled});
+    @Override
+public void addNotify() {
+    super.addNotify();
+    reloadTermsFromDS(); // 每次显示时刷新学期列表
+}{
+    // ：确保切 Tab 时也刷新
+    this.addComponentListener(new java.awt.event.ComponentAdapter() {
+        @Override public void componentShown(java.awt.event.ComponentEvent e) {
+            reloadTermsFromDS();
         }
+    });
+}
+
+    private void refreshEnrollByCourse(String term){
+    javax.swing.table.DefaultTableModel m =
+        (javax.swing.table.DefaultTableModel) tblEnrollByCourse.getModel();
+    m.setRowCount(0);
+    m.setColumnIdentifiers(new String[]{
+        "Term","Department","Course ID","Course Name","Faculty","Enrollment Count"
+    });
+    for (RegistrarDataStore.CourseStat cs : ds.getCourseStats(term)) {
+        m.addRow(new Object[]{cs.term, cs.dept, cs.courseId, cs.title, cs.faculty, cs.enrolled});
     }
 }
+
+private void reloadTermsFromDS() {
+    String prev = (String) cmbTermReport.getSelectedItem();  // 记住当前选择
+    javax.swing.DefaultComboBoxModel<String> m = new javax.swing.DefaultComboBoxModel<>();
+    for (String t : ds.getAllTerms()) m.addElement(t);
+    if (m.getSize() == 0) m.addElement("No Terms");
+    cmbTermReport.setModel(m);
+    if (prev != null) cmbTermReport.setSelectedItem(prev);   // 恢复选择（如果还存在）
+}
+
+
 
 private void refreshGpaDist(String term){
     // 这里用固定演示数据，你也可以根据 term 做不同分布
@@ -191,24 +222,24 @@ private void refreshGpaDist(String term){
 
     private void btnLoadReportsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoadReportsActionPerformed
         // TODO add your handling code here:
-        Object t = cmbTermReport.getSelectedItem();
-    if (t == null){ warn("Please choose a term."); return; }
+         reloadTermsFromDS();
+
+    Object t = cmbTermReport.getSelectedItem();
+    if (t == null && cmbTermReport.getItemCount() > 0) {
+        cmbTermReport.setSelectedIndex(0);
+        t = cmbTermReport.getSelectedItem();
+    }
+    if (t == null) { warn("No available terms."); return; }
+
     String term = t.toString();
 
-    // 课程统计演示数据（你可与 Course Offering/Enrollment 的数字保持一致）
-    courseStats.clear();
-    if ("Fall 2025".equals(term)){
-        courseStats.add(new CourseStat("Fall 2025","IS","INFO 5100","Application Engineering","Dr. Smith", 18));
-        courseStats.add(new CourseStat("Fall 2025","IS","INFO 5600","DBMS","Prof. Lee", 35));
-        courseStats.add(new CourseStat("Fall 2025","CS","CS 5001","Intro CS","Dr. Miller", 42));
-    } else { // Spring 2026
-        courseStats.add(new CourseStat("Spring 2026","IS","INFO 6205","PDP","Dr. Chen", 9));
-        courseStats.add(new CourseStat("Spring 2026","IS","INFO 7520","EA","Dr. Wang", 21));
-        courseStats.add(new CourseStat("Spring 2026","CS","CS 5010","Prog Design","Dr. White", 30));
-    }
-
+    // ★ 不再往 courseStats 手工塞演示数据 ★
+    // 直接用 DataStore 生成“按课程的选课统计”
     refreshEnrollByCourse(term);
+
+    // GPA 这块如果你暂时还用示例分布，可以保留，但建议以后也改为从数据推导
     refreshGpaDist(term);
+
     info("Reports loaded for " + term + ".");
     }//GEN-LAST:event_btnLoadReportsActionPerformed
 
