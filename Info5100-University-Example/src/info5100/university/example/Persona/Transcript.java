@@ -90,5 +90,18 @@ public class Transcript {
         return temp2;
 
     }
+    
+    public ArrayList<String> getAllTerms() {
+        ArrayList<String> terms = new ArrayList<>(courseloadlist.keySet());
+        return terms;
+    }
+    
+    public ArrayList<SeatAssignment> getCoursesByTerm(String term) {
+        CourseLoad cl = courseloadlist.get(term);
+        if (cl == null) {
+            return new ArrayList<>();
+        }
+        return new ArrayList<>(cl.getSeatAssignments());
+    }
 
 }
