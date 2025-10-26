@@ -51,6 +51,11 @@ public class FacultyProfile {
         return null; //complete it later
     }
 
+    public Person getPerson() {
+        return person;
+    }
+    
+
     public boolean isMatch(String id) {
         if (person.getPersonId().equals(id)) {
             return true;
