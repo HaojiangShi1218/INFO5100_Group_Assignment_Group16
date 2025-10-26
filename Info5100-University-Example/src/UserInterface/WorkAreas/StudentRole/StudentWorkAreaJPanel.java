@@ -10,8 +10,8 @@
  */
 package UserInterface.WorkAreas.StudentRole;
 
-import Business.Business;
-import Business.Profiles.StudentProfile;
+
+import info5100.university.example.Persona.StudentProfile;
 import javax.swing.JPanel;
 
 /**
@@ -148,7 +148,7 @@ public class StudentWorkAreaJPanel extends javax.swing.JPanel {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jButton11, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(590, Short.MAX_VALUE))
+                .addContainerGap(454, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
