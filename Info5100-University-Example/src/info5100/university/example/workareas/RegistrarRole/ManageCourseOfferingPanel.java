@@ -7,7 +7,7 @@ package info5100.university.example.workareas.RegistrarRole;
 import javax.swing.table.DefaultTableModel;          // 需要用到
 import javax.swing.JOptionPane;                       // 需要用到
 import java.util.*;                                   // 需要用到
-
+import info5100.university.example.workareas.RegistrarRole.shared.RegistrarDataStore;
 
 /**
  *
@@ -15,63 +15,75 @@ import java.util.*;                                   // 需要用到
  */
 public class ManageCourseOfferingPanel extends javax.swing.JPanel {
     
-    static class Offering {
-        String term, dept, courseId, title, faculty, room, time;
-        int capacity, enrolled;
-        boolean open = true;
-
-        Offering(String term, String dept, String courseId, String title,
-                 String faculty, String room, String time, int capacity, int enrolled, boolean open) {
-            this.term=term; this.dept=dept; this.courseId=courseId; this.title=title;
-            this.faculty=faculty; this.room=room; this.time=time;
-            this.capacity=capacity; this.enrolled=enrolled; this.open=open;
-        }
-    }
-    private final List<Offering> offerings = new ArrayList<>();
-
+//    static class Offering {
+//        String term, dept, courseId, title, faculty, room, time;
+//        int capacity, enrolled;
+//        boolean open = true;
+//
+//        Offering(String term, String dept, String courseId, String title,
+//                 String faculty, String room, String time, int capacity, int enrolled, boolean open) {
+//            this.term=term; this.dept=dept; this.courseId=courseId; this.title=title;
+//            this.faculty=faculty; this.room=room; this.time=time;
+//            this.capacity=capacity; this.enrolled=enrolled; this.open=open;
+//        }
+//    }
+//    private final List<Offering> offerings = new ArrayList<>();
+private final RegistrarDataStore ds = RegistrarDataStore.getInstance();
     /**
      * Creates new form ManageCourseOfferingPanel
      */
 //    public ManageCourseOfferingPanel() {
 //        initComponents();
 //    }
-    private void refreshTable() {
-        DefaultTableModel m = (DefaultTableModel) tblOfferings.getModel();
-        String[] cols = new String[]{"Term","Department","Course ID","Title","Faculty","Room","Time","Capacity","Enrolled","Open"};
-        if (m.getColumnCount() != cols.length) m.setColumnIdentifiers(cols);
-        m.setRowCount(0);
-        for (Offering o : offerings) {
-            m.addRow(new Object[]{o.term,o.dept,o.courseId,o.title,o.faculty,o.room,o.time,o.capacity,o.enrolled, o.open ? "Open":"Closed"});
-        }
+   private void refreshTable() {
+    DefaultTableModel m = (DefaultTableModel) tblOfferings.getModel();
+    String[] cols = new String[]{"Term","Department","Course ID","Title","Faculty","Room","Time","Capacity","Enrolled","Open","Fee"};
+    if (m.getColumnCount() != cols.length) m.setColumnIdentifiers(cols);
+    m.setRowCount(0);
+    for (RegistrarDataStore.Offering o : ds.getAllOfferings()) {
+        m.addRow(new Object[]{
+            o.term,o.dept,o.courseId,o.title,o.faculty,o.room,o.time,o.capacity,o.enrolled, o.open ? "Open":"Closed", o.fee
+        });
     }
+}
+   private String getSelectedCourseId() {
+    int r = tblOfferings.getSelectedRow();
+    if (r < 0) return null;
+    Object v = tblOfferings.getValueAt(r, 2); // 第3列 Course ID
+    return v==null? null : v.toString();
+}
 
-    private int findIndexByCourseId(String courseId) {
-        for (int i=0;i<offerings.size();i++) if (offerings.get(i).courseId.equalsIgnoreCase(courseId)) return i;
-        return -1;
-    }
 
-    private Offering getSelectedOffering() {
-        int r = tblOfferings.getSelectedRow();
-        if (r < 0) return null;
-        String cid = String.valueOf(tblOfferings.getValueAt(r, 2)); // 第3列 Course ID
-        int idx = findIndexByCourseId(cid);
-        return idx>=0 ? offerings.get(idx) : null;
-    }
+//    private int findIndexByCourseId(String courseId) {
+//        for (int i=0;i<offerings.size();i++) if (offerings.get(i).courseId.equalsIgnoreCase(courseId)) return i;
+//        return -1;
+//    }
+//
+//    private Offering getSelectedOffering() {
+//        int r = tblOfferings.getSelectedRow();
+//        if (r < 0) return null;
+//        String cid = String.valueOf(tblOfferings.getValueAt(r, 2)); // 第3列 Course ID
+//        int idx = findIndexByCourseId(cid);
+//        return idx>=0 ? offerings.get(idx) : null;
+//    }
+    private void info(String msg){ javax.swing.JOptionPane.showMessageDialog(this,msg,"Info",javax.swing.JOptionPane.INFORMATION_MESSAGE); }
+    private void warn(String msg){ javax.swing.JOptionPane.showMessageDialog(this,msg,"Warning",javax.swing.JOptionPane.WARNING_MESSAGE); }
 
-    private void info(String msg){ JOptionPane.showMessageDialog(this,msg,"Info",JOptionPane.INFORMATION_MESSAGE); }
-    private void warn(String msg){ JOptionPane.showMessageDialog(this,msg,"Warning",JOptionPane.WARNING_MESSAGE); }
+//    private void info(String msg){ JOptionPane.showMessageDialog(this,msg,"Info",JOptionPane.INFORMATION_MESSAGE); }
+//    private void warn(String msg){ JOptionPane.showMessageDialog(this,msg,"Warning",JOptionPane.WARNING_MESSAGE); }
 
     // ===== ② 这里开始是构造器（NetBeans 生成），不要粘到 guarded 代码里 =====
     public ManageCourseOfferingPanel() {
         initComponents();  // (guarded) 设计器生成
         // ③ 你可以在这里放种子数据：
-        offerings.clear();
-        offerings.add(new Offering("Fall 2025","IS","INFO 5100","Application Engineering",
-                "Dr. Smith","WVH-110","Mon 10:00-12:00",30,18,true));
-        offerings.add(new Offering("Fall 2025","IS","INFO 5600","DBMS",
-                "Prof. Lee","RY-150","Tue 13:00-15:00",35,35,true));
-        offerings.add(new Offering("Spring 2026","IS","INFO 6205","PDP",
-                "Dr. Chen","IV-210","Wed 09:00-11:00",25,9,true));
+//        offerings.clear();
+//        offerings.add(new Offering("Fall 2025","IS","INFO 5100","Application Engineering",
+//                "Dr. Smith","WVH-110","Mon 10:00-12:00",30,18,true));
+//        offerings.add(new Offering("Fall 2025","IS","INFO 5600","DBMS",
+//                "Prof. Lee","RY-150","Tue 13:00-15:00",35,35,true));
+//        offerings.add(new Offering("Spring 2026","IS","INFO 6205","PDP",
+//                "Dr. Chen","IV-210","Wed 09:00-11:00",25,9,true));
+        ds.seedDemoDataIfEmpty();
         refreshTable();
     }
     /**
@@ -94,13 +106,13 @@ public class ManageCourseOfferingPanel extends javax.swing.JPanel {
 
         tblOfferings.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Term", "Department", "Course ID", "Title", "Faculty", "Room", "Time", "Capacity", "Enrolled", "Open"
+                "Term", "Department", "Course ID", "Title", "Faculty", "Room", "Time", "Capacity", "Enrolled", "Open", "Fee"
             }
         ));
         jScrollPane1.setViewportView(tblOfferings);
@@ -147,91 +159,171 @@ public class ManageCourseOfferingPanel extends javax.swing.JPanel {
 
     private void btnToggleOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnToggleOpenActionPerformed
         // TODO add your handling code here:
-        Offering o = getSelectedOffering();
-    if (o == null) { warn("Please select a course row first."); return; }
-    o.open = !o.open;
-    refreshTable();
-    info("Course " + o.courseId + " is now " + (o.open ? "Open" : "Closed") + ".");
+//        Offering o = getSelectedOffering();
+//    if (o == null) { warn("Please select a course row first."); return; }
+//    o.open = !o.open;
+//    refreshTable();
+//    info("Course " + o.courseId + " is now " + (o.open ? "Open" : "Closed") + ".");
+String cid = getSelectedCourseId();
+if (cid == null) { warn("Please select a course row first."); return; }
+RegistrarDataStore.Offering o = ds.getOfferingById(cid);
+if (o == null) { warn("Course not found."); return; }
+
+ds.toggleOpen(cid);
+refreshTable();
+o = ds.getOfferingById(cid);
+info("Course " + cid + " is now " + (o.open ? "Open" : "Closed") + ".");
+
     }//GEN-LAST:event_btnToggleOpenActionPerformed
 
     private void btnAssignFacultyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAssignFacultyActionPerformed
         // TODO add your handling code here:
-        Offering o = getSelectedOffering();
-    if (o == null) { warn("Please select a course row first."); return; }
-    String input = javax.swing.JOptionPane.showInputDialog(this, "Assign Faculty for " + o.courseId, o.faculty);
-    if (input == null) return; // cancel
-    input = input.trim();
-    if (input.isEmpty()) { warn("Faculty cannot be empty."); return; }
-    o.faculty = input;
-    refreshTable();
-    info("Assigned faculty: " + input);
+//        Offering o = getSelectedOffering();
+//    if (o == null) { warn("Please select a course row first."); return; }
+//    String input = javax.swing.JOptionPane.showInputDialog(this, "Assign Faculty for " + o.courseId, o.faculty);
+//    if (input == null) return; // cancel
+//    input = input.trim();
+//    if (input.isEmpty()) { warn("Faculty cannot be empty."); return; }
+//    o.faculty = input;
+//    refreshTable();
+//    info("Assigned faculty: " + input);
+String cid = getSelectedCourseId();
+if (cid == null) { warn("Please select a course row first."); return; }
+RegistrarDataStore.Offering o = ds.getOfferingById(cid);
+if (o == null) { warn("Course not found."); return; }
+
+String input = javax.swing.JOptionPane.showInputDialog(this, "Assign Faculty for " + cid, o.faculty==null?"":o.faculty);
+if (input == null) return;
+input = input.trim();
+if (input.isEmpty()) { warn("Faculty cannot be empty."); return; }
+
+ds.assignFaculty(cid, input);
+refreshTable();
+info("Assigned faculty: " + input);
+
     }//GEN-LAST:event_btnAssignFacultyActionPerformed
 
     private void btnAddEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddEditActionPerformed
         // TODO add your handling code here:
-        javax.swing.JTextField tfTerm = new javax.swing.JTextField();
-    javax.swing.JTextField tfDept = new javax.swing.JTextField("IS");
-    javax.swing.JTextField tfCid  = new javax.swing.JTextField();
-    javax.swing.JTextField tfTitle= new javax.swing.JTextField();
-    javax.swing.JTextField tfFaculty=new javax.swing.JTextField();
-    javax.swing.JTextField tfRoom = new javax.swing.JTextField();
-    javax.swing.JTextField tfTime = new javax.swing.JTextField();
-    javax.swing.JTextField tfCap  = new javax.swing.JTextField();
-    javax.swing.JTextField tfEnr  = new javax.swing.JTextField("0");
+//        javax.swing.JTextField tfTerm = new javax.swing.JTextField();
+//    javax.swing.JTextField tfDept = new javax.swing.JTextField("IS");
+//    javax.swing.JTextField tfCid  = new javax.swing.JTextField();
+//    javax.swing.JTextField tfTitle= new javax.swing.JTextField();
+//    javax.swing.JTextField tfFaculty=new javax.swing.JTextField();
+//    javax.swing.JTextField tfRoom = new javax.swing.JTextField();
+//    javax.swing.JTextField tfTime = new javax.swing.JTextField();
+//    javax.swing.JTextField tfCap  = new javax.swing.JTextField();
+//    javax.swing.JTextField tfEnr  = new javax.swing.JTextField("0");
+//
+//    // 若选中了行，自动带出旧值做 Edit 体验更好
+//    Offering sel = getSelectedOffering();
+//    if (sel != null) {
+//        tfTerm.setText(sel.term); tfDept.setText(sel.dept); tfCid.setText(sel.courseId);
+//        tfTitle.setText(sel.title); tfFaculty.setText(sel.faculty); tfRoom.setText(sel.room);
+//        tfTime.setText(sel.time); tfCap.setText(String.valueOf(sel.capacity));
+//        tfEnr.setText(String.valueOf(sel.enrolled));
+//        tfCid.setEditable(false); // 编辑时不允许改课程号
+//    }
+//
+//    javax.swing.JPanel p = new javax.swing.JPanel(new java.awt.GridLayout(0,2,6,6));
+//    p.add(new javax.swing.JLabel("Term:")); p.add(tfTerm);
+//    p.add(new javax.swing.JLabel("Department:")); p.add(tfDept);
+//    p.add(new javax.swing.JLabel("Course ID:")); p.add(tfCid);
+//    p.add(new javax.swing.JLabel("Title:")); p.add(tfTitle);
+//    p.add(new javax.swing.JLabel("Faculty:")); p.add(tfFaculty);
+//    p.add(new javax.swing.JLabel("Room:")); p.add(tfRoom);
+//    p.add(new javax.swing.JLabel("Time:")); p.add(tfTime);
+//    p.add(new javax.swing.JLabel("Capacity:")); p.add(tfCap);
+//    p.add(new javax.swing.JLabel("Enrolled:")); p.add(tfEnr);
+//
+//    int ok = javax.swing.JOptionPane.showConfirmDialog(this, p, "Add / Edit Course Offering", javax.swing.JOptionPane.OK_CANCEL_OPTION);
+//    if (ok != javax.swing.JOptionPane.OK_OPTION) return;
+//
+//    String term=tfTerm.getText().trim(), dept=tfDept.getText().trim(), cid=tfCid.getText().trim();
+//    String title=tfTitle.getText().trim(), fac=tfFaculty.getText().trim(), room=tfRoom.getText().trim(), time=tfTime.getText().trim();
+//    int cap=0, enr=0;
+//    try { if(!tfCap.getText().trim().isEmpty()) cap=Integer.parseInt(tfCap.getText().trim()); } catch(Exception e){ warn("Capacity must be a number."); return; }
+//    try { if(!tfEnr.getText().trim().isEmpty()) enr=Integer.parseInt(tfEnr.getText().trim()); } catch(Exception e){ warn("Enrolled must be a number."); return; }
+//
+//    if (cid.isEmpty() || term.isEmpty() || title.isEmpty()) { warn("Course ID, Term, Title are required."); return; }
+//    if (cap < enr) { warn("Capacity must be >= Enrolled."); return; }
+//    if (cap < 0 || enr < 0) { warn("Capacity/Enrolled cannot be negative."); return; }
+//
+//    int idx = findIndexByCourseId(cid);
+//    if (idx >= 0) {
+//        // Edit: 只更新非空项
+//        Offering o = offerings.get(idx);
+//        if (!term.isEmpty()) o.term=term;
+//        if (!dept.isEmpty()) o.dept=dept;
+//        if (!title.isEmpty()) o.title=title;
+//        if (!fac.isEmpty()) o.faculty=fac;
+//        if (!room.isEmpty()) o.room=room;
+//        if (!time.isEmpty()) o.time=time;
+//        if (cap>0) o.capacity=cap;
+//        if (enr>=0) o.enrolled=enr;
+//        info("Updated course " + cid + ".");
+//    } else {
+//        // Add
+//        offerings.add(new Offering(term,dept,cid,title,fac,room,time,cap,enr,true));
+//        info("Added course " + cid + ".");
+//    }
+//    refreshTable();
+javax.swing.JTextField tfTerm = new javax.swing.JTextField();
+javax.swing.JTextField tfDept = new javax.swing.JTextField("IS");
+javax.swing.JTextField tfCid  = new javax.swing.JTextField();
+javax.swing.JTextField tfTitle= new javax.swing.JTextField();
+javax.swing.JTextField tfFaculty=new javax.swing.JTextField();
+javax.swing.JTextField tfRoom = new javax.swing.JTextField();
+javax.swing.JTextField tfTime = new javax.swing.JTextField();
+javax.swing.JTextField tfCap  = new javax.swing.JTextField();
+javax.swing.JTextField tfFee  = new javax.swing.JTextField();
 
-    // 若选中了行，自动带出旧值做 Edit 体验更好
-    Offering sel = getSelectedOffering();
-    if (sel != null) {
-        tfTerm.setText(sel.term); tfDept.setText(sel.dept); tfCid.setText(sel.courseId);
-        tfTitle.setText(sel.title); tfFaculty.setText(sel.faculty); tfRoom.setText(sel.room);
-        tfTime.setText(sel.time); tfCap.setText(String.valueOf(sel.capacity));
-        tfEnr.setText(String.valueOf(sel.enrolled));
-        tfCid.setEditable(false); // 编辑时不允许改课程号
+String selCid = getSelectedCourseId();
+if (selCid != null) {
+    // Edit：带出旧值
+    RegistrarDataStore.Offering old = ds.getOfferingById(selCid);
+    if (old != null) {
+        tfTerm.setText(old.term); tfDept.setText(old.dept); tfCid.setText(old.courseId);
+        tfTitle.setText(old.title); tfFaculty.setText(old.faculty); tfRoom.setText(old.room);
+        tfTime.setText(old.time); tfCap.setText(String.valueOf(old.capacity));
+        tfFee.setText(String.valueOf(old.fee));
+        tfCid.setEditable(false);
     }
+}
 
-    javax.swing.JPanel p = new javax.swing.JPanel(new java.awt.GridLayout(0,2,6,6));
-    p.add(new javax.swing.JLabel("Term:")); p.add(tfTerm);
-    p.add(new javax.swing.JLabel("Department:")); p.add(tfDept);
-    p.add(new javax.swing.JLabel("Course ID:")); p.add(tfCid);
-    p.add(new javax.swing.JLabel("Title:")); p.add(tfTitle);
-    p.add(new javax.swing.JLabel("Faculty:")); p.add(tfFaculty);
-    p.add(new javax.swing.JLabel("Room:")); p.add(tfRoom);
-    p.add(new javax.swing.JLabel("Time:")); p.add(tfTime);
-    p.add(new javax.swing.JLabel("Capacity:")); p.add(tfCap);
-    p.add(new javax.swing.JLabel("Enrolled:")); p.add(tfEnr);
+javax.swing.JPanel p = new javax.swing.JPanel(new java.awt.GridLayout(0,2,6,6));
+p.add(new javax.swing.JLabel("Term:")); p.add(tfTerm);
+p.add(new javax.swing.JLabel("Department:")); p.add(tfDept);
+p.add(new javax.swing.JLabel("Course ID:")); p.add(tfCid);
+p.add(new javax.swing.JLabel("Title:")); p.add(tfTitle);
+p.add(new javax.swing.JLabel("Faculty:")); p.add(tfFaculty);
+p.add(new javax.swing.JLabel("Room:")); p.add(tfRoom);
+p.add(new javax.swing.JLabel("Time:")); p.add(tfTime);
+p.add(new javax.swing.JLabel("Capacity:")); p.add(tfCap);
+p.add(new javax.swing.JLabel("Fee (USD):")); p.add(tfFee);
 
-    int ok = javax.swing.JOptionPane.showConfirmDialog(this, p, "Add / Edit Course Offering", javax.swing.JOptionPane.OK_CANCEL_OPTION);
-    if (ok != javax.swing.JOptionPane.OK_OPTION) return;
+int ok = javax.swing.JOptionPane.showConfirmDialog(this, p, "Add / Edit Course Offering", javax.swing.JOptionPane.OK_CANCEL_OPTION);
+if (ok != javax.swing.JOptionPane.OK_OPTION) return;
 
-    String term=tfTerm.getText().trim(), dept=tfDept.getText().trim(), cid=tfCid.getText().trim();
-    String title=tfTitle.getText().trim(), fac=tfFaculty.getText().trim(), room=tfRoom.getText().trim(), time=tfTime.getText().trim();
-    int cap=0, enr=0;
-    try { if(!tfCap.getText().trim().isEmpty()) cap=Integer.parseInt(tfCap.getText().trim()); } catch(Exception e){ warn("Capacity must be a number."); return; }
-    try { if(!tfEnr.getText().trim().isEmpty()) enr=Integer.parseInt(tfEnr.getText().trim()); } catch(Exception e){ warn("Enrolled must be a number."); return; }
+String term=tfTerm.getText().trim(), dept=tfDept.getText().trim(), cid=tfCid.getText().trim();
+String title=tfTitle.getText().trim(), fac=tfFaculty.getText().trim(), room=tfRoom.getText().trim(), time=tfTime.getText().trim();
+int cap=0, fee=0;
+try { if(!tfCap.getText().trim().isEmpty()) cap=Integer.parseInt(tfCap.getText().trim()); } catch(Exception e){ warn("Capacity must be a number."); return; }
+try { if(!tfFee.getText().trim().isEmpty()) fee=Integer.parseInt(tfFee.getText().trim()); } catch(Exception e){ warn("Fee must be a number."); return; }
 
-    if (cid.isEmpty() || term.isEmpty() || title.isEmpty()) { warn("Course ID, Term, Title are required."); return; }
-    if (cap < enr) { warn("Capacity must be >= Enrolled."); return; }
-    if (cap < 0 || enr < 0) { warn("Capacity/Enrolled cannot be negative."); return; }
+if (cid.isEmpty() || term.isEmpty() || title.isEmpty()) { warn("Course ID, Term, Title are required."); return; }
+if (cap < 0) { warn("Capacity cannot be negative."); return; }
+if (fee < 0) { warn("Fee cannot be negative."); return; }
 
-    int idx = findIndexByCourseId(cid);
-    if (idx >= 0) {
-        // Edit: 只更新非空项
-        Offering o = offerings.get(idx);
-        if (!term.isEmpty()) o.term=term;
-        if (!dept.isEmpty()) o.dept=dept;
-        if (!title.isEmpty()) o.title=title;
-        if (!fac.isEmpty()) o.faculty=fac;
-        if (!room.isEmpty()) o.room=room;
-        if (!time.isEmpty()) o.time=time;
-        if (cap>0) o.capacity=cap;
-        if (enr>=0) o.enrolled=enr;
-        info("Updated course " + cid + ".");
-    } else {
-        // Add
-        offerings.add(new Offering(term,dept,cid,title,fac,room,time,cap,enr,true));
-        info("Added course " + cid + ".");
-    }
-    refreshTable();
+// 写入 DataStore（不存在则新增，存在则覆盖；enrolled 会自动按关系回填）
+RegistrarDataStore.Offering o = new RegistrarDataStore.Offering(
+        term, dept, cid, title, fac, room, time, cap, 0, true, fee
+);
+ds.putOrUpdateOffering(o);
+
+refreshTable();
+info((selCid==null? "Added":"Updated") + " course " + cid + ".");
+
     }//GEN-LAST:event_btnAddEditActionPerformed
 
 
