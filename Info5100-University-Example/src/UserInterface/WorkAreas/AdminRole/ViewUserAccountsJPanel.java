@@ -18,11 +18,11 @@ public class ViewUserAccountsJPanel extends javax.swing.JPanel {
     /**
      * Creates new form CreateJPanel
      */
-    JPanel userProcessContainer;
+    JPanel CardSequencePanel;
     UserAccount selectedAccount;
-    public ViewUserAccountsJPanel(JPanel container, UserAccount ua) {
+    public ViewUserAccountsJPanel(JPanel csp, UserAccount ua) {
         initComponents();
-        this.userProcessContainer = container;
+        this.CardSequencePanel = csp;
         selectedAccount = ua;
         
         populateTextFields();
@@ -158,8 +158,11 @@ public class ViewUserAccountsJPanel extends javax.swing.JPanel {
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         // TODO add your handling code here:
-        userProcessContainer.remove(this);
-        ((java.awt.CardLayout) userProcessContainer.getLayout()).next(userProcessContainer);
+        //CardSequencePanel.remove(this);
+        //((java.awt.CardLayout) userProcessContainer.getLayout()).next(userProcessContainer);
+        ((java.awt.CardLayout) CardSequencePanel.getLayout()).show(CardSequencePanel, "ManageUserAccountsJPanel");
+        CardSequencePanel.revalidate();
+        CardSequencePanel.repaint();
     }//GEN-LAST:event_btnBackActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed

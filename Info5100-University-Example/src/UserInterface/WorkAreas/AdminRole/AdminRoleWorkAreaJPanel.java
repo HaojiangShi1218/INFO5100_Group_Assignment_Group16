@@ -214,10 +214,13 @@ public class AdminRoleWorkAreaJPanel extends javax.swing.JPanel {
     private void btnMUAIdentifyResourceAssetsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMUAIdentifyResourceAssetsActionPerformed
         // TODO add your handling code here:
 
-        ManageUserAccountsJPanel aos = new ManageUserAccountsJPanel(department, CardSequencePanel);
+        ManageUserAccountsJPanel mua = new ManageUserAccountsJPanel(department, CardSequencePanel);
 
-        CardSequencePanel.add("ManageUserAccountsJPanel", aos);
-        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+        CardSequencePanel.add("ManageUserAccountsJPanel", mua);
+        //((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+        ((java.awt.CardLayout) CardSequencePanel.getLayout()).show(CardSequencePanel, "ManageUserAccountsJPanel");
+        CardSequencePanel.revalidate();
+        CardSequencePanel.repaint();
 
     }//GEN-LAST:event_btnMUAIdentifyResourceAssetsActionPerformed
 
@@ -251,8 +254,9 @@ public class AdminRoleWorkAreaJPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
 //        CardSequencePanel.remove(this);
 //        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
-        CardSequencePanel.remove(this);
-        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+        ((java.awt.CardLayout) CardSequencePanel.getLayout()).show(CardSequencePanel, "LoginScreen");
+        CardSequencePanel.revalidate();
+        CardSequencePanel.repaint();
 //        CardLayout layout = (CardLayout) CardSequencePanel.getLayout();
 //        layout.next(CardSequencePanel);
     }//GEN-LAST:event_btnLogOutActionPerformed

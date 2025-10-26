@@ -95,8 +95,8 @@ public class MainJFrame extends javax.swing.JFrame {
     private void setLoginScreen() {
         LoginScreen ls = new LoginScreen(mainWorkArea);
         mainWorkArea.add("LoginScreen",ls);
-        CardLayout layout = (CardLayout) mainWorkArea.getLayout();
-        layout.next(mainWorkArea);
+        
+        ((java.awt.CardLayout) mainWorkArea.getLayout()).show(mainWorkArea, "LoginScreen");
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -229,9 +229,12 @@ public class ManageUserAccountsJPanel extends javax.swing.JPanel {
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         // TODO add your handling code here:
-        CardSequencePanel.remove(this);
-        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+        //CardSequencePanel.remove(this);
+        //((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
  //       ((java.awt.CardLayout)CardSequencePanel.getLayout()).show(CardSequencePanel, "IdentifyEventTypes");
+        ((java.awt.CardLayout) CardSequencePanel.getLayout()).show(CardSequencePanel, "Admin");
+        CardSequencePanel.revalidate();
+        CardSequencePanel.repaint();
 
     }//GEN-LAST:event_btnBackActionPerformed
 
@@ -278,7 +281,10 @@ public class ManageUserAccountsJPanel extends javax.swing.JPanel {
             ViewUserAccountsJPanel vua = new ViewUserAccountsJPanel(CardSequencePanel, selectedUserAccount);
 
             CardSequencePanel.add("ViewUserAccountsJPanel", vua);
-            ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+            //((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+            ((java.awt.CardLayout) CardSequencePanel.getLayout()).show(CardSequencePanel, "ViewUserAccountsJPanel");
+            CardSequencePanel.revalidate();
+            CardSequencePanel.repaint();
         }
         else {
             JOptionPane.showMessageDialog(null, "Please select an account from the list", "Warning", JOptionPane.WARNING_MESSAGE);
