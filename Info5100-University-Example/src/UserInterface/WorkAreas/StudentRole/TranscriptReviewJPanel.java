@@ -4,18 +4,124 @@
  */
 package UserInterface.WorkAreas.StudentRole;
 
+import info5100.university.example.CourseCatalog.Course;
+import info5100.university.example.CourseSchedule.SeatAssignment;
+import info5100.university.example.Persona.StudentProfile;
+import java.awt.CardLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
+import javax.swing.JComboBox;
+import javax.swing.JPanel;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author dell
  */
 public class TranscriptReviewJPanel extends javax.swing.JPanel {
+    private JPanel mainWorkArea;
+    private StudentProfile student;
+    private JComboBox<String> termComboBox;
+    private JTable transcriptable;
 
     /**
      * Creates new form TranscriptJPanel
      */
-    public TranscriptReviewJPanel() {
+    public TranscriptReviewJPanel(StudentProfile student) {
         initComponents();
+        this.student = student;
+        populateTermComboBox();
+        addListeners();
     }
+    
+    private void populateTermComboBox() {
+        termComboBox.removeAllItems();
+        for (String term : student.getAllTerms()) {
+            termComboBox.addItem(term);
+        }
+    }
+    
+    private void addListeners() {
+        termComboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String selectedTerm = (String) termComboBox.getSelectedItem();
+                if (selectedTerm != null) {
+                    populateTranscriptTable(selectedTerm);
+                }
+            }
+        });
+    }
+    
+    private void populateTranscriptTable(String term) {
+        DefaultTableModel model = (DefaultTableModel) tblTranscript.getModel();
+        model.setRowCount(0);
+
+        List<SeatAssignment> termCourses = student.getCoursesByTerm(term);
+
+        double totalQualityPointsTerm = 0;
+        double totalCreditsTerm = 0;
+        double totalQualityPointsAll = 0;
+        double totalCreditsAll = 0;
+
+        for (SeatAssignment sa : termCourses) {
+            Course course = sa.getAssociatedCourse();
+            double gradePoint = convertGradeToPoints(sa.getGradeLetter());
+            double qualityPoints = gradePoint * sa.getCreditHours();
+
+            totalQualityPointsTerm += qualityPoints;
+            totalCreditsTerm += sa.getCreditHours();
+
+            model.addRow(new Object[]{
+                course.getCOurseNumber(),
+                course.getName(),
+                sa.getGradeLetter(),
+                String.format("%.2f", gradePoint)
+            });
+        }
+
+        for (SeatAssignment sa : student.getAllSeatAssignments()) {
+            double gp = convertGradeToPoints(sa.getGradeLetter());
+            totalQualityPointsAll += gp * sa.getCreditHours();
+            totalCreditsAll += sa.getCreditHours();
+        }
+
+        double termGpa = totalCreditsTerm == 0 ? 0 : totalQualityPointsTerm / totalCreditsTerm;
+        double overallGpa = totalCreditsAll == 0 ? 0 : totalQualityPointsAll / totalCreditsAll;
+
+        txtTermGPA.setText(String.format("%.2f", termGpa));
+        txtOverallGPA.setText(String.format("%.2f", overallGpa));
+        txtAcademicStanding.setText(getAcademicStanding(termGpa, overallGpa));
+    }
+    
+    private double convertGradeToPoints(String grade) {
+        switch (grade) {
+            case "A": return 4.0;
+            case "A-": return 3.7;
+            case "B+": return 3.3;
+            case "B": return 3.0;
+            case "B-": return 2.7;
+            case "C+": return 2.3;
+            case "C": return 2.0;
+            case "C-": return 1.7;
+            case "F": return 0.0;
+            default: return 0.0;
+        }
+    }
+        
+        private String getAcademicStanding(double termGpa, double overallGpa) {
+        if (overallGpa < 3.0) {
+            return "Academic Probation";
+        } else if (termGpa < 3.0) {
+            return "Academic Warning";
+        } else {
+            return "Good Standing";
+        }
+    }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -26,20 +132,25 @@ public class TranscriptReviewJPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton1 = new javax.swing.JButton();
+        btnBack = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblTranscript = new javax.swing.JTable();
         jLabel3 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        txtTermGPA = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        txtOverallGPA = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
+        txtAcademicStanding = new javax.swing.JTextField();
 
-        jButton1.setText("<<< Back");
+        btnBack.setText("<<< Back");
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
         jLabel1.setText("Transcript");
@@ -48,7 +159,7 @@ public class TranscriptReviewJPanel extends javax.swing.JPanel {
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblTranscript.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -67,7 +178,7 @@ public class TranscriptReviewJPanel extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tblTranscript);
 
         jLabel3.setText("Term GPA:");
 
@@ -85,7 +196,7 @@ public class TranscriptReviewJPanel extends javax.swing.JPanel {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addContainerGap()
-                                .addComponent(jButton1)
+                                .addComponent(btnBack)
                                 .addGap(342, 342, 342)
                                 .addComponent(jLabel1))
                             .addGroup(layout.createSequentialGroup()
@@ -106,9 +217,9 @@ public class TranscriptReviewJPanel extends javax.swing.JPanel {
                     .addComponent(jLabel3))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jTextField1)
-                    .addComponent(jTextField2)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE))
+                    .addComponent(txtTermGPA)
+                    .addComponent(txtOverallGPA)
+                    .addComponent(txtAcademicStanding, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -120,7 +231,7 @@ public class TranscriptReviewJPanel extends javax.swing.JPanel {
                         .addComponent(jLabel1))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jButton1)))
+                        .addComponent(btnBack)))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
@@ -130,22 +241,29 @@ public class TranscriptReviewJPanel extends javax.swing.JPanel {
                 .addGap(28, 28, 28)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtTermGPA, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtOverallGPA, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtAcademicStanding, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(50, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        // TODO add your handling code here:
+        CardLayout layout = (CardLayout) mainWorkArea.getLayout();
+        mainWorkArea.remove(this);
+        layout.previous(mainWorkArea);
+    }//GEN-LAST:event_btnBackActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnBack;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -153,9 +271,9 @@ public class TranscriptReviewJPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
+    private javax.swing.JTable tblTranscript;
+    private javax.swing.JTextField txtAcademicStanding;
+    private javax.swing.JTextField txtOverallGPA;
+    private javax.swing.JTextField txtTermGPA;
     // End of variables declaration//GEN-END:variables
 }
