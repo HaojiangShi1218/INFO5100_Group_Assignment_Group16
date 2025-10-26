@@ -13,6 +13,8 @@ package UserInterface.WorkAreas.AdminRole;
 
 
 import info5100.university.example.Department.Department;
+import java.awt.CardLayout;
+import java.awt.Component;
 import javax.swing.JPanel;
 
 /**
@@ -21,7 +23,7 @@ import javax.swing.JPanel;
  */
 public class AdminRoleWorkAreaJPanel extends javax.swing.JPanel {
 
-    javax.swing.JPanel CardSequencePanel;
+    JPanel CardSequencePanel;
     Department department;
 
     /**
@@ -52,7 +54,7 @@ public class AdminRoleWorkAreaJPanel extends javax.swing.JPanel {
         btnMS = new javax.swing.JButton();
         btnMR = new javax.swing.JButton();
         btnAD = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        btnLogOut = new javax.swing.JButton();
 
         setForeground(new java.awt.Color(51, 51, 51));
 
@@ -154,7 +156,12 @@ public class AdminRoleWorkAreaJPanel extends javax.swing.JPanel {
             }
         });
 
-        jButton1.setText("log out");
+        btnLogOut.setText("log out");
+        btnLogOut.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLogOutActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -178,14 +185,14 @@ public class AdminRoleWorkAreaJPanel extends javax.swing.JPanel {
                                     .addComponent(btnMS, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jButton1)))
+                        .addComponent(btnLogOut)))
                 .addContainerGap(632, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(14, 14, 14)
-                .addComponent(jButton1)
+                .addComponent(btnLogOut)
                 .addGap(80, 80, 80)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnRP, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -207,10 +214,10 @@ public class AdminRoleWorkAreaJPanel extends javax.swing.JPanel {
     private void btnMUAIdentifyResourceAssetsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMUAIdentifyResourceAssetsActionPerformed
         // TODO add your handling code here:
 
-//        ManageUserAccountsJPanel aos = new ManageUserAccountsJPanel(department, CardSequencePanel);
-//
-//        CardSequencePanel.add("ManageVulns", aos);
-//        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+        ManageUserAccountsJPanel aos = new ManageUserAccountsJPanel(department, CardSequencePanel);
+
+        CardSequencePanel.add("ManageUserAccountsJPanel", aos);
+        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
 
     }//GEN-LAST:event_btnMUAIdentifyResourceAssetsActionPerformed
 
@@ -240,16 +247,26 @@ public class AdminRoleWorkAreaJPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnADActionPerformed
 
+    private void btnLogOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogOutActionPerformed
+        // TODO add your handling code here:
+//        CardSequencePanel.remove(this);
+//        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+        CardSequencePanel.remove(this);
+        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+//        CardLayout layout = (CardLayout) CardSequencePanel.getLayout();
+//        layout.next(CardSequencePanel);
+    }//GEN-LAST:event_btnLogOutActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAD;
+    private javax.swing.JButton btnLogOut;
     private javax.swing.JButton btnMF;
     private javax.swing.JButton btnMP;
     private javax.swing.JButton btnMR;
     private javax.swing.JButton btnMS;
     private javax.swing.JButton btnMUA;
     private javax.swing.JButton btnRP;
-    private javax.swing.JButton jButton1;
     // End of variables declaration//GEN-END:variables
 
 }

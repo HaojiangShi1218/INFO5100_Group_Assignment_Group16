@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
+package UserInterface.WorkAreas.Main;
 import UserInterface.WorkAreas.Main.LoginScreen;
 import java.awt.CardLayout;
 
@@ -93,12 +93,8 @@ public class MainJFrame extends javax.swing.JFrame {
     }
 
     private void setLoginScreen() {
-        LoginScreen pwamf = new LoginScreen(mainWorkArea);
-        
-        mainWorkArea.removeAll();
-        mainWorkArea.add("ProfileWorkAreaMainFrame",pwamf);
-        mainWorkArea.revalidate();
-        mainWorkArea.repaint(); 
+        LoginScreen ls = new LoginScreen(mainWorkArea);
+        mainWorkArea.add("LoginScreen",ls);
         CardLayout layout = (CardLayout) mainWorkArea.getLayout();
         layout.next(mainWorkArea);
     }

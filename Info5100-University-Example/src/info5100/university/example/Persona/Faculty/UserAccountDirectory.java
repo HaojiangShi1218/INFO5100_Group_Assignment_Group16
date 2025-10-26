@@ -31,6 +31,11 @@ public class UserAccountDirectory {
         return ua;
     }
 
+    public void deleteAccount(UserAccount ua) {
+        useraccountlist.remove(ua);
+    }
+    
+
     public UserAccount findUserAccount(String id) {
 
         for (UserAccount ua : useraccountlist) {

@@ -31,10 +31,10 @@ public class LoginScreen extends javax.swing.JPanel {
     /**
      * Creates new form LoginScreen
      */
-    public LoginScreen(JPanel mainWorkArea) {
+    public LoginScreen(JPanel mWA) {
         initComponents();
         
-        this.mainWorkArea = mainWorkArea;
+        this.mainWorkArea = mWA;
         department = ConfigureAUniversity.initialize();
 
     }
@@ -149,7 +149,6 @@ public class LoginScreen extends javax.swing.JPanel {
             
             System.out.println(profile.getRole());
             adminworkarea = new AdminRoleWorkAreaJPanel(department, mainWorkArea);
-            mainWorkArea.removeAll();
             mainWorkArea.add("Admin", adminworkarea);
             ((java.awt.CardLayout) mainWorkArea.getLayout()).next(mainWorkArea);
 

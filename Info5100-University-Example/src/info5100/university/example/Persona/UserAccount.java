@@ -52,6 +52,24 @@ public class UserAccount {
         public Profile getAssociatedPersonProfile(){
             return profile;
         }
+
+    public void setProfile(Profile profile) {
+        this.profile = profile;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+    
+    
         
     @Override
         public String toString(){

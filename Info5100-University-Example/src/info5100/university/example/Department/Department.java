@@ -42,6 +42,7 @@ public class Department {
         name = n;
         mastercoursecatalog = new HashMap<>();
         coursecatalog = new CourseCatalog(this);
+        facultydirectory = new FacultyDirectory(this);
         studentdirectory = new StudentDirectory(this); //pass the department object so it stays linked to it
         persondirectory = new PersonDirectory();
         adminDirectory = new AdminDirectory();
@@ -63,6 +64,12 @@ public void addElectiveCourse(Course c){
 
     }
 
+    public FacultyDirectory getFacultydirectory() {
+        return facultydirectory;
+    }
+    
+    
+    
     public StudentDirectory getStudentDirectory() {
     return studentdirectory;
     }

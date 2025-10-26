@@ -74,8 +74,8 @@ public class ConfigureAUniversity {
         PersonDirectory pd = department.getPersonDirectory();
         Person person = pd.newPerson("0112303");
         StudentDirectory sd = department.getStudentDirectory();
-        StudentProfile student = sd.newStudentProfile(person);
-        CourseLoad courseload = student.newCourseLoad("Fall2020"); 
+        StudentProfile studentProfile1 = sd.newStudentProfile(person);
+        CourseLoad courseload = studentProfile1.newCourseLoad("Fall2020"); 
 //        
         courseload.newSeatAssignment(courseoffer); //register student in class
         
@@ -93,10 +93,12 @@ public class ConfigureAUniversity {
         
         AdminDirectory adminDirectory = department.getAdminDirectory();
         AdminProfile adminProfile0 = adminDirectory.newAdminProfile(person001);
+       
+        AdminProfile adminProfile1 = adminDirectory.newAdminProfile(person002);
         
         UserAccountDirectory uadirectory = department.getUseraccountdirectory();
         UserAccount ua3 = uadirectory.newUserAccount(adminProfile0, "admin", "****"); /// order products for one of the customers and performed by a sales person
-        //UserAccount ua4 = uadirectory.newUserAccount(studentprofile0, "adam", "****"); 
+        UserAccount ua4 = uadirectory.newUserAccount(adminProfile1, "Gina", "666"); 
         
         int total = department.calculateRevenuesBySemester("Fall2020");
         System.out.print("Total: " + total);
