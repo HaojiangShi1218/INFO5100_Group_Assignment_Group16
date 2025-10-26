@@ -13,16 +13,16 @@ import java.util.ArrayList;
  *
  * @author kal bugrara
  */
-public class FacultyProfile {
-
+public class FacultyProfile extends Profile{
+    
     Person person;
     ArrayList <FacultyAssignment> facultyassignments; 
     
     public FacultyProfile(Person p) {
-
-        person = p;
+        super(p);
         facultyassignments = new ArrayList();
     }
+    
     public  double getProfAverageOverallRating(){
         
         double sum = 0.0;
@@ -51,16 +51,21 @@ public class FacultyProfile {
         return null; //complete it later
     }
 
+<<<<<<< HEAD
     public Person getPerson() {
         return person;
     }
     
+=======
+    
+    @Override
+    public String getRole() {
+        return "Faculty";
+    }
+>>>>>>> e064826 (implemented main frame)
 
     public boolean isMatch(String id) {
-        if (person.getPersonId().equals(id)) {
-            return true;
-        }
-        return false;
+        return person.getPersonId().equals(id);
     }
 
 }

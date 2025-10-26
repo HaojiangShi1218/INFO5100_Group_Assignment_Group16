@@ -12,7 +12,9 @@ import info5100.university.example.CourseSchedule.CourseOffer;
 import info5100.university.example.CourseSchedule.CourseSchedule;
 import info5100.university.example.Degree.Degree;
 import info5100.university.example.Employer.EmployerDirectory;
+import info5100.university.example.Persona.AdminDirectory;
 import info5100.university.example.Persona.Faculty.FacultyDirectory;
+import info5100.university.example.Persona.Faculty.UserAccountDirectory;
 import info5100.university.example.Persona.PersonDirectory;
 import info5100.university.example.Persona.StudentDirectory;
 import info5100.university.example.Persona.StudentProfile;
@@ -30,6 +32,8 @@ public class Department {
     StudentDirectory studentdirectory;
     FacultyDirectory facultydirectory;
     EmployerDirectory employerdirectory;
+    AdminDirectory adminDirectory;
+    UserAccountDirectory useraccountdirectory;
     Degree degree;
 
     HashMap<String, CourseSchedule> mastercoursecatalog;
@@ -40,6 +44,8 @@ public class Department {
         coursecatalog = new CourseCatalog(this);
         studentdirectory = new StudentDirectory(this); //pass the department object so it stays linked to it
         persondirectory = new PersonDirectory();
+        adminDirectory = new AdminDirectory();
+        useraccountdirectory = new UserAccountDirectory();
         degree = new Degree("MSIS");
         
     }
@@ -107,4 +113,23 @@ public void addElectiveCourse(Course c){
         co.assignEmptySeat(cl);
 
     }
+
+    public UserAccountDirectory getUseraccountdirectory() {
+        return useraccountdirectory;
+    }
+
+    public void setUseraccountdirectory(UserAccountDirectory useraccountdirectory) {
+        this.useraccountdirectory = useraccountdirectory;
+    }
+
+    public AdminDirectory getAdminDirectory() {
+        return adminDirectory;
+    }
+
+    public void setAdminDirectory(AdminDirectory adminDirectory) {
+        this.adminDirectory = adminDirectory;
+    }
+    
+    
+    
 }

@@ -17,11 +17,45 @@ import info5100.university.example.workareas.Workarea;
  * @author kal bugrara
  */
 public class UserAccount {
-    Person person;
-    Workarea landingworkarea;
+    Profile profile;
+    String username;
+    String password;
     
-    public UserAccount(Person p){
-        person = p;
+    public UserAccount (Profile profile, String un, String pw){
+        username = un;
+         password = pw;
+         this.profile = profile;
+
     }
-    
+
+    public String getPersonId(){
+        return profile.getPerson().getPersonId();
+    }
+    public String getUserLoginName(){
+        return username;
+    }
+
+        public boolean isMatch(String id){
+        if(getPersonId().equals(id)) return true;
+        return false;
+    }
+        public boolean IsValidUser(String un, String pw){
+        
+            if (username.equalsIgnoreCase(un) && password.equals(pw)) return true;
+            else return false;
+        
+        }
+        public String getRole(){
+            return profile.getRole();
+        }
+        
+        public Profile getAssociatedPersonProfile(){
+            return profile;
+        }
+        
+    @Override
+        public String toString(){
+            
+            return getUserLoginName();
+        }
 }

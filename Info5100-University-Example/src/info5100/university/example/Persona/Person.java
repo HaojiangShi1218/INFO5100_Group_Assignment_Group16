@@ -9,7 +9,9 @@ package info5100.university.example.Persona;
  *
  * @author kal bugrara
  */
+
 public class Person {
+<<<<<<< HEAD
     
     private String id;
     private String name;
@@ -20,10 +22,21 @@ public class Person {
     public Person (String id){
         this.id = id;
     }
+=======
+
+    String id;
+
+    public Person(String id) {
+
+        this.id = id;
+    }
+
+>>>>>>> e064826 (implemented main frame)
     public String getPersonId() {
         return id;
     }
 
+<<<<<<< HEAD
     public void setPersonId(String id) {
         this.id = id;
     }
@@ -62,6 +75,17 @@ public class Person {
 
     public void setAddress(String address) {
         this.address = address;
+=======
+    public boolean isMatch(String id) {
+        if (getPersonId().equals(id)) {
+            return true;
+        }
+        return false;
+>>>>>>> e064826 (implemented main frame)
     }
-    
+
+    @Override
+    public String toString() {
+        return getPersonId();
+    }
 }

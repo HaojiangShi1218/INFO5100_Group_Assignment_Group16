@@ -26,9 +26,9 @@ public class EmployerDirectory {
 
     }
 
-    public EmployerProfile newEmployerProfile(String n) {
+    public EmployerProfile newEmployerProfile(Person p) {
 
-        EmployerProfile sp = new EmployerProfile(n);
+        EmployerProfile sp = new EmployerProfile(p);
         employerlist.add(sp);
         return sp;
     }
