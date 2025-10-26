@@ -31,6 +31,10 @@ public class StudentProfile {
         return person.getPersonId().equals(id);
     }
 
+    public Person getPerson() {
+        return person;
+    }
+
     public Transcript getTranscript() {
         return transcript;
     }
@@ -54,5 +58,17 @@ public class StudentProfile {
 
         return transcript.getCourseList();
 
+    }
+    
+    public ArrayList<String> getAllTerms() {
+        return transcript.getAllTerms();
+    }
+    
+    public ArrayList<SeatAssignment> getCoursesByTerm(String term) {
+        return transcript.getCoursesByTerm(term);
+    }
+    
+    public ArrayList<SeatAssignment> getAllSeatAssignments() {
+        return transcript.getCourseList();
     }
 }
