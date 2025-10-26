@@ -1,1 +1,8 @@
 /Info5100-University-Example/dist/
+.DS_Store
+/build/
+/out/
+/target/
+/bin/
+*.class
+*.log
