@@ -38,6 +38,7 @@ public class RegistrarWorkAreaPanel extends javax.swing.JPanel {
         registrarProfilePanel1 = new info5100.university.example.workareas.RegistrarRole.RegistrarProfilePanel();
         registrarReportsPanel1 = new info5100.university.example.workareas.RegistrarRole.RegistrarReportsPanel();
         studentRegistrationPanel1 = new info5100.university.example.workareas.RegistrarRole.StudentRegistrationPanel();
+        gradeManagementPanel1 = new info5100.university.example.workareas.RegistrarRole.GradeManagementPanel();
 
         setLayout(new java.awt.BorderLayout());
 
@@ -86,6 +87,7 @@ public class RegistrarWorkAreaPanel extends javax.swing.JPanel {
         jTabbedPane1.addTab("Profile setting", registrarProfilePanel1);
         jTabbedPane1.addTab("Report Analytics", registrarReportsPanel1);
         jTabbedPane1.addTab("Student Enrollment", studentRegistrationPanel1);
+        jTabbedPane1.addTab("Grade Managment", gradeManagementPanel1);
 
         add(jTabbedPane1, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
@@ -102,6 +104,7 @@ public class RegistrarWorkAreaPanel extends javax.swing.JPanel {
     private javax.swing.JButton btnReg;
     private javax.swing.JButton btnReports;
     private info5100.university.example.workareas.RegistrarRole.FinancialReconciliationPanel financialReconciliationPanel1;
+    private info5100.university.example.workareas.RegistrarRole.GradeManagementPanel gradeManagementPanel1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JToolBar jToolBar1;
     private info5100.university.example.workareas.RegistrarRole.ManageCourseOfferingPanel manageCourseOfferingPanel1;
