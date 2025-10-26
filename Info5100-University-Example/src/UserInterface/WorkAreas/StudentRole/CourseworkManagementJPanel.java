@@ -4,17 +4,73 @@
  */
 package UserInterface.WorkAreas.StudentRole;
 
+import info5100.university.example.Persona.StudentProfile;
+import java.awt.CardLayout;
+import java.io.File;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.table.DefaultTableModel;
+import info5100.university.example.CourseSchedule.SeatAssignment;
+import info5100.university.example.CourseSchedule.CourseOffer;
+import info5100.university.example.CourseCatalog.Course;
+
 /**
  *
  * @author dell
  */
 public class CourseworkManagementJPanel extends javax.swing.JPanel {
-
+    private JPanel mainWorkArea;
+    private StudentProfile studentProfile;
+    private DefaultTableModel tableModel;
+    private File attachedFile;
     /**
      * Creates new form CourseworkJPanel
      */
-    public CourseworkManagementJPanel() {
+    public CourseworkManagementJPanel(JPanel mainWorkArea, StudentProfile studentProfile) {
         initComponents();
+        this.mainWorkArea = mainWorkArea;
+        this.studentProfile = studentProfile;
+        
+        tableModel = (DefaultTableModel) tblCourseWork.getModel();
+        populateCourseTable();
+    }
+    
+    private void populateCourseTable() {
+    tableModel.setRowCount(0);
+
+    if (studentProfile == null) {
+        tableModel.addRow(new Object[]{"INFO 5100", "Application Engineering and Development", "Kal Bugrara", "A"});
+        tableModel.addRow(new Object[]{"INFO 6150", "Web Tools", "Jane Doe", "B"});
+        return;
+    }
+    try {
+        var transcript = studentProfile.getTranscript();
+        if (transcript == null || transcript.getCourseList() == null || transcript.getCourseList().isEmpty()) {
+            tableModel.addRow(new Object[]{"-", "No courses found", "-", "-"});
+            return;
+        }
+        for (var sa : transcript.getCourseList()) {
+            var offer = sa.getCourseOffer();
+            var course = offer.getSubjectCourse();
+
+            String courseNumber = offer.getCourseNumber();
+            String courseName = course.getName();
+            String instructorName = offer.getFacultyProfile() != null
+                    ? offer.getFacultyProfile().getPerson().getPersonId(): "TBD";
+            String grade = (sa.getGrade() != 0) ? String.valueOf(sa.getGrade()) : "N/A";
+
+            tableModel.addRow(new Object[]{
+                    courseNumber,
+                    courseName,
+                    instructorName,
+                    grade
+            });
+        }
+        
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Error loading data: " + e.getMessage());
+    }
     }
 
     /**
@@ -26,26 +82,31 @@ public class CourseworkManagementJPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton1 = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
+        btnBack = new javax.swing.JButton();
+        lblTitle = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        tblCourseWork = new javax.swing.JTable();
+        lblAssignmentName = new javax.swing.JLabel();
+        txtAssignmentName = new javax.swing.JTextField();
+        lblDescription = new javax.swing.JLabel();
+        txtDescription = new javax.swing.JTextField();
+        lblFile = new javax.swing.JLabel();
+        lblSubmit = new javax.swing.JLabel();
+        btnAttach = new javax.swing.JButton();
+        btnRemove = new javax.swing.JButton();
+        btnSubmit = new javax.swing.JButton();
 
-        jButton1.setText("<<< Back");
+        btnBack.setText("<<< Back");
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
+            }
+        });
 
-        jLabel1.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
-        jLabel1.setText("Coursework Management");
+        lblTitle.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
+        lblTitle.setText("Coursework Management");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblCourseWork.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -64,19 +125,34 @@ public class CourseworkManagementJPanel extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tblCourseWork);
 
-        jLabel2.setText("Assignment Name:");
+        lblAssignmentName.setText("Assignment Name:");
 
-        jLabel3.setText("Description:");
+        lblDescription.setText("Description:");
 
-        jLabel4.setText("File:");
+        lblFile.setText("File:");
 
-        jButton2.setText("Attach");
+        btnAttach.setText("Attach");
+        btnAttach.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAttachActionPerformed(evt);
+            }
+        });
 
-        jButton3.setText("Remove");
+        btnRemove.setText("Remove");
+        btnRemove.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveActionPerformed(evt);
+            }
+        });
 
-        jButton4.setText("Submit");
+        btnSubmit.setText("Submit");
+        btnSubmit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSubmitActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -89,30 +165,30 @@ public class CourseworkManagementJPanel extends javax.swing.JPanel {
                         .addComponent(jScrollPane1))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jButton1)
+                        .addComponent(btnBack)
                         .addGap(266, 266, 266)
-                        .addComponent(jLabel1))
+                        .addComponent(lblTitle))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(115, 115, 115)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel4))
+                            .addComponent(lblDescription)
+                            .addComponent(lblAssignmentName)
+                            .addComponent(lblFile))
                         .addGap(53, 53, 53)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextField1)
-                            .addComponent(jTextField2)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 119, Short.MAX_VALUE)
+                            .addComponent(txtAssignmentName, javax.swing.GroupLayout.DEFAULT_SIZE, 449, Short.MAX_VALUE)
+                            .addComponent(txtDescription)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(lblSubmit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(btnRemove, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnAttach, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addGap(52, 52, 52)))))
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addGap(426, 426, 426)
-                .addComponent(jButton4)
+                .addComponent(btnSubmit)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -121,49 +197,104 @@ public class CourseworkManagementJPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(23, 23, 23)
-                        .addComponent(jLabel1))
+                        .addComponent(lblTitle))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jButton1)))
+                        .addComponent(btnBack)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(9, 9, 9)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblAssignmentName)
+                    .addComponent(txtAssignmentName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblDescription)
+                    .addComponent(txtDescription, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel4)
-                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblFile)
+                    .addComponent(lblSubmit, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton2)
+                        .addComponent(btnAttach)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton3)))
+                        .addComponent(btnRemove)))
                 .addGap(18, 18, 18)
-                .addComponent(jButton4)
+                .addComponent(btnSubmit)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        // TODO add your handling code here:
+        CardLayout layout = (CardLayout) mainWorkArea.getLayout();
+        mainWorkArea.remove(this);
+        layout.previous(mainWorkArea);
+    }//GEN-LAST:event_btnBackActionPerformed
+
+    private void btnAttachActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAttachActionPerformed
+        // TODO add your handling code here:
+        JFileChooser chooser = new JFileChooser();
+        int result = chooser.showOpenDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) { 
+            attachedFile = chooser.getSelectedFile();
+            JOptionPane.showMessageDialog(this, "File attached: " + attachedFile.getName());
+    }
+    }//GEN-LAST:event_btnAttachActionPerformed
+
+    private void btnRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveActionPerformed
+        // TODO add your handling code here:
+        if (attachedFile != null) {
+            JOptionPane.showMessageDialog(this, "Removed: " + attachedFile.getName());
+            attachedFile = null;
+        } else {
+            JOptionPane.showMessageDialog(this, "No file to remove.");
+            }
+    }//GEN-LAST:event_btnRemoveActionPerformed
+
+    private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitActionPerformed
+        // TODO add your handling code here:
+        int selectedRow = tblCourseWork.getSelectedRow();
+        if (selectedRow < 0) {
+            JOptionPane.showMessageDialog(this, "Please select a course before submitting.");
+        return;
+        }
+        
+        String assignmentName = txtAssignmentName.getText().trim();
+        String description = txtDescription.getText().trim();
+        
+        if (assignmentName.isEmpty() || attachedFile == null) {
+            JOptionPane.showMessageDialog(this, "Please provide an assignment name and attach a file.");
+            return;
+        }
+        
+        String courseId = tableModel.getValueAt(selectedRow, 0).toString();
+        JOptionPane.showMessageDialog(this,
+                "Assignment submitted!\n" +
+                        "Course: " + courseId +
+                        "\nAssignment: " + assignmentName +
+                        "\nDescription: " + description +
+                        "\nFile: " + attachedFile.getName());
+        
+        txtAssignmentName.setText("");
+        txtDescription.setText("");
+        attachedFile = null;
+    }//GEN-LAST:event_btnSubmitActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
+    private javax.swing.JButton btnAttach;
+    private javax.swing.JButton btnBack;
+    private javax.swing.JButton btnRemove;
+    private javax.swing.JButton btnSubmit;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JLabel lblAssignmentName;
+    private javax.swing.JLabel lblDescription;
+    private javax.swing.JLabel lblFile;
+    private javax.swing.JLabel lblSubmit;
+    private javax.swing.JLabel lblTitle;
+    private javax.swing.JTable tblCourseWork;
+    private javax.swing.JTextField txtAssignmentName;
+    private javax.swing.JTextField txtDescription;
     // End of variables declaration//GEN-END:variables
 }
