@@ -84,6 +84,20 @@ public class RegistrarDataStore {
         Offering o = offerings.get(cid);
         if (o != null && newCap >= 0) o.capacity = newCap;
     }
+    // RegistrarDataStore.java
+public java.util.Set<String> getAllTerms() {
+    java.util.LinkedHashSet<String> terms = new java.util.LinkedHashSet<>();
+    // 来自课程
+    for (Offering o : offerings.values()) {
+        if (o.term != null && !o.term.isEmpty()) terms.add(o.term);
+    }
+    // 来自账单（以防有历史账单但当前无开课）
+    for (PaymentRecord pr : ledger) {
+        if (pr.term != null && !pr.term.isEmpty()) terms.add(pr.term);
+    }
+    return terms;
+}
+
 
     // ====== Enrollment API（带容量/open 校验，自动记账）======
     public String enroll(String studentId, String courseId) {
