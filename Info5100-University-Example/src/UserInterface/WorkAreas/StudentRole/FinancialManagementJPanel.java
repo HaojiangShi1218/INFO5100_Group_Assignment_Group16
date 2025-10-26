@@ -4,17 +4,122 @@
  */
 package UserInterface.WorkAreas.StudentRole;
 
+import info5100.university.example.CourseSchedule.SeatAssignment;
+import info5100.university.example.Persona.StudentAccount;
+import info5100.university.example.Persona.StudentProfile;
+import java.awt.CardLayout;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author dell
  */
 public class FinancialManagementJPanel extends javax.swing.JPanel {
+    private JPanel mainWorkArea;
+    private StudentProfile studentProfile;
+    private double currentBalance = 0.0;
+    private DefaultTableModel tableModel;
+    private StudentAccount studentAccount;
 
     /**
      * Creates new form FinancialManagementJPanel
      */
-    public FinancialManagementJPanel() {
+    public FinancialManagementJPanel(JPanel mainWorkArea, StudentProfile studentProfile) {
         initComponents();
+        this.mainWorkArea = mainWorkArea;
+        this.studentProfile = studentProfile;
+        setupTable();
+        calculateBalance();
+        refreshTable();
+    }
+    
+    private void setupTable() {
+        tableModel = (DefaultTableModel) tblTransactions.getModel();
+        tableModel.setColumnIdentifiers(new Object[]{"Date", "Description", "Amount", "Type (Paid/Refund)"});
+    }
+    
+    private void calculateBalance() {
+        double totalTuition = 0.0;
+
+        for (SeatAssignment sa : studentProfile.getCourseList()) {
+            int credits = sa.getCreditHours();
+            double courseCost = credits * 1500;
+            totalTuition += courseCost;
+        }
+
+        currentBalance = totalTuition - getTotalPaid();
+        txtBalance.setText(String.format("%.2f", currentBalance));
+    }
+    
+    private double getTotalPaid() {
+        double total = 0.0;
+        for (int i = 0; i < tableModel.getRowCount(); i++) {
+            String type = (String) tableModel.getValueAt(i, 3);
+            if ("Paid".equals(type)) {
+                total += Double.parseDouble(tableModel.getValueAt(i, 2).toString());
+            } else if ("Refund".equals(type)) {
+                total -= Double.parseDouble(tableModel.getValueAt(i, 2).toString());
+            }
+        }
+        return total;
+    }
+    
+    private void handlePayTuition() {
+        if (currentBalance <= 0) {
+            JOptionPane.showMessageDialog(this,"No outstanding balance to pay!","Notice",JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
+        String input = JOptionPane.showInputDialog(this, "Enter payment amount:");
+        if (input == null || input.isEmpty()) return;
+
+        try {
+            double payment = Double.parseDouble(input);
+            if (payment <= 0) {
+                JOptionPane.showMessageDialog(this, "Invalid amount!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (payment > currentBalance) {
+                JOptionPane.showMessageDialog(this, "Payment exceeds balance. Paying remaining tuition only.");
+                payment = currentBalance;
+            }
+
+            currentBalance -= payment;
+            txtBalance.setText(String.format("%.2f", currentBalance));
+
+            addTransaction("Tuition Payment", payment, "Paid");
+
+            JOptionPane.showMessageDialog(this, "Payment successful!");
+            refreshTable();
+
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Invalid number format!", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    public void refundTuition(double amount, String courseName) {
+        addTransaction("Refund for " + courseName, amount, "Refund");
+        currentBalance += amount;
+        txtBalance.setText(String.format("%.2f", currentBalance));
+        refreshTable();
+    }
+    
+    private void addTransaction(String desc, double amount, String type) {
+        String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+        tableModel.addRow(new Object[]{date, desc, String.format("%.2f", amount), type});
+    }
+    
+    private void refreshTable() {
+        tblTransactions.setModel(tableModel);
+    }
+    
+    public boolean canViewTranscript() {
+        return currentBalance <= 0;
     }
 
     /**
@@ -26,16 +131,21 @@ public class FinancialManagementJPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton1 = new javax.swing.JButton();
+        btnBack = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        txtBalance = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jButton2 = new javax.swing.JButton();
+        tblTransactions = new javax.swing.JTable();
+        btnPayTuition = new javax.swing.JButton();
 
-        jButton1.setText("<<< Back");
+        btnBack.setText("<<< Back");
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
         jLabel1.setText("Financial Management");
@@ -44,7 +154,7 @@ public class FinancialManagementJPanel extends javax.swing.JPanel {
 
         jLabel3.setText("$");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblTransactions.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -63,9 +173,14 @@ public class FinancialManagementJPanel extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tblTransactions);
 
-        jButton2.setText("Pay Tuition");
+        btnPayTuition.setText("Pay Tuition");
+        btnPayTuition.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPayTuitionActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -77,7 +192,7 @@ public class FinancialManagementJPanel extends javax.swing.JPanel {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addContainerGap()
-                                .addComponent(jButton1)
+                                .addComponent(btnBack)
                                 .addGap(293, 293, 293)
                                 .addComponent(jLabel1))
                             .addGroup(layout.createSequentialGroup()
@@ -86,7 +201,7 @@ public class FinancialManagementJPanel extends javax.swing.JPanel {
                                 .addGap(18, 18, 18)
                                 .addComponent(jLabel3)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(txtBalance, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 353, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
@@ -94,7 +209,7 @@ public class FinancialManagementJPanel extends javax.swing.JPanel {
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jButton2)
+                .addComponent(btnPayTuition)
                 .addGap(439, 439, 439))
         );
         layout.setVerticalGroup(
@@ -106,29 +221,61 @@ public class FinancialManagementJPanel extends javax.swing.JPanel {
                         .addComponent(jLabel1))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jButton1)))
+                        .addComponent(btnBack)))
                 .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(jLabel3)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtBalance, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(33, 33, 33)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(35, 35, 35)
-                .addComponent(jButton2)
+                .addComponent(btnPayTuition)
                 .addContainerGap(82, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnPayTuitionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPayTuitionActionPerformed
+        // TODO add your handling code here:
+        try {
+            String amountStr = JOptionPane.showInputDialog(this, "Enter amount to pay:");
+            if (amountStr == null || amountStr.trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Payment cancelled.");
+                return;
+            }
+            
+            double amount = Double.parseDouble(amountStr);
+            if (amount <= 0) {
+                JOptionPane.showMessageDialog(this, "Invalid amount.");
+                return;
+            }
+            
+            studentAccount.payTuition(amount);
+            JOptionPane.showMessageDialog(this, "Payment successful! You paid $" + amount);
+            
+            txtBalance.setText(String.valueOf(studentAccount.getBalance()));
+        
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Please enter a valid number.");
+        }
+    }//GEN-LAST:event_btnPayTuitionActionPerformed
+
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        // TODO add your handling code here:
+        CardLayout layout = (CardLayout) mainWorkArea.getLayout();
+        mainWorkArea.remove(this);
+        layout.previous(mainWorkArea);
+    }//GEN-LAST:event_btnBackActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton btnBack;
+    private javax.swing.JButton btnPayTuition;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTable tblTransactions;
+    private javax.swing.JTextField txtBalance;
     // End of variables declaration//GEN-END:variables
 }
