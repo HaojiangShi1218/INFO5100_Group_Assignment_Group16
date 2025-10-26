@@ -9,14 +9,55 @@ package info5100.university.example.workareas.RegistrarRole;
  * @author xuanliliu
  */
 public class RegistrarReportsPanel extends javax.swing.JPanel {
+    
+    static class CourseStat {
+    String term, dept, cid, name, faculty;
+    int enrolled;
+    CourseStat(String term, String dept, String cid, String name, String faculty, int enrolled){
+        this.term=term; this.dept=dept; this.cid=cid; this.name=name; this.faculty=faculty; this.enrolled=enrolled;
+    }
+}
+    private final java.util.List<CourseStat> courseStats = new java.util.ArrayList<>();
+
+private void info(String s){ javax.swing.JOptionPane.showMessageDialog(this, s, "Info", javax.swing.JOptionPane.INFORMATION_MESSAGE); }
+private void warn(String s){ javax.swing.JOptionPane.showMessageDialog(this, s, "Warning", javax.swing.JOptionPane.WARNING_MESSAGE); }
 
     /**
      * Creates new form RegistrarReportsPanel
      */
     public RegistrarReportsPanel() {
         initComponents();
+        if (cmbTermReport.getItemCount() == 0){
+    cmbTermReport.addItem("Fall 2025");
+    cmbTermReport.addItem("Spring 2026");
+}
     }
 
+    
+    private void refreshEnrollByCourse(String term){
+    javax.swing.table.DefaultTableModel m = (javax.swing.table.DefaultTableModel) tblEnrollByCourse.getModel();
+    m.setRowCount(0);
+    m.setColumnIdentifiers(new String[]{"Term","Department","Course ID","Course Name","Faculty","Enrollment Count"});
+    for (CourseStat cs : courseStats){
+        if (term.equals(cs.term)){
+            m.addRow(new Object[]{cs.term, cs.dept, cs.cid, cs.name, cs.faculty, cs.enrolled});
+        }
+    }
+}
+
+private void refreshGpaDist(String term){
+    // 这里用固定演示数据，你也可以根据 term 做不同分布
+    javax.swing.table.DefaultTableModel m = (javax.swing.table.DefaultTableModel) tblGpaDist.getModel();
+    m.setRowCount(0);
+    m.setColumnIdentifiers(new String[]{"Program","A","A-","B+","B","B-","C+","C","C-","F","Average GPA"});
+    if ("Fall 2025".equals(term)){
+        m.addRow(new Object[]{"MSIS", 25,18,14,9,4,2,1,0,0, 3.42});
+        m.addRow(new Object[]{"MSCS", 12,15,20,10,6,3,1,0,1, 3.18});
+    } else {
+        m.addRow(new Object[]{"MSIS", 10,12,11,8,5,3,2,1,0, 3.10});
+        m.addRow(new Object[]{"MSCS", 8,9,12,7,6,4,2,1,1,  2.98});
+    }
+}
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -28,31 +69,44 @@ public class RegistrarReportsPanel extends javax.swing.JPanel {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        cmbTermReport = new javax.swing.JComboBox<>();
+        btnLoadReports = new javax.swing.JButton();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblEnrollByCourse = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        tblGpaDist = new javax.swing.JTable();
 
         setLayout(new java.awt.BorderLayout());
 
         jLabel1.setText("Term");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmbTermReport.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Fall 2025", "Spring 2026" }));
+
+        btnLoadReports.setText("Load Reports");
+        btnLoadReports.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLoadReportsActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(100, 100, 100)
-                .addComponent(jLabel1)
-                .addGap(35, 35, 35)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(384, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(100, 100, 100)
+                        .addComponent(jLabel1)
+                        .addGap(35, 35, 35)
+                        .addComponent(cmbTermReport, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(110, 110, 110)
+                        .addComponent(btnLoadReports)))
+                .addContainerGap(352, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -60,24 +114,26 @@ public class RegistrarReportsPanel extends javax.swing.JPanel {
                 .addGap(22, 22, 22)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(55, Short.MAX_VALUE))
+                    .addComponent(cmbTermReport, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(btnLoadReports)
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         add(jPanel1, java.awt.BorderLayout.PAGE_START);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblEnrollByCourse.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "Term", "Department", "Course ID", "Course Name", "Faculty", "Enrollment", "Count"
+                "Term", "Department", "Course ID", "Course Name", "Faculty", "Enrollment Count"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tblEnrollByCourse);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -98,7 +154,7 @@ public class RegistrarReportsPanel extends javax.swing.JPanel {
 
         jTabbedPane1.addTab("Enrollment by Course", jPanel2);
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        tblGpaDist.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null, null, null, null},
@@ -109,7 +165,7 @@ public class RegistrarReportsPanel extends javax.swing.JPanel {
                 "Program", "A", "A-", "B+", "B", "B-", "C+", "C", "C-", "F", "Average"
             }
         ));
-        jScrollPane2.setViewportView(jTable2);
+        jScrollPane2.setViewportView(tblGpaDist);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -133,9 +189,33 @@ public class RegistrarReportsPanel extends javax.swing.JPanel {
         add(jTabbedPane1, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnLoadReportsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoadReportsActionPerformed
+        // TODO add your handling code here:
+        Object t = cmbTermReport.getSelectedItem();
+    if (t == null){ warn("Please choose a term."); return; }
+    String term = t.toString();
+
+    // 课程统计演示数据（你可与 Course Offering/Enrollment 的数字保持一致）
+    courseStats.clear();
+    if ("Fall 2025".equals(term)){
+        courseStats.add(new CourseStat("Fall 2025","IS","INFO 5100","Application Engineering","Dr. Smith", 18));
+        courseStats.add(new CourseStat("Fall 2025","IS","INFO 5600","DBMS","Prof. Lee", 35));
+        courseStats.add(new CourseStat("Fall 2025","CS","CS 5001","Intro CS","Dr. Miller", 42));
+    } else { // Spring 2026
+        courseStats.add(new CourseStat("Spring 2026","IS","INFO 6205","PDP","Dr. Chen", 9));
+        courseStats.add(new CourseStat("Spring 2026","IS","INFO 7520","EA","Dr. Wang", 21));
+        courseStats.add(new CourseStat("Spring 2026","CS","CS 5010","Prog Design","Dr. White", 30));
+    }
+
+    refreshEnrollByCourse(term);
+    refreshGpaDist(term);
+    info("Reports loaded for " + term + ".");
+    }//GEN-LAST:event_btnLoadReportsActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JButton btnLoadReports;
+    private javax.swing.JComboBox<String> cmbTermReport;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -143,7 +223,7 @@ public class RegistrarReportsPanel extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
+    private javax.swing.JTable tblEnrollByCourse;
+    private javax.swing.JTable tblGpaDist;
     // End of variables declaration//GEN-END:variables
 }
