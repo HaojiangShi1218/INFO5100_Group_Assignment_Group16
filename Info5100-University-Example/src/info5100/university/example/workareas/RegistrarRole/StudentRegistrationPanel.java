@@ -3,19 +3,106 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package info5100.university.example.workareas.RegistrarRole;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.JOptionPane;
+
 
 /**
  *
  * @author xuanliliu
  */
 public class StudentRegistrationPanel extends javax.swing.JPanel {
+        
+        // ===== In-memory state =====
+private final java.util.Map<String, Integer> capacityByCourse   = new java.util.HashMap<>();
+private final java.util.Map<String, Integer> enrolledByCourse   = new java.util.HashMap<>();
+private final java.util.Map<String, java.util.Set<String>> courseToStudents = new java.util.HashMap<>();
+private final java.util.Map<String, java.util.Set<String>> studentToCourses = new java.util.HashMap<>();
+
+// 原始学生表数据（用于搜索过滤时恢复）
+private final java.util.List<Object[]> allStudents = new java.util.ArrayList<>();
+
 
     /**
      * Creates new form StudentRegistrationPanel
      */
     public StudentRegistrationPanel() {
         initComponents();
+        // 初始化学生表（可用你已有的数据替换）
+DefaultTableModel ms = (DefaultTableModel) tblStudents.getModel();
+ms.setRowCount(0);
+ms.setColumnIdentifiers(new String[]{"Student ID","Name"});
+Object[][] seedStudents = {
+    {"S10001","Alice Wang"},
+    {"S10002","Bob Kim"},
+    {"S10003","Carol Li"}
+};
+for (Object[] row : seedStudents) {
+    ms.addRow(row);
+    allStudents.add(row); // 保存原始数据用于搜索恢复
+}
+
+// 初始化课程表
+DefaultTableModel mo = (DefaultTableModel) tblCourseList.getModel();
+mo.setRowCount(0);
+mo.setColumnIdentifiers(new String[]{"Course ID","Title","Term","Enrolled"});
+mo.addRow(new Object[]{"INFO 5100","Application Engineering","Fall 2025",18});
+mo.addRow(new Object[]{"INFO 5600","DBMS","Fall 2025",35});
+mo.addRow(new Object[]{"INFO 6205","Program Design Paradigm","Spring 2026",9});
+
+// 容量 & 当前已选（与表格中的 Enrolled 对齐）
+capacityByCourse.put("INFO 5100", 30);
+capacityByCourse.put("INFO 5600", 35);
+capacityByCourse.put("INFO 6205", 25);
+
+enrolledByCourse.put("INFO 5100", 18);
+enrolledByCourse.put("INFO 5600", 35);
+enrolledByCourse.put("INFO 6205", 9);
+
     }
+    
+    private String getSelectedStudentId() {
+    int r = tblStudents.getSelectedRow();
+    if (r < 0) return null;
+    Object v = tblStudents.getValueAt(r, 0);
+    return v == null ? null : v.toString();
+}
+
+private String getSelectedCourseId() {
+    int r = tblCourseList.getSelectedRow();
+    if (r < 0) return null;
+    Object v = tblCourseList.getValueAt(r, 0);
+    return v == null ? null : v.toString();
+}
+
+private int getCapacity(String courseId) {
+    return capacityByCourse.getOrDefault(courseId, 0);
+}
+private int getEnrolled(String courseId) {
+    return enrolledByCourse.getOrDefault(courseId, 0);
+}
+private void setEnrolled(String courseId, int val) {
+    enrolledByCourse.put(courseId, Math.max(val, 0));
+    // 同步到表格 Enrolled 列
+    DefaultTableModel m = (DefaultTableModel) tblCourseList.getModel();
+    for (int i=0;i<m.getRowCount();i++){
+        if (courseId.equals(String.valueOf(m.getValueAt(i,0)))) {
+            m.setValueAt(val, i, 3); // 第4列 Enrolled
+            break;
+        }
+    }
+}
+
+private java.util.Set<String> studentSetForCourse(String courseId) {
+    return courseToStudents.computeIfAbsent(courseId, k -> new java.util.HashSet<>());
+}
+private java.util.Set<String> courseSetForStudent(String studentId) {
+    return studentToCourses.computeIfAbsent(studentId, k -> new java.util.HashSet<>());
+}
+
+private void info(String s){ JOptionPane.showMessageDialog(this, s, "Info", JOptionPane.INFORMATION_MESSAGE); }
+private void warn(String s){ JOptionPane.showMessageDialog(this, s, "Warning", JOptionPane.WARNING_MESSAGE); }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -28,25 +115,40 @@ public class StudentRegistrationPanel extends javax.swing.JPanel {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        txtSearchStudent = new javax.swing.JTextField();
+        btnSearch = new javax.swing.JButton();
+        btnEnroll = new javax.swing.JButton();
+        btnDrop = new javax.swing.JButton();
         jSplitPane1 = new javax.swing.JSplitPane();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblStudents = new javax.swing.JTable();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        tblCourseList = new javax.swing.JTable();
 
         setLayout(new java.awt.BorderLayout());
 
         jLabel1.setText("Search Student By ID/Name");
 
-        jButton1.setText("Search");
+        btnSearch.setText("Search");
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchActionPerformed(evt);
+            }
+        });
 
-        jButton2.setText("Enroll");
+        btnEnroll.setText("Enroll");
+        btnEnroll.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEnrollActionPerformed(evt);
+            }
+        });
 
-        jButton3.setText("Drop");
+        btnDrop.setText("Drop");
+        btnDrop.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDropActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -56,15 +158,15 @@ public class StudentRegistrationPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtSearchStudent, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton1)
+                .addComponent(btnSearch)
                 .addContainerGap(80, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(158, 158, 158)
-                .addComponent(jButton2)
+                .addComponent(btnEnroll)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton3))
+                .addComponent(btnDrop))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -72,19 +174,19 @@ public class StudentRegistrationPanel extends javax.swing.JPanel {
                 .addGap(31, 31, 31)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
+                    .addComponent(txtSearchStudent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSearch))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3)))
+                    .addComponent(btnEnroll)
+                    .addComponent(btnDrop)))
         );
 
         add(jPanel1, java.awt.BorderLayout.PAGE_START);
 
         jSplitPane1.setResizeWeight(0.5);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblStudents.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null},
                 {null, null},
@@ -95,40 +197,109 @@ public class StudentRegistrationPanel extends javax.swing.JPanel {
                 "Student ID", "Name"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tblStudents);
 
         jSplitPane1.setLeftComponent(jScrollPane1);
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        tblCourseList.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "Course ID", "Title", "Term"
+                "Course ID", "Title", "Term", "Enrolled"
             }
         ));
-        jScrollPane2.setViewportView(jTable2);
+        jScrollPane2.setViewportView(tblCourseList);
 
         jSplitPane1.setRightComponent(jScrollPane2);
 
         add(jSplitPane1, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnEnrollActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnrollActionPerformed
+        // TODO add your handling code here:
+        String sid = getSelectedStudentId();
+    String cid = getSelectedCourseId();
+    if (sid == null) { warn("Please select a student in the left table."); return; }
+    if (cid == null) { warn("Please select a course in the right table."); return; }
+
+    // 重复检查
+    if (courseSetForStudent(sid).contains(cid)) {
+        warn("Student " + sid + " is already enrolled in " + cid + ".");
+        return;
+    }
+
+    // 容量检查
+    int cap = getCapacity(cid);
+    int now = getEnrolled(cid);
+    if (now >= cap) {
+        warn("Course " + cid + " is full. Capacity = " + cap + ".");
+        return;
+    }
+
+    // 执行选课
+    studentSetForCourse(cid).add(sid);
+    courseSetForStudent(sid).add(cid);
+    setEnrolled(cid, now + 1);
+
+    info("Enrolled student " + sid + " to " + cid + " successfully.");
+    }//GEN-LAST:event_btnEnrollActionPerformed
+
+    private void btnDropActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDropActionPerformed
+        // TODO add your handling code here:
+        String sid = getSelectedStudentId();
+    String cid = getSelectedCourseId();
+    if (sid == null) { warn("Please select a student in the left table."); return; }
+    if (cid == null) { warn("Please select a course in the right table."); return; }
+
+    if (!courseSetForStudent(sid).contains(cid)) {
+        warn("Student " + sid + " is not enrolled in " + cid + ".");
+        return;
+    }
+
+    // 执行退课
+    courseSetForStudent(sid).remove(cid);
+    studentSetForCourse(cid).remove(sid);
+    setEnrolled(cid, getEnrolled(cid) - 1);
+
+    info("Dropped student " + sid + " from " + cid + ".");
+    }//GEN-LAST:event_btnDropActionPerformed
+
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+        // TODO add your handling code here:
+        String q = txtSearchStudent.getText();
+    DefaultTableModel m = (DefaultTableModel) tblStudents.getModel();
+    m.setRowCount(0);
+    if (q == null || q.trim().isEmpty()) {
+        // 为空 → 恢复所有
+        for (Object[] r : allStudents) m.addRow(r);
+        return;
+    }
+    String needle = q.trim().toLowerCase();
+    for (Object[] r : allStudents) {
+        String id = String.valueOf(r[0]).toLowerCase();
+        String name = String.valueOf(r[1]).toLowerCase();
+        if (id.contains(needle) || name.contains(needle)) {
+            m.addRow(r);
+        }
+    }
+    }//GEN-LAST:event_btnSearchActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton btnDrop;
+    private javax.swing.JButton btnEnroll;
+    private javax.swing.JButton btnSearch;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSplitPane jSplitPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTable tblCourseList;
+    private javax.swing.JTable tblStudents;
+    private javax.swing.JTextField txtSearchStudent;
     // End of variables declaration//GEN-END:variables
 }
