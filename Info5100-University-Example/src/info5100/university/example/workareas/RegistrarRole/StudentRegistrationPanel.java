@@ -5,6 +5,8 @@
 package info5100.university.example.workareas.RegistrarRole;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JOptionPane;
+import info5100.university.example.workareas.RegistrarRole.shared.RegistrarDataStore;
+
 
 
 /**
@@ -14,13 +16,16 @@ import javax.swing.JOptionPane;
 public class StudentRegistrationPanel extends javax.swing.JPanel {
         
         // ===== In-memory state =====
-private final java.util.Map<String, Integer> capacityByCourse   = new java.util.HashMap<>();
-private final java.util.Map<String, Integer> enrolledByCourse   = new java.util.HashMap<>();
-private final java.util.Map<String, java.util.Set<String>> courseToStudents = new java.util.HashMap<>();
-private final java.util.Map<String, java.util.Set<String>> studentToCourses = new java.util.HashMap<>();
+//private final java.util.Map<String, Integer> capacityByCourse   = new java.util.HashMap<>();
+//private final java.util.Map<String, Integer> enrolledByCourse   = new java.util.HashMap<>();
+//private final java.util.Map<String, java.util.Set<String>> courseToStudents = new java.util.HashMap<>();
+//private final java.util.Map<String, java.util.Set<String>> studentToCourses = new java.util.HashMap<>();
 
 // 原始学生表数据（用于搜索过滤时恢复）
-private final java.util.List<Object[]> allStudents = new java.util.ArrayList<>();
+//private final java.util.List<Object[]> allStudents = new java.util.ArrayList<>();
+
+    private final java.util.List<Object[]> allStudents = new java.util.ArrayList<Object[]>();
+    private final RegistrarDataStore ds = RegistrarDataStore.getInstance();
 
 
     /**
@@ -41,23 +46,40 @@ for (Object[] row : seedStudents) {
     ms.addRow(row);
     allStudents.add(row); // 保存原始数据用于搜索恢复
 }
+tblStudents.setDefaultEditor(Object.class, null);
+tblCourseList.setDefaultEditor(Object.class, null);
+tblStudents.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+tblCourseList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
-// 初始化课程表
+// 种子课程（只在 DataStore 为空时注入一次）
+ds.seedDemoDataIfEmpty();
+
+// 课程表从 DataStore 读
 DefaultTableModel mo = (DefaultTableModel) tblCourseList.getModel();
 mo.setRowCount(0);
 mo.setColumnIdentifiers(new String[]{"Course ID","Title","Term","Enrolled"});
-mo.addRow(new Object[]{"INFO 5100","Application Engineering","Fall 2025",18});
-mo.addRow(new Object[]{"INFO 5600","DBMS","Fall 2025",35});
-mo.addRow(new Object[]{"INFO 6205","Program Design Paradigm","Spring 2026",9});
+for (RegistrarDataStore.Offering o : ds.getAllOfferings()) {
+    mo.addRow(new Object[]{o.courseId, o.title, o.term, o.enrolled});
+}
 
-// 容量 & 当前已选（与表格中的 Enrolled 对齐）
-capacityByCourse.put("INFO 5100", 30);
-capacityByCourse.put("INFO 5600", 35);
-capacityByCourse.put("INFO 6205", 25);
+//// 初始化课程表
+//DefaultTableModel mo = (DefaultTableModel) tblCourseList.getModel();
+//mo.setRowCount(0);
+//mo.setColumnIdentifiers(new String[]{"Course ID","Title","Term","Enrolled"});
+//mo.addRow(new Object[]{"INFO 5100","Application Engineering","Fall 2025",18});
+//mo.addRow(new Object[]{"INFO 5600","DBMS","Fall 2025",35});
+//mo.addRow(new Object[]{"INFO 6205","Program Design Paradigm","Spring 2026",9});
+//
+//// 容量 & 当前已选（与表格中的 Enrolled 对齐）
+//capacityByCourse.put("INFO 5100", 30);
+//capacityByCourse.put("INFO 5600", 35);
+//capacityByCourse.put("INFO 6205", 25);
+//
+//enrolledByCourse.put("INFO 5100", 18);
+//enrolledByCourse.put("INFO 5600", 35);
+//enrolledByCourse.put("INFO 6205", 9);
+// 种子数据（只在 DataStore 为空时填一次）
 
-enrolledByCourse.put("INFO 5100", 18);
-enrolledByCourse.put("INFO 5600", 35);
-enrolledByCourse.put("INFO 6205", 9);
 
     }
     
@@ -75,30 +97,30 @@ private String getSelectedCourseId() {
     return v == null ? null : v.toString();
 }
 
-private int getCapacity(String courseId) {
-    return capacityByCourse.getOrDefault(courseId, 0);
-}
-private int getEnrolled(String courseId) {
-    return enrolledByCourse.getOrDefault(courseId, 0);
-}
-private void setEnrolled(String courseId, int val) {
-    enrolledByCourse.put(courseId, Math.max(val, 0));
-    // 同步到表格 Enrolled 列
-    DefaultTableModel m = (DefaultTableModel) tblCourseList.getModel();
-    for (int i=0;i<m.getRowCount();i++){
-        if (courseId.equals(String.valueOf(m.getValueAt(i,0)))) {
-            m.setValueAt(val, i, 3); // 第4列 Enrolled
-            break;
-        }
-    }
-}
-
-private java.util.Set<String> studentSetForCourse(String courseId) {
-    return courseToStudents.computeIfAbsent(courseId, k -> new java.util.HashSet<>());
-}
-private java.util.Set<String> courseSetForStudent(String studentId) {
-    return studentToCourses.computeIfAbsent(studentId, k -> new java.util.HashSet<>());
-}
+//private int getCapacity(String courseId) {
+//    return capacityByCourse.getOrDefault(courseId, 0);
+//}
+//private int getEnrolled(String courseId) {
+//    return enrolledByCourse.getOrDefault(courseId, 0);
+//}
+//private void setEnrolled(String courseId, int val) {
+//    enrolledByCourse.put(courseId, Math.max(val, 0));
+//    // 同步到表格 Enrolled 列
+//    DefaultTableModel m = (DefaultTableModel) tblCourseList.getModel();
+//    for (int i=0;i<m.getRowCount();i++){
+//        if (courseId.equals(String.valueOf(m.getValueAt(i,0)))) {
+//            m.setValueAt(val, i, 3); // 第4列 Enrolled
+//            break;
+//        }
+//    }
+//}
+//
+//private java.util.Set<String> studentSetForCourse(String courseId) {
+//    return courseToStudents.computeIfAbsent(courseId, k -> new java.util.HashSet<>());
+//}
+//private java.util.Set<String> courseSetForStudent(String studentId) {
+//    return studentToCourses.computeIfAbsent(studentId, k -> new java.util.HashSet<>());
+//}
 
 private void info(String s){ JOptionPane.showMessageDialog(this, s, "Info", JOptionPane.INFORMATION_MESSAGE); }
 private void warn(String s){ JOptionPane.showMessageDialog(this, s, "Warning", JOptionPane.WARNING_MESSAGE); }
@@ -222,50 +244,52 @@ private void warn(String s){ JOptionPane.showMessageDialog(this, s, "Warning", J
     private void btnEnrollActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnrollActionPerformed
         // TODO add your handling code here:
         String sid = getSelectedStudentId();
-    String cid = getSelectedCourseId();
-    if (sid == null) { warn("Please select a student in the left table."); return; }
-    if (cid == null) { warn("Please select a course in the right table."); return; }
+String cid = getSelectedCourseId();
+if (sid == null) { warn("Please select a student in the left table."); return; }
+if (cid == null) { warn("Please select a course in the right table."); return; }
 
-    // 重复检查
-    if (courseSetForStudent(sid).contains(cid)) {
-        warn("Student " + sid + " is already enrolled in " + cid + ".");
-        return;
+String r = ds.enroll(sid, cid);
+if (!"OK".equals(r)) {
+    warn(r);
+    return;
+}
+
+// 成功后刷新右表该课程的 Enrolled 显示
+DefaultTableModel m = (DefaultTableModel) tblCourseList.getModel();
+for (int i=0; i<m.getRowCount(); i++) {
+    if (cid.equals(String.valueOf(m.getValueAt(i, 0)))) {
+        RegistrarDataStore.Offering o = ds.getOfferingById(cid);
+        m.setValueAt(o.enrolled, i, 3);
+        break;
     }
+}
+info("Enrolled student " + sid + " to " + cid + " successfully.");
 
-    // 容量检查
-    int cap = getCapacity(cid);
-    int now = getEnrolled(cid);
-    if (now >= cap) {
-        warn("Course " + cid + " is full. Capacity = " + cap + ".");
-        return;
-    }
-
-    // 执行选课
-    studentSetForCourse(cid).add(sid);
-    courseSetForStudent(sid).add(cid);
-    setEnrolled(cid, now + 1);
-
-    info("Enrolled student " + sid + " to " + cid + " successfully.");
     }//GEN-LAST:event_btnEnrollActionPerformed
 
     private void btnDropActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDropActionPerformed
-        // TODO add your handling code here:
-        String sid = getSelectedStudentId();
-    String cid = getSelectedCourseId();
-    if (sid == null) { warn("Please select a student in the left table."); return; }
-    if (cid == null) { warn("Please select a course in the right table."); return; }
+       String sid = getSelectedStudentId();
+String cid = getSelectedCourseId();
+if (sid == null) { warn("Please select a student in the left table."); return; }
+if (cid == null) { warn("Please select a course in the right table."); return; }
 
-    if (!courseSetForStudent(sid).contains(cid)) {
-        warn("Student " + sid + " is not enrolled in " + cid + ".");
-        return;
+String r = ds.drop(sid, cid);
+if (!"OK".equals(r)) {
+    warn(r);
+    return;
+}
+
+// 刷新右表人数
+DefaultTableModel m = (DefaultTableModel) tblCourseList.getModel();
+for (int i=0; i<m.getRowCount(); i++) {
+    if (cid.equals(String.valueOf(m.getValueAt(i, 0)))) {
+        RegistrarDataStore.Offering o = ds.getOfferingById(cid);
+        m.setValueAt(o.enrolled, i, 3);
+        break;
     }
+}
+info("Dropped student " + sid + " from " + cid + ".");
 
-    // 执行退课
-    courseSetForStudent(sid).remove(cid);
-    studentSetForCourse(cid).remove(sid);
-    setEnrolled(cid, getEnrolled(cid) - 1);
-
-    info("Dropped student " + sid + " from " + cid + ".");
     }//GEN-LAST:event_btnDropActionPerformed
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
