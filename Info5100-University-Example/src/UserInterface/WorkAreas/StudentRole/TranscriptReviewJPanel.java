@@ -29,8 +29,9 @@ public class TranscriptReviewJPanel extends javax.swing.JPanel {
     /**
      * Creates new form TranscriptJPanel
      */
-    public TranscriptReviewJPanel(StudentProfile student) {
+    public TranscriptReviewJPanel(JPanel mainWorkArea, StudentProfile student) {
         initComponents();
+        this.mainWorkArea = mainWorkArea;
         this.student = student;
         populateTermComboBox();
         addListeners();
