@@ -157,6 +157,20 @@ public class LoginScreen extends javax.swing.JPanel {
             mainWorkArea.revalidate();
             mainWorkArea.repaint();
         }
+        // ==== Registrar 登录 ====
+        if (profile instanceof info5100.university.example.Persona.Registrar.RegistrarProfile) {
+            System.out.println(profile.getRole());
+            info5100.university.example.workareas.RegistrarRole.RegistrarWorkAreaPanel registrarPanel =
+                    new info5100.university.example.workareas.RegistrarRole.RegistrarWorkAreaPanel();
+
+            mainWorkArea.add("Registrar", registrarPanel);
+            ((java.awt.CardLayout) mainWorkArea.getLayout()).show(mainWorkArea, "Registrar");
+            mainWorkArea.revalidate();
+            mainWorkArea.repaint();
+            return;
+}
+
+        
         
         if (profile instanceof StudentProfile) {
             System.out.println(profile.getRole());

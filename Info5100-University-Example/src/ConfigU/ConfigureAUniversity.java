@@ -24,6 +24,8 @@ import info5100.university.example.Persona.PersonDirectory;
 import info5100.university.example.Persona.StudentDirectory;
 import info5100.university.example.Persona.StudentProfile;
 import info5100.university.example.Persona.UserAccount;
+import info5100.university.example.Persona.Registrar.RegistrarDirectory;
+import info5100.university.example.Persona.Registrar.RegistrarProfile;
 
 
 /**
@@ -210,12 +212,56 @@ public class ConfigureAUniversity {
 
         // If you created registrarProfile above, you can also:
         // uad.newUserAccount(registrarProfile, "registrar", "****");
+        // ① 建 Person（只有 id、name 等基础字段）
+        //registrar 角色建立
+// —— registrar 角色建立 ——
+
+// ① 先建一个 Person（只有 id / name / 联系方式可选）
+// —— registrar 角色建立 ——
+
+// ① Person
+Person regPerson = department.getPersonDirectory().newPerson("0112400");
+regPerson.setName("Registrar");
+
+// ② 从目录创建 RegistrarProfile（方法名按你们源码调整）
+RegistrarDirectory registrarDirectory = new RegistrarDirectory();
+// 二选一：看 RegistrarDirectory 里是哪个方法
+// RegistrarProfile regProfile = registrarDirectory.newRegistrar(regPerson);
+RegistrarProfile   regProfile         = registrarDirectory.newRegistrar(regPerson);
+
+// ③ 联系方式：若 Profile 没有 setter，就改设置到 person 上
+// 如果有 regProfile.setEmail / setPhone 就用下面两行：
+// regProfile.setEmail("registrar@example.edu");
+// regProfile.setPhone("617-000-0000");
+// 否则用 person：
+regProfile.getPerson().setEmail("registrar@example.edu");
+regProfile.getPerson().setPhone("617-000-0000");
+
+// ④ 账号：不要再次声明 uad，直接复用上面已创建的 uad
+uad.newUserAccount(regProfile, "registrar", "****");
+
+// 日志
+System.out.println("Seeded Registrar: " + regPerson.getPersonId()
+        + " / " + regProfile.getPerson().getEmail());
+
+
+// 日志
+System.out.println("Seeded Registrar: " + regPerson.getPersonId()
+        + " / " + regProfile.getEmail());
+
+//一直到这里 xuanli liu
+
+// 日志
+System.out.println("Seeded Registrar: " + regPerson.getPersonId()
+        + " / " + regProfile.getEmail());
+
 
         // (Optional) compute revenue
         int total = department.calculateRevenuesBySemester(SEM);
         System.out.println("Total: " + total);
 
         return college;
+        
     }
 
     // --- helper for sample names ---
