@@ -138,7 +138,7 @@ Export transcript to PDF
 
 1️⃣1️⃣ Contribution Breakdown
 Name	Coding	UI	Testing	Docs	PRs	% Work
-Liu Xuanli	✅ Registrar logic	✅ Registrar UI	✅	✅ README	✅ reviewed others	25%
+Liu Xuanli	✅ 	✅ 	✅	✅ 	✅ 	25%
 Shi Haojiang	✅	✅	✅	✅	✅	25%
 Gao Xiyue		✅	✅	✅	✅	✅	25%
 Liu Xuanli	✅	✅	✅	✅	✅	25%
