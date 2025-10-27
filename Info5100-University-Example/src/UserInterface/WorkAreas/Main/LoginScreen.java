@@ -7,6 +7,7 @@ package UserInterface.WorkAreas.Main;
 
 import ConfigU.ConfigureAUniversity;
 import UserInterface.WorkAreas.AdminRole.AdminRoleWorkAreaJPanel;
+import info5100.university.example.College.College;
 import info5100.university.example.Department.Department;
 import info5100.university.example.Employer.EmployerProfile;
 import info5100.university.example.Persona.AdminProfile;
@@ -25,6 +26,7 @@ import javax.swing.JPanel;
 public class LoginScreen extends javax.swing.JPanel {
 
     JPanel mainWorkArea;
+    College college;
     Department department;
     
     
@@ -35,8 +37,8 @@ public class LoginScreen extends javax.swing.JPanel {
         initComponents();
         
         this.mainWorkArea = mWA;
-        department = ConfigureAUniversity.initialize();
-
+        college = ConfigureAUniversity.initialize();
+        department = college.findDepartment("Information Systems"); //default
     }
 
     /**
@@ -55,10 +57,8 @@ public class LoginScreen extends javax.swing.JPanel {
         UserNameTextField = new javax.swing.JTextField();
         PasswordTextField = new javax.swing.JTextField();
 
-        setBackground(new java.awt.Color(255, 255, 255));
-
         lblTitle.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        lblTitle.setText("Welcome to Lab 4 Demo");
+        lblTitle.setText("Welcome to University System");
 
         btnLogin.setText("Login");
         btnLogin.addActionListener(new java.awt.event.ActionListener() {
@@ -84,10 +84,6 @@ public class LoginScreen extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(538, Short.MAX_VALUE)
-                .addComponent(lblTitle)
-                .addGap(64, 64, 64))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -102,7 +98,11 @@ public class LoginScreen extends javax.swing.JPanel {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(UserNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(PasswordTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(444, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(lblTitle)
+                .addGap(100, 100, 100))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -131,7 +131,8 @@ public class LoginScreen extends javax.swing.JPanel {
 
         String un = UserNameTextField.getText();
         String pw = PasswordTextField.getText();
-
+        
+        
         UserAccountDirectory uad = department.getUseraccountdirectory();
         UserAccount useraccount = uad.AuthenticateUser(un, pw);
         if (useraccount == null) {
@@ -148,7 +149,7 @@ public class LoginScreen extends javax.swing.JPanel {
         if (profile instanceof AdminProfile) {
             
             System.out.println(profile.getRole());
-            adminworkarea = new AdminRoleWorkAreaJPanel(department, mainWorkArea);
+            adminworkarea = new AdminRoleWorkAreaJPanel(college, department, mainWorkArea);
             mainWorkArea.add("Admin", adminworkarea);
             //((java.awt.CardLayout) mainWorkArea.getLayout()).next(mainWorkArea);
             ((java.awt.CardLayout) mainWorkArea.getLayout()).show(mainWorkArea, "Admin");

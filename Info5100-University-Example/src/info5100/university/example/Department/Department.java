@@ -58,6 +58,16 @@ public void addElectiveCourse(Course c){
         degree.addElectiveCourse(c);
         
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    
     public PersonDirectory getPersonDirectory() {
 
         return persondirectory;
@@ -137,6 +147,13 @@ public void addElectiveCourse(Course c){
         this.adminDirectory = adminDirectory;
     }
     
+    public boolean isMatch(String name) {
+        return name.equals(name);
+    }
     
+    @Override
+    public String toString() {
+        return name;
+    }
     
 }

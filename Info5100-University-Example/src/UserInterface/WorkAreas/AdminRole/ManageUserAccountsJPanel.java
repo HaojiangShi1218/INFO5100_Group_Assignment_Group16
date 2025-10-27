@@ -99,7 +99,6 @@ public class ManageUserAccountsJPanel extends javax.swing.JPanel {
         jLabel4 = new javax.swing.JLabel();
         cmbRole = new javax.swing.JComboBox<>();
 
-        setBackground(new java.awt.Color(0, 153, 153));
         setLayout(null);
 
         btnBack.setText("<< Back");

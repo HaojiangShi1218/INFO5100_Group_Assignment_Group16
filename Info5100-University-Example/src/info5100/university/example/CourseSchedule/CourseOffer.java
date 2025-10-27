@@ -90,4 +90,15 @@ public class CourseOffer {
         return course.getCredits();
     }
 
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
+    }
+    
+    
+    
+
 }

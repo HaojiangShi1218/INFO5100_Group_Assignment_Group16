@@ -31,5 +31,19 @@ public class FacultyAssignment {
     public FacultyProfile getFacultyProfile(){
         return facultyprofile;
     }
+
+    public double getTracerating() {
+        return tracerating;
+    }
+
+    public CourseOffer getCourseoffer() {
+        return courseoffer;
+    }
+
+    public FacultyProfile getFacultyprofile() {
+        return facultyprofile;
+    }
+    
+    
     
 }

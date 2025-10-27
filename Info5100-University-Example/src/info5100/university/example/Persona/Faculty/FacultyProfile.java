@@ -7,6 +7,7 @@ package info5100.university.example.Persona.Faculty;
 
 import info5100.university.example.Persona.*;
 import info5100.university.example.CourseSchedule.CourseOffer;
+import info5100.university.example.Department.Department;
 import java.util.ArrayList;
 
 /**
@@ -16,10 +17,13 @@ import java.util.ArrayList;
 public class FacultyProfile extends Profile{
     
     Person person;
+    Department department;
     ArrayList <FacultyAssignment> facultyassignments; 
     
-    public FacultyProfile(Person p) {
+    public FacultyProfile(Person p, Department d) {
         super(p);
+        person = p;
+        department = d;
         facultyassignments = new ArrayList();
     }
     
@@ -51,18 +55,29 @@ public class FacultyProfile extends Profile{
         return null; //complete it later
     }
 
-<<<<<<< HEAD
     public Person getPerson() {
         return person;
     }
+
+    public ArrayList<FacultyAssignment> getFacultyassignments() {
+        return facultyassignments;
+    }
+
+    public Department getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(Department department) {
+        this.department = department;
+    }
+
     
-=======
+    
     
     @Override
     public String getRole() {
         return "Faculty";
     }
->>>>>>> e064826 (implemented main frame)
 
     public boolean isMatch(String id) {
         return person.getPersonId().equals(id);

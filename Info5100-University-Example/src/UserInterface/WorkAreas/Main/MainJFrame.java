@@ -20,7 +20,7 @@ public class MainJFrame extends javax.swing.JFrame {
     public MainJFrame() {
         initComponents();
         
-        setSize(800,600);
+        setSize(1200,800);
         setResizable(false);
        
         
