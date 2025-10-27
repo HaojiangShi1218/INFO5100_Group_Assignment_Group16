@@ -7,6 +7,7 @@ package info5100.university.example.Persona;
 
 import info5100.university.example.CourseSchedule.CourseLoad;
 import info5100.university.example.CourseSchedule.SeatAssignment;
+import info5100.university.example.Department.Department;
 import info5100.university.example.Persona.EmploymentHistory.EmploymentHistroy;
 import java.util.ArrayList;
 
@@ -17,12 +18,14 @@ import java.util.ArrayList;
 public class StudentProfile extends Profile {
 
     Person person;
+    Department department;
     Transcript transcript;
     EmploymentHistroy employmenthistory;
 
-    public StudentProfile(Person p) {
+    public StudentProfile(Person p, Department d) {
         super(p);
         person = p;
+        department = d;
         transcript = new Transcript(this);
         employmenthistory = new EmploymentHistroy();
     }
@@ -71,6 +74,16 @@ public class StudentProfile extends Profile {
     public ArrayList<SeatAssignment> getAllSeatAssignments() {
         return transcript.getCourseList();
     }
+
+    public Department getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(Department department) {
+        this.department = department;
+    }
+    
+    
     
     @Override
     public String getRole() {

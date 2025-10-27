@@ -26,9 +26,13 @@ public class StudentDirectory {
 
     public StudentProfile newStudentProfile(Person p) {
 
-        StudentProfile sp = new StudentProfile(p);
+        StudentProfile sp = new StudentProfile(p, department);
         studentlist.add(sp);
         return sp;
+    }
+    
+    public void deleteStudent(StudentProfile sp) {
+        studentlist.remove(sp);
     }
 
     public StudentProfile findStudent(String id) {
@@ -41,5 +45,22 @@ public class StudentDirectory {
         }
             return null; //not found after going through the whole list
          }
+
+    public Department getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(Department department) {
+        this.department = department;
+    }
+
+    public ArrayList<StudentProfile> getStudentlist() {
+        return studentlist;
+    }
+
+    public void setStudentlist(ArrayList<StudentProfile> studentlist) {
+        this.studentlist = studentlist;
+    }
+    
     
 }
