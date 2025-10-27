@@ -15,6 +15,7 @@ public class RegistrarWorkAreaPanel extends javax.swing.JPanel {
      */
     public RegistrarWorkAreaPanel() {
         initComponents();
+        
     }
 
     /**
