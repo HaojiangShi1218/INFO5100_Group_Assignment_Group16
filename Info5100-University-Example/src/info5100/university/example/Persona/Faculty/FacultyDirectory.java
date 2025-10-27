@@ -24,7 +24,11 @@ public class FacultyDirectory {
         teacherlist = new ArrayList();
 
     }
-
+    
+    public void deleteFaculty (FacultyProfile fp) {
+        teacherlist.remove(fp);
+    }
+    
     public FacultyProfile newFacultyProfile(Person p) {
 
         FacultyProfile sp = new FacultyProfile(p, department);

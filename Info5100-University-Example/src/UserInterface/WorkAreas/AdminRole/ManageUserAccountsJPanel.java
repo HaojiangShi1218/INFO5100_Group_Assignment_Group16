@@ -63,7 +63,7 @@ public class ManageUserAccountsJPanel extends javax.swing.JPanel {
 
             Object[] row = new Object[5];
             row[0] = ua;
-            row[1] = ua.getPersonId(); //complete this..
+            row[1] = ua.getAssociatedPersonProfile().getPerson().getName(); //complete this..
             row[2] = ua.getRole();
 
             ((DefaultTableModel) UserAccountTable.getModel()).addRow(row);
@@ -117,17 +117,17 @@ public class ManageUserAccountsJPanel extends javax.swing.JPanel {
             }
         });
         add(btnDelete);
-        btnDelete.setBounds(650, 350, 80, 23);
+        btnDelete.setBounds(650, 510, 80, 23);
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel1.setText("User Accounts");
         add(jLabel1);
-        jLabel1.setBounds(30, 90, 190, 17);
+        jLabel1.setBounds(30, 50, 190, 17);
 
         jLabel2.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
         jLabel2.setText("Manage User Accounts");
         add(jLabel2);
-        jLabel2.setBounds(170, 50, 250, 28);
+        jLabel2.setBounds(190, 20, 250, 28);
 
         UserAccountTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -156,7 +156,7 @@ public class ManageUserAccountsJPanel extends javax.swing.JPanel {
         jScrollPane1.setViewportView(UserAccountTable);
 
         add(jScrollPane1);
-        jScrollPane1.setBounds(30, 110, 700, 220);
+        jScrollPane1.setBounds(30, 70, 700, 420);
 
         btnView.setText("View");
         btnView.addActionListener(new java.awt.event.ActionListener() {
@@ -165,7 +165,7 @@ public class ManageUserAccountsJPanel extends javax.swing.JPanel {
             }
         });
         add(btnView);
-        btnView.setBounds(30, 350, 78, 23);
+        btnView.setBounds(30, 510, 78, 23);
 
         btnCreate.setText("Create");
         btnCreate.addActionListener(new java.awt.event.ActionListener() {
@@ -174,7 +174,7 @@ public class ManageUserAccountsJPanel extends javax.swing.JPanel {
             }
         });
         add(btnCreate);
-        btnCreate.setBounds(350, 460, 72, 23);
+        btnCreate.setBounds(230, 510, 72, 23);
 
         fieldName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -182,20 +182,20 @@ public class ManageUserAccountsJPanel extends javax.swing.JPanel {
             }
         });
         add(fieldName);
-        fieldName.setBounds(120, 420, 180, 23);
+        fieldName.setBounds(120, 580, 180, 23);
 
         lblUsername1.setText("Name");
         add(lblUsername1);
-        lblUsername1.setBounds(40, 420, 34, 17);
+        lblUsername1.setBounds(40, 580, 34, 17);
 
         jLabel3.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
         jLabel3.setText("Create an Account ");
         add(jLabel3);
-        jLabel3.setBounds(40, 380, 209, 29);
+        jLabel3.setBounds(40, 540, 209, 29);
 
         lblUsername.setText("Username");
         add(lblUsername);
-        lblUsername.setBounds(40, 460, 59, 17);
+        lblUsername.setBounds(40, 620, 59, 17);
 
         fieldUsername.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -203,11 +203,11 @@ public class ManageUserAccountsJPanel extends javax.swing.JPanel {
             }
         });
         add(fieldUsername);
-        fieldUsername.setBounds(120, 460, 180, 23);
+        fieldUsername.setBounds(120, 620, 180, 23);
 
         lblPassword.setText("Password");
         add(lblPassword);
-        lblPassword.setBounds(40, 500, 58, 17);
+        lblPassword.setBounds(40, 660, 58, 17);
 
         fieldPassword.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -215,15 +215,15 @@ public class ManageUserAccountsJPanel extends javax.swing.JPanel {
             }
         });
         add(fieldPassword);
-        fieldPassword.setBounds(120, 500, 180, 23);
+        fieldPassword.setBounds(120, 660, 180, 23);
 
         jLabel4.setText("Role");
         add(jLabel4);
-        jLabel4.setBounds(50, 540, 26, 17);
+        jLabel4.setBounds(50, 700, 26, 17);
 
         cmbRole.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         add(cmbRole);
-        cmbRole.setBounds(120, 540, 180, 23);
+        cmbRole.setBounds(120, 700, 180, 23);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed

@@ -7,9 +7,11 @@ package UserInterface.WorkAreas.AdminRole;
 import info5100.university.example.College.College;
 import info5100.university.example.CourseCatalog.Course;
 import info5100.university.example.CourseSchedule.CourseOffer;
+import info5100.university.example.CourseSchedule.SeatAssignment;
 import info5100.university.example.Department.Department;
 import info5100.university.example.Persona.Faculty.FacultyAssignment;
 import info5100.university.example.Persona.Faculty.FacultyProfile;
+import info5100.university.example.Persona.StudentProfile;
 import info5100.university.example.Persona.UserAccount;
 import java.awt.CardLayout;
 import javax.swing.JOptionPane;
@@ -19,22 +21,22 @@ import javax.swing.JPanel;
  *
  * @author kevin
  */
-public class ViewFacultyJPanel extends javax.swing.JPanel {
+public class ViewStudentJPanel extends javax.swing.JPanel {
 
     /**
      * Creates new form CreateJPanel
      */
     JPanel CardSequencePanel;
-    FacultyProfile selectedFaculty;
+    StudentProfile selectedStudent;
     Department department;
     College college;
     
-    public ViewFacultyJPanel(JPanel csp, College cc, Department dd, FacultyProfile fp) {
+    public ViewStudentJPanel(JPanel csp, College cc, Department dd, StudentProfile sp) {
         initComponents();
         this.CardSequencePanel = csp;
         college = cc;
         department = dd;
-        selectedFaculty = fp;
+        selectedStudent = sp;
         
         populateTextFields();
         populateDepartmentCombo();
@@ -42,10 +44,10 @@ public class ViewFacultyJPanel extends javax.swing.JPanel {
         populateCourseCombo1();
         setViewMode();
         
-        for (FacultyAssignment fa: selectedFaculty.getFacultyassignments()) {
-            
-            System.out.println(fa.getCourseoffer().getCourse().getName());
-        }
+//        for (FacultyAssignment fa: selectedFaculty.getFacultyassignments()) {
+//            
+//            System.out.println(fa.getCourseoffer().getCourse().getName());
+//        }
     }
 
     /**
@@ -153,7 +155,7 @@ public class ViewFacultyJPanel extends javax.swing.JPanel {
         lblPassword6.setText("Course");
 
         jLabel2.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
-        jLabel2.setText("Viewing Faculty Details ");
+        jLabel2.setText("Viewing Student Details ");
 
         fieldDepartment.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -211,9 +213,7 @@ public class ViewFacultyJPanel extends javax.swing.JPanel {
                                             .addComponent(lblPassword6))
                                         .addGap(48, 48, 48)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(cmbCourse1, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                            .addComponent(cmbCourse1, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addComponent(fieldDepartment)
                                             .addComponent(fieldPhone))))
                                 .addGap(50, 50, 50)
@@ -296,7 +296,7 @@ public class ViewFacultyJPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
         //CardSequencePanel.remove(this);
         //((java.awt.CardLayout) userProcessContainer.getLayout()).next(userProcessContainer);
-        ((java.awt.CardLayout) CardSequencePanel.getLayout()).show(CardSequencePanel, "ManageFacultyJPanel");
+        ((java.awt.CardLayout) CardSequencePanel.getLayout()).show(CardSequencePanel, "ManageStudentJPanel");
         CardSequencePanel.revalidate();
         CardSequencePanel.repaint();
     }//GEN-LAST:event_btnBackActionPerformed
@@ -321,26 +321,26 @@ public class ViewFacultyJPanel extends javax.swing.JPanel {
         
         String courseNum = String.valueOf(cmbCourse.getSelectedItem());
         int count = 0;
-        for (FacultyAssignment fa: selectedFaculty.getFacultyassignments()) {
-            if (fa.getCourseoffer().getCourse().getCOurseNumber().equals(courseNum)) {
+        for (SeatAssignment sa: selectedStudent.getCoursesByTerm("Fall2020")) {
+            if (sa.getAssociatedCourse().getCOurseNumber().equals(courseNum)) {
                 count++;
             }
             //System.out.println(fa.getCourseoffer().getCourse().getName());
         }
-        //if the course has not been assigned to the faculty 
+        //if the course has not been assigned to the student 
         if (count == 0) {
             CourseOffer newCourse = department.getCourseSchedule("Fall2020").getCourseOfferByNumber(courseNum);
-            selectedFaculty.AssignAsTeacher(newCourse);
+            selectedStudent.getCurrentCourseLoad().newSeatAssignment(newCourse);
             
         }
         
-        selectedFaculty.getPerson().setName(name);
-        selectedFaculty.getPerson().setEmail(email);
-        selectedFaculty.getPerson().setPhone(phone);
+        selectedStudent.getPerson().setName(name);
+        selectedStudent.getPerson().setEmail(email);
+        selectedStudent.getPerson().setPhone(phone);
         //selectedFaculty.setDept(selectedDepartment);
         
         
-        JOptionPane.showMessageDialog(this, "Faculty information updated!", "Success", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(this, "Student information updated!", "Success", JOptionPane.INFORMATION_MESSAGE);
         
         fieldID.setText("");
         fieldName.setText("");
@@ -363,11 +363,11 @@ public class ViewFacultyJPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_fieldDepartmentActionPerformed
     
     private void populateTextFields() {
-        fieldID.setText(selectedFaculty.getPerson().getPersonId());
-        fieldName.setText(selectedFaculty.getPerson().getName());
-        fieldEmail.setText(selectedFaculty.getPerson().getEmail());
-        fieldPhone.setText(selectedFaculty.getPerson().getPhone());
-        fieldDepartment.setText(selectedFaculty.getDepartment().getName());
+        fieldID.setText(selectedStudent.getPerson().getPersonId());
+        fieldName.setText(selectedStudent.getPerson().getName());
+        fieldEmail.setText(selectedStudent.getPerson().getEmail());
+        fieldPhone.setText(selectedStudent.getPerson().getPhone());
+        fieldDepartment.setText(selectedStudent.getDepartment().getName());
         
     }
     
@@ -417,9 +417,9 @@ public class ViewFacultyJPanel extends javax.swing.JPanel {
     private void populateCourseCombo1() {
         cmbCourse1.removeAllItems();
         
-        for (FacultyAssignment fa: selectedFaculty.getFacultyassignments()) {
+        for (SeatAssignment sa: selectedStudent.getCurrentCourseLoad().getSeatAssignments()) {
             
-            cmbCourse1.addItem(fa.getCourseoffer().getCourse().getCOurseNumber());
+            cmbCourse1.addItem(sa.getCourseOffer().getCourse().getCOurseNumber());
         }
     }
     

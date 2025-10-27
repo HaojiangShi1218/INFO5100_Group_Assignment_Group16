@@ -150,7 +150,7 @@ public class LoginScreen extends javax.swing.JPanel {
         if (profile instanceof AdminProfile) {
             
             System.out.println(profile.getRole());
-            adminworkarea = new AdminRoleWorkAreaJPanel(college, department, mainWorkArea);
+            adminworkarea = new AdminRoleWorkAreaJPanel(college, department, mainWorkArea, useraccount);
             mainWorkArea.add("Admin", adminworkarea);
             //((java.awt.CardLayout) mainWorkArea.getLayout()).next(mainWorkArea);
             ((java.awt.CardLayout) mainWorkArea.getLayout()).show(mainWorkArea, "Admin");

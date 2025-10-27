@@ -26,7 +26,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author kal bugrara
  */
-public class ManageFacultyJPanel extends javax.swing.JPanel {
+public class ManageStudentJPanel extends javax.swing.JPanel {
 
     /**
      * Creates new form ManageSuppliersJPanel
@@ -37,7 +37,7 @@ public class ManageFacultyJPanel extends javax.swing.JPanel {
     //UserAccount selecteduseraccount;
 
 
-    public ManageFacultyJPanel(College cc, Department dd, JPanel jp) {
+    public ManageStudentJPanel(College cc, Department dd, JPanel jp) {
         CardSequencePanel = jp;
         college = cc;
         department = dd;
@@ -50,28 +50,28 @@ public class ManageFacultyJPanel extends javax.swing.JPanel {
     public void refreshTable() {
 
 //clear supplier table
-        int rc = tblFaculty.getRowCount();
+        int rc = tblStudent.getRowCount();
         int i;
         for (i = rc - 1; i >= 0; i--) {
-            ((DefaultTableModel) tblFaculty.getModel()).removeRow(i);
+            ((DefaultTableModel) tblStudent.getModel()).removeRow(i);
         }
 
 
 
-        FacultyDirectory fd = department.getFacultydirectory();
+        StudentDirectory sd = department.getStudentDirectory();
 
        
 
-        for (FacultyProfile fp : fd.getTeacherlist()) {
-            Person faculty = fp.getPerson();
+        for (StudentProfile sp : sd.getStudentlist()) {
+            Person student = sp.getPerson();
             Object[] row = new Object[5];
-            row[0] = faculty;
-            row[1] = faculty.getName(); //complete this..
-            row[2] = fp.getDepartment();
-            row[3] = faculty.getEmail();
-            row[4] = faculty.getPhone();
+            row[0] = student;
+            row[1] = student.getName();
+            row[2] = sp.getDepartment();
+            row[3] = student.getEmail();
+            row[4] = student.getPhone();
 
-            ((DefaultTableModel) tblFaculty.getModel()).addRow(row);
+            ((DefaultTableModel) tblStudent.getModel()).addRow(row);
         }
 
     }
@@ -91,7 +91,7 @@ public class ManageFacultyJPanel extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblFaculty = new javax.swing.JTable();
+        tblStudent = new javax.swing.JTable();
         btnView = new javax.swing.JButton();
         btnRefresh = new javax.swing.JButton();
 
@@ -113,19 +113,19 @@ public class ManageFacultyJPanel extends javax.swing.JPanel {
             }
         });
         add(btnDelete);
-        btnDelete.setBounds(650, 660, 80, 23);
+        btnDelete.setBounds(650, 640, 80, 23);
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        jLabel1.setText("Faculty Records");
+        jLabel1.setText("Student Records");
         add(jLabel1);
-        jLabel1.setBounds(30, 50, 190, 17);
+        jLabel1.setBounds(30, 60, 190, 17);
 
         jLabel2.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
-        jLabel2.setText("Manage Faculty Records");
+        jLabel2.setText("Manage Student Records");
         add(jLabel2);
         jLabel2.setBounds(170, 20, 280, 28);
 
-        tblFaculty.setModel(new javax.swing.table.DefaultTableModel(
+        tblStudent.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
@@ -144,15 +144,15 @@ public class ManageFacultyJPanel extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
-        tblFaculty.addMouseListener(new java.awt.event.MouseAdapter() {
+        tblStudent.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                tblFacultyMousePressed(evt);
+                tblStudentMousePressed(evt);
             }
         });
-        jScrollPane1.setViewportView(tblFaculty);
+        jScrollPane1.setViewportView(tblStudent);
 
         add(jScrollPane1);
-        jScrollPane1.setBounds(30, 70, 700, 570);
+        jScrollPane1.setBounds(30, 80, 920, 540);
 
         btnView.setText("View");
         btnView.addActionListener(new java.awt.event.ActionListener() {
@@ -161,7 +161,7 @@ public class ManageFacultyJPanel extends javax.swing.JPanel {
             }
         });
         add(btnView);
-        btnView.setBounds(30, 660, 78, 23);
+        btnView.setBounds(30, 640, 78, 23);
 
         btnRefresh.setText("Refresh");
         btnRefresh.addActionListener(new java.awt.event.ActionListener() {
@@ -170,7 +170,7 @@ public class ManageFacultyJPanel extends javax.swing.JPanel {
             }
         });
         add(btnRefresh);
-        btnRefresh.setBounds(180, 660, 75, 23);
+        btnRefresh.setBounds(180, 640, 75, 23);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
@@ -186,25 +186,25 @@ public class ManageFacultyJPanel extends javax.swing.JPanel {
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         // TODO add your handling code here:
-        int selectedRow = tblFaculty.getSelectedRow();
+        int selectedRow = tblStudent.getSelectedRow();
         if (selectedRow >= 0) {
             int dialogButton = JOptionPane.YES_NO_OPTION;
-            int dialogResult = JOptionPane.showConfirmDialog(null, "You sure you want to delete this faculty?", "Warning", dialogButton);
+            int dialogResult = JOptionPane.showConfirmDialog(null, "You sure you want to delete this student?", "Warning", dialogButton);
             if (dialogResult == JOptionPane.YES_OPTION) {
-                Person selectedFaculty = (Person) tblFaculty.getValueAt(selectedRow, 0);
-                FacultyProfile selectedFacultyProfile = department.getFacultydirectory().findTeachingFaculty(selectedFaculty.getPersonId());
-                department.getFacultydirectory().deleteFaculty(selectedFacultyProfile);
-                JOptionPane.showMessageDialog(null, "Faculty successfully deleted!", "Information", JOptionPane.INFORMATION_MESSAGE);
+                Person selectedStudent = (Person) tblStudent.getValueAt(selectedRow, 0);
+                StudentProfile selectedStudentProfile = department.getStudentDirectory().findStudent(selectedStudent.getPersonId());
+                department.getStudentDirectory().deleteStudent(selectedStudentProfile);
+                JOptionPane.showMessageDialog(null, "Student successfully deleted!", "Information", JOptionPane.INFORMATION_MESSAGE);
             }
         }
         else {
-            JOptionPane.showMessageDialog(null, "Please select a faculty from the list", "Warning", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Please select a student from the list", "Warning", JOptionPane.WARNING_MESSAGE);
         }
         refreshTable();
 
     }//GEN-LAST:event_btnDeleteActionPerformed
 
-    private void tblFacultyMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblFacultyMousePressed
+    private void tblStudentMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblStudentMousePressed
         // Extracts the row (uaser account) in the table that is selected by the user
 //        int siztblFacultyable.getRowCount();
 //        int selectedrotblFacultyable.getSelectionModel().getLeadSelectionIndex();
@@ -218,19 +218,19 @@ public class ManageFacultyJPanel extends javax.swing.JPanel {
 //        }
         
             
-    }//GEN-LAST:event_tblFacultyMousePressed
+    }//GEN-LAST:event_tblStudentMousePressed
 
     private void btnViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewActionPerformed
         // TODO add your handling code here:
-        int selectedRow = tblFaculty.getSelectedRow();
+        int selectedRow = tblStudent.getSelectedRow();
         if (selectedRow >= 0) {
-            Person selectedFaculty = (Person) tblFaculty.getValueAt(selectedRow, 0);
-            FacultyProfile selectedFacultyProfile = department.getFacultydirectory().findTeachingFaculty(selectedFaculty.getPersonId());
-            ViewFacultyJPanel vf = new ViewFacultyJPanel(CardSequencePanel, college, department, selectedFacultyProfile);
+            Person selectedStudent = (Person) tblStudent.getValueAt(selectedRow, 0);
+            StudentProfile selectedStudentProfile = department.getStudentDirectory().findStudent(selectedStudent.getPersonId());
+            ViewStudentJPanel vs = new ViewStudentJPanel(CardSequencePanel, college, department, selectedStudentProfile);
 
-            CardSequencePanel.add("ViewFacultyJPanel", vf);
+            CardSequencePanel.add("ViewStudentJPanel", vs);
             //((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
-            ((java.awt.CardLayout) CardSequencePanel.getLayout()).show(CardSequencePanel, "ViewFacultyJPanel");
+            ((java.awt.CardLayout) CardSequencePanel.getLayout()).show(CardSequencePanel, "ViewStudentJPanel");
             CardSequencePanel.revalidate();
             CardSequencePanel.repaint();
         }
@@ -253,7 +253,7 @@ public class ManageFacultyJPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tblFaculty;
+    private javax.swing.JTable tblStudent;
     // End of variables declaration//GEN-END:variables
     
 //    private void populateRoleCombo() {
@@ -262,5 +262,6 @@ public class ManageFacultyJPanel extends javax.swing.JPanel {
 //        cmbRole.addItem("Faculty");
 //        cmbRole.addItem("Admin");
 //    }
+    
 }
 

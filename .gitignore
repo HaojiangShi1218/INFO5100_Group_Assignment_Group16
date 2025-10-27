@@ -14,3 +14,11 @@
 /bin/
 nbproject/private/
 /Info5100-University-Example/build/
+/build/
+/dist/
+/out/
+/target/
+/bin/
+*.class
+**/.DS_Store
+nbproject/private/
