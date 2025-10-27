@@ -191,10 +191,17 @@ public class ConfigureAUniversity {
             }
             idx++;
         }
+        
+        
 
         // ----- Accounts (admin + faculties; add more as needed) -----
         UserAccountDirectory uad = department.getUseraccountdirectory();
         uad.newUserAccount(adminProfile, "admin", "****");
+        
+        //  Create a student login for testing
+        StudentProfile testStudent = students.get(0);
+        uad.newUserAccount(testStudent, "student1", "1234");
+        System.out.println("Created student login: username=student1, password=1234");
 
         for (int i = 0; i < faculties.size(); i++) {
             FacultyProfile fp = faculties.get(i);
