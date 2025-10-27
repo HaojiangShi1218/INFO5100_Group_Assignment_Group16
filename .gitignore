@@ -1,1 +1,18 @@
 /Info5100-University-Example/dist/
+<<<<<<< HEAD
+=======
+.DS_Store
+/build/
+/out/
+/target/
+/bin/
+*.class
+*.log
+**/.DS_Store
+*.class
+/build/
+/out/
+/target/
+/bin/
+nbproject/private/
+>>>>>>> main

@@ -27,7 +27,7 @@ public class FacultyDirectory {
 
     public FacultyProfile newFacultyProfile(Person p) {
 
-        FacultyProfile sp = new FacultyProfile(p);
+        FacultyProfile sp = new FacultyProfile(p, department);
         teacherlist.add(sp);
         return sp;
     }
@@ -55,5 +55,20 @@ public class FacultyDirectory {
         }
             return null; //not found after going through the whole list
          }
+
+    public void setDepartment(Department department) {
+        this.department = department;
+    }
+    
+    
+    
+    public Department getDepartment() {
+        return department;
+    }
+
+    public ArrayList<FacultyProfile> getTeacherlist() {
+        return teacherlist;
+    }
+    
     
 }

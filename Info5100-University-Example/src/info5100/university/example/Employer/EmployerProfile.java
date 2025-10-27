@@ -6,22 +6,32 @@
 package info5100.university.example.Employer;
 
 import info5100.university.example.Persona.EmploymentHistory.Employment;
+import info5100.university.example.Persona.Person;
+import info5100.university.example.Persona.Profile;
 import java.util.ArrayList;
 
 /**
  *
  * @author kal bugrara
  */
-public class EmployerProfile {
-    String name;
+public class EmployerProfile extends Profile {
+//    String name;
     ArrayList<Employment> employments;
-    public EmployerProfile(String n){  //could be company instead of just a name as a string
-        name = n;
-        
+    
+    public EmployerProfile(Person p) {
+
+        super(p); 
+
     }
-         public boolean isMatch(String id){
-        if(name.equals(id)) return true;             //String is an object and can do equal matach
-        return false;
+    
+//    public boolean isMatch(String id){
+//        if(name.equals(id)) return true;             //String is an object and can do equal matach
+//        return false;
+//    }
+         
+    @Override
+    public String getRole(){
+        return  "Employer";
     }
     
 }

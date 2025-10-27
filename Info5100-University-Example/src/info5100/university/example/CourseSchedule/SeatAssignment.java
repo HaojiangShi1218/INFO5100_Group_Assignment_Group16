@@ -16,6 +16,7 @@ public class SeatAssignment {
     Seat seat;
     boolean like; //true means like and false means not like
     CourseLoad courseload;
+    
     public SeatAssignment(CourseLoad cl, Seat s){
         seat = s;
         courseload = cl;
@@ -45,6 +46,28 @@ public class SeatAssignment {
     }
     public float GetCourseStudentScore(){
         return getCreditHours()*grade;
+    }
+
+    public float getGrade() {
+        return grade;
+    }
+
+    public void setGrade(float grade) {
+        this.grade = grade;
+    }
+    
+    public String getGradeLetter() {
+        float g = this.grade;
+        if (g == 0) return "N/A";
+        if (g >= 3.85) return "A";
+        if (g >= 3.5)  return "A-";
+        if (g >= 3.15) return "B+";
+        if (g >= 2.85) return "B";
+        if (g >= 2.5)  return "B-";
+        if (g >= 2.15) return "C+";
+        if (g >= 1.85) return "C";
+        if (g >= 1.5)  return "C-";
+        return "F";
     }
     
     

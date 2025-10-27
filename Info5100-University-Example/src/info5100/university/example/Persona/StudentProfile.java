@@ -14,21 +14,25 @@ import java.util.ArrayList;
  *
  * @author kal bugrara
  */
-public class StudentProfile {
+public class StudentProfile extends Profile {
 
     Person person;
     Transcript transcript;
     EmploymentHistroy employmenthistory;
 
     public StudentProfile(Person p) {
-
+        super(p);
         person = p;
         transcript = new Transcript(this);
         employmenthistory = new EmploymentHistroy();
     }
 
-    public boolean isMatch(String id) {
-        return person.getPersonId().equals(id);
+//    public boolean isMatch(String id) {
+//        return person.getPersonId().equals(id);
+//    }
+
+    public Person getPerson() {
+        return person;
     }
 
     public Transcript getTranscript() {
@@ -54,5 +58,26 @@ public class StudentProfile {
 
         return transcript.getCourseList();
 
+    }
+    
+    public ArrayList<String> getAllTerms() {
+        return transcript.getAllTerms();
+    }
+    
+    public ArrayList<SeatAssignment> getCoursesByTerm(String term) {
+        return transcript.getCoursesByTerm(term);
+    }
+    
+    public ArrayList<SeatAssignment> getAllSeatAssignments() {
+        return transcript.getCourseList();
+    }
+    
+    @Override
+    public String getRole() {
+        return "Faculty";
+    }
+
+    public boolean isMatch(String id) {
+        return person.getPersonId().equals(id);
     }
 }

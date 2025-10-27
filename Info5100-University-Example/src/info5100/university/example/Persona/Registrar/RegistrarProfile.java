@@ -1,29 +1,25 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package info5100.university.example.Persona.Registrar;
 
 import info5100.university.example.Persona.Person;
-/**
- *
- * @author xuanliliu
- */
+import info5100.university.example.Persona.Profile;
 
-
-public class RegistrarProfile {
-    private final Person person;
+/** Registrar 作为系统可登录的一个 Profile 角色 */
+public class RegistrarProfile extends Profile {
     private String email;
     private String phone;
     private String officeHours;
     private String department;
 
     public RegistrarProfile(Person person) {
-        if (person == null) throw new IllegalArgumentException("person cannot be null");
-        this.person = person;
+        super(person); // ★ 关键：调用父类 Profile(Person) 构造
     }
 
-    public Person getPerson() { return person; }
+    @Override
+    public String getRole() {
+        return "Registrar"; // ★ 关键：登录路由要用到
+    }
+
+    // 你保留的业务字段
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
     public String getPhone() { return phone; }
@@ -35,6 +31,6 @@ public class RegistrarProfile {
 
     @Override
     public String toString() {
-        return "RegistrarProfile{" + person + "}";
+        return "RegistrarProfile{" + getPerson() + "}";
     }
 }
