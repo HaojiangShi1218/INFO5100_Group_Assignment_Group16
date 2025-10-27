@@ -18,4 +18,32 @@ public class College {
     public College(String name){
         departments = new ArrayList();
     }
+    
+    public Department newDepartment(String  name) {
+
+        Department dept = new Department(name);
+        departments.add(dept);
+        return dept;
+    }
+
+    public Department findDepartment(String name) {
+
+        for (Department dept : departments) {
+
+            if (dept.isMatch(name)) {
+                return dept;
+            }
+        }
+            return null; //not found after going through the whole list
+         }
+
+    public ArrayList<Department> getDepartments() {
+        return departments;
+    }
+
+    public void setDepartments(ArrayList<Department> departments) {
+        this.departments = departments;
+    }
+    
+    
 }
