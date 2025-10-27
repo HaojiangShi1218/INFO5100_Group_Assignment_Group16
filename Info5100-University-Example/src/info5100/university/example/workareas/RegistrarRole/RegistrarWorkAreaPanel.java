@@ -27,6 +27,7 @@ public class RegistrarWorkAreaPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         jToolBar1 = new javax.swing.JToolBar();
+        jLabel1 = new javax.swing.JLabel();
         btnOffering = new javax.swing.JButton();
         btnReg = new javax.swing.JButton();
         btnFinance = new javax.swing.JButton();
@@ -44,6 +45,10 @@ public class RegistrarWorkAreaPanel extends javax.swing.JPanel {
 
         jToolBar1.setOrientation(javax.swing.SwingConstants.VERTICAL);
         jToolBar1.setRollover(true);
+
+        jLabel1.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
+        jLabel1.setText("Registrar");
+        jToolBar1.add(jLabel1);
 
         btnOffering.setText("Course Offering Management");
         btnOffering.setFocusable(false);
@@ -78,6 +83,11 @@ public class RegistrarWorkAreaPanel extends javax.swing.JPanel {
         btnProfile.setFocusable(false);
         btnProfile.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnProfile.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnProfile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnProfileActionPerformed(evt);
+            }
+        });
         jToolBar1.add(btnProfile);
 
         add(jToolBar1, java.awt.BorderLayout.LINE_START);
@@ -96,6 +106,10 @@ public class RegistrarWorkAreaPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnRegActionPerformed
 
+    private void btnProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProfileActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnProfileActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnFinance;
@@ -105,6 +119,7 @@ public class RegistrarWorkAreaPanel extends javax.swing.JPanel {
     private javax.swing.JButton btnReports;
     private info5100.university.example.workareas.RegistrarRole.FinancialReconciliationPanel financialReconciliationPanel1;
     private info5100.university.example.workareas.RegistrarRole.GradeManagementPanel gradeManagementPanel1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JToolBar jToolBar1;
     private info5100.university.example.workareas.RegistrarRole.ManageCourseOfferingPanel manageCourseOfferingPanel1;
