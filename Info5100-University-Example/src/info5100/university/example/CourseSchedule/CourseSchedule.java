@@ -58,4 +58,10 @@ public class CourseSchedule {
         return sum;
     }
 
+    public ArrayList<CourseOffer> getSchedule() {
+        return schedule;
+    }
+    
+    
+
 }

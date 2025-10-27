@@ -28,12 +28,29 @@ public class PersonDirectory {
         return p;
     }
 
-    public Person findPerson(String id) {
+    public ArrayList<Person> getPersonlist() {
+        return personlist;
+    }
+    
+    
+
+    public Person findPersonID(String id) {
 
         for (Person p : personlist) {
 
             if (p.isMatch(id)) {
                 return p;
+            }
+        }
+            return null; //not found after going through the whole list
+         }
+    
+    public Person findPersonEmail(String email) {
+
+        for (Person p : personlist) {
+
+            if (p.getEmail() != null) {
+                if (p.getEmail().equals(email))return p;
             }
         }
             return null; //not found after going through the whole list

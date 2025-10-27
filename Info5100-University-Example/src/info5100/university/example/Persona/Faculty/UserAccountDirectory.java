@@ -16,31 +16,48 @@ import java.util.ArrayList;
 public class UserAccountDirectory {
 
     Department department;
-    ArrayList<UserAccount> studentlist;
-
-    public UserAccountDirectory(Department d) {
-
-        department = d;
-        studentlist = new ArrayList();
+    ArrayList<UserAccount> useraccountlist ;
+    
+      public UserAccountDirectory (){
+          
+       useraccountlist = new ArrayList();
 
     }
 
-    public UserAccount newUserAccount(Person p) {
+    public UserAccount newUserAccount(Profile p, String un, String pw) {
 
-        UserAccount sp = new UserAccount(p);
-        studentlist.add(sp);
-        return sp;
+        UserAccount ua = new UserAccount (p,  un,  pw);
+        useraccountlist.add(ua);
+        return ua;
     }
 
-    public UserAccount findStudent(String id) {
+    public void deleteAccount(UserAccount ua) {
+        useraccountlist.remove(ua);
+    }
+    
 
-        for (UserAccount sp : studentlist) {
+    public UserAccount findUserAccount(String id) {
 
-         //   if (sp.isMatch(id)) {
-         //       return sp;
-         //   }
+        for (UserAccount ua : useraccountlist) {
+
+            if (ua.isMatch(id)) {
+                return ua;
+            }
         }
             return null; //not found after going through the whole list
          }
-    
+     public UserAccount AuthenticateUser(String un, String pw) {
+
+        for (UserAccount ua : useraccountlist) {
+
+            if (ua.IsValidUser(un, pw)) {
+                return ua;
+            }
+        }
+            return null; //not found after going through the whole list
+         }   
+     public ArrayList<UserAccount> getUserAccountList()
+     {
+         return useraccountlist;
+     }
 }
