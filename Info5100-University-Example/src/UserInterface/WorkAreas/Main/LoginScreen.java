@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package UserInterface.WorkAreas.Main;
-
+import UserInterface.WorkAreas.StudentRole.StudentWorkAreaJPanel;
 import ConfigU.ConfigureAUniversity;
 import UserInterface.WorkAreas.AdminRole.AdminRoleWorkAreaJPanel;
 import info5100.university.example.College.College;
@@ -13,6 +13,7 @@ import info5100.university.example.Employer.EmployerProfile;
 import info5100.university.example.Persona.AdminProfile;
 import info5100.university.example.Persona.Faculty.UserAccountDirectory;
 import info5100.university.example.Persona.Profile;
+import info5100.university.example.Persona.StudentProfile;
 import info5100.university.example.Persona.UserAccount;
 import java.awt.CardLayout;
 import javax.swing.JOptionPane;
@@ -157,15 +158,14 @@ public class LoginScreen extends javax.swing.JPanel {
             mainWorkArea.repaint();
         }
         
-//        if (profile instanceof StudentProfile) {
-//
-//            StudentProfile spp = (StudentProfile) profile;
-//            studentworkareajpanel = new StudentWorkAreaJPanel(business, spp, CardSequencePanel);
-//            CardSequencePanel.removeAll();
-//            CardSequencePanel.add("student", studentworkareajpanel);
-//            ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
-//
-//        }
+        if (profile instanceof StudentProfile) {
+            System.out.println(profile.getRole());
+            StudentWorkAreaJPanel studentworkarea = new StudentWorkAreaJPanel(mainWorkArea, (StudentProfile) profile);
+            mainWorkArea.add("Student", studentworkarea);
+            ((CardLayout) mainWorkArea.getLayout()).show(mainWorkArea, "Student");
+            mainWorkArea.revalidate();
+            mainWorkArea.repaint();
+        }
         
 //        mainWorkArea.add("WorkAreaJPnael", selectedPanel);
 //        CardLayout layout = (CardLayout) mainWorkArea.getLayout();
