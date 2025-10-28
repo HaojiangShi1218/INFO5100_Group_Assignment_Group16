@@ -244,11 +244,10 @@ public class AdminRoleWorkAreaJPanel extends javax.swing.JPanel {
 
     private void btnRPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRPActionPerformed
         // TODO add your handling code here:
-        PersonRegistrationJPanel pr = new PersonRegistrationJPanel(department, CardSequencePanel);
+        ManagePeopleJPanel mp = new ManagePeopleJPanel(college, department, CardSequencePanel);
 
-        CardSequencePanel.add("PersonRegistrationJPanel", pr);
-        //((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
-        ((java.awt.CardLayout) CardSequencePanel.getLayout()).show(CardSequencePanel, "PersonRegistrationJPanel");
+        CardSequencePanel.add("ManagePeopleJPanel", mp);
+        ((java.awt.CardLayout) CardSequencePanel.getLayout()).show(CardSequencePanel, "ManagePeopleJPanel");
         CardSequencePanel.revalidate();
         CardSequencePanel.repaint();
         
@@ -260,7 +259,6 @@ public class AdminRoleWorkAreaJPanel extends javax.swing.JPanel {
         ManageStudentJPanel ms = new ManageStudentJPanel(college, department, CardSequencePanel);
 
         CardSequencePanel.add("ManageStudentJPanel", ms);
-        //((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
         ((java.awt.CardLayout) CardSequencePanel.getLayout()).show(CardSequencePanel, "ManageStudentJPanel");
         CardSequencePanel.revalidate();
         CardSequencePanel.repaint();
@@ -268,11 +266,22 @@ public class AdminRoleWorkAreaJPanel extends javax.swing.JPanel {
 
     private void btnMRActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMRActionPerformed
         // TODO add your handling code here:
-        
+        ManageRegistrarJPanel mr = new ManageRegistrarJPanel(college, department, CardSequencePanel);
+
+        CardSequencePanel.add("ManageRegistrarJPanel", mr);
+        ((java.awt.CardLayout) CardSequencePanel.getLayout()).show(CardSequencePanel, "ManageRegistrarJPanel");
+        CardSequencePanel.revalidate();
+        CardSequencePanel.repaint();
     }//GEN-LAST:event_btnMRActionPerformed
 
     private void btnADActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnADActionPerformed
         // TODO add your handling code here:
+        AnalyticsDashboardJPanel ad = new AnalyticsDashboardJPanel(college, department, CardSequencePanel);
+
+        CardSequencePanel.add("AnalyticsDashboardJPanel", ad);
+        ((java.awt.CardLayout) CardSequencePanel.getLayout()).show(CardSequencePanel, "AnalyticsDashboardJPanel");
+        CardSequencePanel.revalidate();
+        CardSequencePanel.repaint();
     }//GEN-LAST:event_btnADActionPerformed
 
     private void btnLogOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogOutActionPerformed

@@ -87,7 +87,7 @@ public class StudentProfile extends Profile {
     
     @Override
     public String getRole() {
-        return "Faculty";
+        return "Student";
     }
 
     public boolean isMatch(String id) {

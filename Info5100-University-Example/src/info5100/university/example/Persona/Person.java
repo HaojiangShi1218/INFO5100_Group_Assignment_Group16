@@ -22,6 +22,8 @@ public class Person {
     private String email;
     private String phone;
     private String address;
+    private UserAccount account;
+    private Profile profile;
     private static final Set<String> ISSUED =
             Collections.synchronizedSet(new HashSet<>());
     
@@ -109,6 +111,24 @@ public class Person {
     public void setAddress(String address) {
         this.address = address;
     }
+
+    public UserAccount getAccount() {
+        return account;
+    }
+
+    public void setAccount(UserAccount account) {
+        this.account = account;
+    }
+
+    public Profile getProfile() {
+        return profile;
+    }
+
+    public void setProfile(Profile profile) {
+        this.profile = profile;
+    }
+    
+    
     
     @Override
     public String toString() {

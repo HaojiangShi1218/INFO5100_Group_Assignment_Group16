@@ -5,16 +5,8 @@
 package UserInterface.WorkAreas.AdminRole;
 
 import info5100.university.example.College.College;
-import info5100.university.example.CourseCatalog.Course;
-import info5100.university.example.CourseSchedule.CourseLoad;
-import info5100.university.example.CourseSchedule.CourseOffer;
-import info5100.university.example.CourseSchedule.SeatAssignment;
 import info5100.university.example.Department.Department;
-import info5100.university.example.Persona.Faculty.FacultyAssignment;
-import info5100.university.example.Persona.Faculty.FacultyProfile;
-import info5100.university.example.Persona.StudentProfile;
-import info5100.university.example.Persona.UserAccount;
-import java.awt.CardLayout;
+import info5100.university.example.Persona.Registrar.RegistrarProfile;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -22,30 +14,28 @@ import javax.swing.JPanel;
  *
  * @author kevin
  */
-public class ViewStudentJPanel extends javax.swing.JPanel {
+public class ViewRegistrarJPanel extends javax.swing.JPanel {
 
     /**
      * Creates new form CreateJPanel
      */
     JPanel CardSequencePanel;
-    StudentProfile selectedStudent;
+    RegistrarProfile selectedRegistrar;
     Department department;
     College college;
     
-    public ViewStudentJPanel(JPanel csp, College cc, Department dd, StudentProfile sp) {
+    public ViewRegistrarJPanel(JPanel csp, College cc, Department dd, RegistrarProfile rp) {
         initComponents();
         this.CardSequencePanel = csp;
         college = cc;
         department = dd;
-        selectedStudent = sp;
+        selectedRegistrar = rp;
         
         populateTextFields();
         populateDepartmentCombo();
-        populateCourseCombo();
-        populateCourseCombo1();
         setViewMode();
         
-//        for (FacultyAssignment fa: selectedFaculty.getFacultyassignments()) {
+//        for (FacultyAssignment fa: selectedRegistrar.getFacultyassignments()) {
 //            
 //            System.out.println(fa.getCourseoffer().getCourse().getName());
 //        }
@@ -75,18 +65,18 @@ public class ViewStudentJPanel extends javax.swing.JPanel {
         fieldPhone = new javax.swing.JTextField();
         lblPassword3 = new javax.swing.JLabel();
         cmbDepartment = new javax.swing.JComboBox<>();
-        lblPassword4 = new javax.swing.JLabel();
-        cmbCourse = new javax.swing.JComboBox<>();
         lblPassword5 = new javax.swing.JLabel();
         lblPassword6 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         fieldDepartment = new javax.swing.JTextField();
-        cmbCourse1 = new javax.swing.JComboBox<>();
+        fieldAddress = new javax.swing.JTextField();
+        lblPassword7 = new javax.swing.JLabel();
+        fieldOfficeHours = new javax.swing.JTextField();
 
         setPreferredSize(new java.awt.Dimension(1000, 750));
 
         jLabel1.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
-        jLabel1.setText("Assign New Department and/or Course");
+        jLabel1.setText("Assign New Department ");
 
         lblUsername.setText("ID");
 
@@ -147,16 +137,12 @@ public class ViewStudentJPanel extends javax.swing.JPanel {
 
         cmbDepartment.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        lblPassword4.setText("Course");
-
-        cmbCourse.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
         lblPassword5.setText("Department");
 
-        lblPassword6.setText("Course");
+        lblPassword6.setText("Address");
 
         jLabel2.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
-        jLabel2.setText("Viewing Student Details ");
+        jLabel2.setText("Viewing Registrar Details ");
 
         fieldDepartment.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -164,7 +150,19 @@ public class ViewStudentJPanel extends javax.swing.JPanel {
             }
         });
 
-        cmbCourse1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        fieldAddress.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fieldAddressActionPerformed(evt);
+            }
+        });
+
+        lblPassword7.setText("Office Hours");
+
+        fieldOfficeHours.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fieldOfficeHoursActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -202,11 +200,10 @@ public class ViewStudentJPanel extends javax.swing.JPanel {
                                             .addGroup(layout.createSequentialGroup()
                                                 .addComponent(lblPassword1)
                                                 .addGap(86, 86, 86)))
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(fieldEmail)
                                             .addComponent(fieldName)
-                                            .addComponent(fieldID, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(0, 22, Short.MAX_VALUE))
+                                            .addComponent(fieldID)))
                                     .addGroup(layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(lblPassword2)
@@ -214,19 +211,17 @@ public class ViewStudentJPanel extends javax.swing.JPanel {
                                             .addComponent(lblPassword6))
                                         .addGap(48, 48, 48)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(cmbCourse1, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addComponent(fieldDepartment)
-                                            .addComponent(fieldPhone))))
+                                            .addComponent(fieldPhone)
+                                            .addComponent(fieldAddress)))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(lblPassword7)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
+                                        .addComponent(fieldOfficeHours, javax.swing.GroupLayout.PREFERRED_SIZE, 278, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(50, 50, 50)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(lblPassword4)
-                                        .addGap(81, 81, 81)
-                                        .addComponent(cmbCourse, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(lblPassword3)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 74, Short.MAX_VALUE)
-                                        .addComponent(cmbDepartment, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addComponent(lblPassword3)
+                                .addGap(74, 74, 74)
+                                .addComponent(cmbDepartment, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(164, 164, 164))))
         );
         layout.setVerticalGroup(
@@ -248,14 +243,9 @@ public class ViewStudentJPanel extends javax.swing.JPanel {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblPassword)
                             .addComponent(fieldName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblPassword3)
-                            .addComponent(cmbDepartment, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblPassword4)
-                            .addComponent(cmbCourse, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(lblPassword3)
+                        .addComponent(cmbDepartment, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblPassword1)
@@ -271,8 +261,12 @@ public class ViewStudentJPanel extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblPassword6)
-                    .addComponent(cmbCourse1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(56, 56, 56)
+                    .addComponent(fieldAddress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblPassword7)
+                    .addComponent(fieldOfficeHours, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(15, 15, 15)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -297,7 +291,7 @@ public class ViewStudentJPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
         //CardSequencePanel.remove(this);
         //((java.awt.CardLayout) userProcessContainer.getLayout()).next(userProcessContainer);
-        ((java.awt.CardLayout) CardSequencePanel.getLayout()).show(CardSequencePanel, "ManageStudentJPanel");
+        ((java.awt.CardLayout) CardSequencePanel.getLayout()).show(CardSequencePanel, "ManageRegistrarJPanel");
         CardSequencePanel.revalidate();
         CardSequencePanel.repaint();
     }//GEN-LAST:event_btnBackActionPerformed
@@ -308,9 +302,13 @@ public class ViewStudentJPanel extends javax.swing.JPanel {
         String name = fieldName.getText();
         String email = fieldEmail.getText();
         String phone = fieldPhone.getText();
+        String address = fieldAddress.getText();
+        String oh = fieldOfficeHours.getText();
         
         
-        if (id.isBlank() || name.isBlank() || email.isBlank() || phone.isBlank()) {
+        
+        if (id.isBlank() || name.isBlank() || email.isBlank() || phone.isBlank()
+                || address.isBlank() || oh.isBlank()) {
             JOptionPane.showMessageDialog(null, "Please fill out all fields");
             return;
         }
@@ -320,40 +318,25 @@ public class ViewStudentJPanel extends javax.swing.JPanel {
 
         
         
-        String courseNum = String.valueOf(cmbCourse.getSelectedItem());
-        int count = 0;
-        for (SeatAssignment sa: selectedStudent.getCoursesByTerm("Fall2020")) {
-            if (sa.getAssociatedCourse().getCOurseNumber().equals(courseNum)) {
-                count++;
-            }
-            //System.out.println(fa.getCourseoffer().getCourse().getName());
-        }
-        //if the course has not been assigned to the student 
-        if (count == 0) {
-            CourseOffer newCourse = department.getCourseSchedule("Fall2020").getCourseOfferByNumber(courseNum);
-            if (selectedStudent.getCurrentCourseLoad() == null) {
-                CourseLoad newCourseLoad = selectedStudent.newCourseLoad("Fall2020");
-                newCourseLoad.newSeatAssignment(newCourse);
-            }
-            else {
-                selectedStudent.getCurrentCourseLoad().newSeatAssignment(newCourse);
-            }
-            
-            
-        }
         
-        selectedStudent.getPerson().setName(name);
-        selectedStudent.getPerson().setEmail(email);
-        selectedStudent.getPerson().setPhone(phone);
+        
+        selectedRegistrar.getPerson().setName(name);
+        selectedRegistrar.getPerson().setEmail(email);
+        selectedRegistrar.getPerson().setPhone(phone);
+        selectedRegistrar.getPerson().setAddress(address);
+        selectedRegistrar.setOfficeHours(oh);
         //selectedFaculty.setDept(selectedDepartment);
         
         
-        JOptionPane.showMessageDialog(this, "Student information updated!", "Success", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(this, "Registrar information updated!", "Success", JOptionPane.INFORMATION_MESSAGE);
         
         fieldID.setText("");
         fieldName.setText("");
         fieldEmail.setText("");
         fieldPhone.setText("");
+        fieldDepartment.setText("");
+        fieldAddress.setText("");
+        fieldOfficeHours.setText("");
         
         setViewMode();
     }//GEN-LAST:event_btnSaveActionPerformed
@@ -369,14 +352,23 @@ public class ViewStudentJPanel extends javax.swing.JPanel {
     private void fieldDepartmentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldDepartmentActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_fieldDepartmentActionPerformed
+
+    private void fieldAddressActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldAddressActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_fieldAddressActionPerformed
+
+    private void fieldOfficeHoursActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldOfficeHoursActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_fieldOfficeHoursActionPerformed
     
     private void populateTextFields() {
-        fieldID.setText(selectedStudent.getPerson().getPersonId());
-        fieldName.setText(selectedStudent.getPerson().getName());
-        fieldEmail.setText(selectedStudent.getPerson().getEmail());
-        fieldPhone.setText(selectedStudent.getPerson().getPhone());
-        fieldDepartment.setText(selectedStudent.getDepartment().getName());
-        
+        fieldID.setText(selectedRegistrar.getPerson().getPersonId());
+        fieldName.setText(selectedRegistrar.getPerson().getName());
+        fieldEmail.setText(selectedRegistrar.getPerson().getEmail());
+        fieldPhone.setText(selectedRegistrar.getPerson().getPhone());
+        fieldDepartment.setText(selectedRegistrar.getDepartment().getName());
+        fieldAddress.setText(selectedRegistrar.getPerson().getAddress());
+        fieldOfficeHours.setText(selectedRegistrar.getOfficeHours());
     }
     
     
@@ -386,8 +378,8 @@ public class ViewStudentJPanel extends javax.swing.JPanel {
         fieldEmail.setEnabled(false);
         fieldPhone.setEnabled(false);
         fieldDepartment.setEnabled(false);
-        cmbCourse.setEnabled(false);
-        cmbCourse1.setEnabled(false);
+        fieldAddress.setEnabled(false);
+        fieldOfficeHours.setEnabled(false);
         cmbDepartment.setEnabled(false);
         btnSave.setEnabled(false);
         btnUpdate.setEnabled(true);
@@ -399,8 +391,8 @@ public class ViewStudentJPanel extends javax.swing.JPanel {
         fieldEmail.setEnabled(true);
         fieldPhone.setEnabled(true);
         fieldDepartment.setEnabled(false);
-        cmbCourse.setEnabled(true);
-        cmbCourse1.setEnabled(true);
+        fieldAddress.setEnabled(true);
+        fieldOfficeHours.setEnabled(true);
         cmbDepartment.setEnabled(true);
         btnSave.setEnabled(true);
         btnUpdate.setEnabled(false);
@@ -413,42 +405,19 @@ public class ViewStudentJPanel extends javax.swing.JPanel {
         }
     }
     
-    private void populateCourseCombo() {
-        cmbCourse.removeAllItems();
-        
-        for (CourseOffer cf: department.getCourseSchedule("Fall2020").getSchedule()) {
-            
-            cmbCourse.addItem(cf.getCourse().getCOurseNumber());
-        }
-    }
-    
-    private void populateCourseCombo1() {
-        cmbCourse1.removeAllItems();
-        if (selectedStudent.getCurrentCourseLoad() == null) {
-            cmbCourse1.addItem("No courses assigned");
-        }
-        else {
-            for (SeatAssignment sa: selectedStudent.getCurrentCourseLoad().getSeatAssignments()) {
-            
-            cmbCourse1.addItem(sa.getCourseOffer().getCourse().getCOurseNumber());
-            }
-        }
-        
-    }
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack;
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnUpdate;
     private javax.swing.ButtonGroup buttonGroup1;
-    private javax.swing.JComboBox<String> cmbCourse;
-    private javax.swing.JComboBox<String> cmbCourse1;
     private javax.swing.JComboBox<String> cmbDepartment;
+    private javax.swing.JTextField fieldAddress;
     private javax.swing.JTextField fieldDepartment;
     private javax.swing.JTextField fieldEmail;
     private javax.swing.JTextField fieldID;
     private javax.swing.JTextField fieldName;
+    private javax.swing.JTextField fieldOfficeHours;
     private javax.swing.JTextField fieldPhone;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -456,9 +425,9 @@ public class ViewStudentJPanel extends javax.swing.JPanel {
     private javax.swing.JLabel lblPassword1;
     private javax.swing.JLabel lblPassword2;
     private javax.swing.JLabel lblPassword3;
-    private javax.swing.JLabel lblPassword4;
     private javax.swing.JLabel lblPassword5;
     private javax.swing.JLabel lblPassword6;
+    private javax.swing.JLabel lblPassword7;
     private javax.swing.JLabel lblUsername;
     // End of variables declaration//GEN-END:variables
 }

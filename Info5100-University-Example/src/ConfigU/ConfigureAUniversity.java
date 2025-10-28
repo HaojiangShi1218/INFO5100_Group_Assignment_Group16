@@ -26,78 +26,7 @@ import info5100.university.example.Persona.StudentProfile;
 import info5100.university.example.Persona.UserAccount;
 import info5100.university.example.Persona.Registrar.RegistrarDirectory;
 import info5100.university.example.Persona.Registrar.RegistrarProfile;
-
-
-/**
- *
- * @author kal bugrara
- */
-//public class ConfigureAUniversity {
-
-//    public static College initialize() {
-//
-//        College college = new College("College of Engineering");
-//        
-//        //Department department = new Department("Information Systems");
-//        Department department = college.newDepartment("Information Systems");
-//        CourseCatalog coursecatalog = department.getCourseCatalog();
-//        
-//        Course course = coursecatalog.newCourse("app eng", "info 5100", 4);
-//        
-//        CourseSchedule courseschedule = department.newCourseSchedule("Fall2020");
-//
-//        CourseOffer courseoffer = courseschedule.newCourseOffer("info 5100");
-//        if (courseoffer==null) return null;
-//        courseoffer.generatSeats(10);
-//        PersonDirectory pd = department.getPersonDirectory();
-//        Person person = pd.newPerson("0112303");
-//        person.setName("John Doe");
-//        StudentDirectory sd = department.getStudentDirectory();
-//        StudentProfile studentProfile1 = sd.newStudentProfile(person);
-//        CourseLoad courseload = studentProfile1.newCourseLoad("Fall2020"); 
-////        
-//        courseload.newSeatAssignment(courseoffer); //register student in class
-//        
-//// person representing sales organization        
-//        Person person001 = pd.newPerson("0112304");
-//        person001.setName("John Smith");
-//        Person person002 = pd.newPerson("0112305");
-//        person002.setName("Gina Montana");
-//        Person person003 = pd.newPerson("0112306");
-//        person003.setName("Adam Rollen");
-// 
-//        Person person005 = pd.newPerson("0112307");
-//        person005.setName("Jim Dellon");
-//        Person person006 = pd.newPerson("0112308");
-//        person006.setName("Anna Shnider");
-//        Person person007 = pd.newPerson("0112309");
-//        person007.setName("Laura Brown");
-//        Person person008 = pd.newPerson("0112310");
-//        person008.setName("Jack While");
-//        Person person010 = pd.newPerson("0112311");
-//        person010.setName("Meeten Cider");
-//        
-//        AdminDirectory adminDirectory = department.getAdminDirectory();
-//        AdminProfile adminProfile0 = adminDirectory.newAdminProfile(person001);
-//       
-//        AdminProfile adminProfile1 = adminDirectory.newAdminProfile(person002);
-//        
-//        FacultyDirectory facultyDirectory = department.getFacultydirectory();
-//        FacultyProfile facultyProfile1 = facultyDirectory.newFacultyProfile(person003);
-//        facultyProfile1.getPerson().setEmail("rollen.adam@northeastern.edu");
-//        facultyProfile1.getPerson().setPhone("3642557181");
-//        facultyProfile1.AssignAsTeacher(courseoffer);
-//        
-//        
-//        UserAccountDirectory uadirectory = department.getUseraccountdirectory();
-//        UserAccount ua3 = uadirectory.newUserAccount(adminProfile0, "admin", "****"); /// order products for one of the customers and performed by a sales person
-//        UserAccount ua4 = uadirectory.newUserAccount(adminProfile1, "Gina", "666");
-//        UserAccount ua5 = uadirectory.newUserAccount(facultyProfile1, "Adam", "3144");
-//        
-//        int total = department.calculateRevenuesBySemester("Fall2020");
-//        System.out.print("Total: " + total);
-//        return college;
-//    }
+import java.util.concurrent.ThreadLocalRandom;
 
 public class ConfigureAUniversity {
 
@@ -137,6 +66,7 @@ public class ConfigureAUniversity {
             p.setName(sampleName(i));
             p.setEmail("user" + i + "@example.edu");
             p.setPhone("617000" + String.format("%04d", i));
+            p.setAddress(randomAddress());              // <-- here
             people.add(p);
         }
 
@@ -150,17 +80,21 @@ public class ConfigureAUniversity {
         // ----- Admin -----
         AdminDirectory adminDirectory = department.getAdminDirectory();
         AdminProfile adminProfile = adminDirectory.newAdminProfile(adminPerson);
+        adminProfile.setDepartment(department);
+        adminPerson.setProfile(adminProfile);
 
         // ----- Registrar (if your model has it) -----
         // Many INFO5100 codebases have Registrar; if yours does, uncomment:
-        // RegistrarDirectory registrarDirectory = department.getRegistrarDirectory();
-        // RegistrarProfile registrarProfile     = registrarDirectory.newRegistrarProfile(registrarPerson);
+//         RegistrarDirectory registrarDirectoryDept = department.getRegistrarDirectory();
+//         RegistrarProfile registrarProfile     = registrarDirectoryDept.newRegistrar(registrarPerson);
 
         // ----- Faculty (10) -----
         FacultyDirectory facultyDirectory = department.getFacultydirectory();
         java.util.List<FacultyProfile> faculties = new java.util.ArrayList<>();
         for (int i = 0; i < facultyPersons.size(); i++) {
             FacultyProfile fp = facultyDirectory.newFacultyProfile(facultyPersons.get(i));
+            fp.setDepartment(department);
+            facultyPersons.get(i).setProfile(fp);
             fp.getPerson().setEmail("faculty" + (i+1) + "@example.edu");
             fp.getPerson().setPhone("617555" + String.format("%04d", i+1));
             faculties.add(fp);
@@ -177,7 +111,10 @@ public class ConfigureAUniversity {
         StudentDirectory sd = department.getStudentDirectory();
         java.util.List<StudentProfile> students = new java.util.ArrayList<>();
         for (Person sp : studentPersons) {
-            students.add(sd.newStudentProfile(sp));
+            StudentProfile newStudent = sd.newStudentProfile(sp);
+            newStudent.setDepartment(department);
+            students.add(newStudent);
+            sp.setProfile(newStudent);
         }
 
         // each student gets a courseload and we enroll them round-robin into 2–3 courses
@@ -198,16 +135,18 @@ public class ConfigureAUniversity {
 
         // ----- Accounts (admin + faculties; add more as needed) -----
         UserAccountDirectory uad = department.getUseraccountdirectory();
-        uad.newUserAccount(adminProfile, "admin", "****");
+        //uad.newUserAccount(adminProfile, "admin", "****");
+        adminProfile.getPerson().setAccount(uad.newUserAccount(adminProfile, "admin", "****"));
         
         //  Create a student login for testing
         StudentProfile testStudent = students.get(0);
-        uad.newUserAccount(testStudent, "student1", "1234");
+        //uad.newUserAccount(testStudent, "student1", "1234");
+        testStudent.getPerson().setAccount(uad.newUserAccount(testStudent, "student1", "1234"));
         System.out.println("Created student login: username=student1, password=1234");
 
         for (int i = 0; i < faculties.size(); i++) {
             FacultyProfile fp = faculties.get(i);
-            uad.newUserAccount(fp, "fac" + (i+1), "pass" + (i+1));
+            fp.getPerson().setAccount(uad.newUserAccount(fp, "fac" + (i+1), "pass" + (i+1)));
         }
 
         // If you created registrarProfile above, you can also:
@@ -224,22 +163,29 @@ Person regPerson = department.getPersonDirectory().newPerson("0112400");
 regPerson.setName("Registrar");
 
 // ② 从目录创建 RegistrarProfile（方法名按你们源码调整）
-RegistrarDirectory registrarDirectory = new RegistrarDirectory();
+//RegistrarDirectory registrarDirectory = new RegistrarDirectory();
+RegistrarDirectory registrarDirectoryDept = department.getRegistrarDirectory();
 // 二选一：看 RegistrarDirectory 里是哪个方法
 // RegistrarProfile regProfile = registrarDirectory.newRegistrar(regPerson);
-RegistrarProfile   regProfile         = registrarDirectory.newRegistrar(regPerson);
-
+RegistrarProfile   regProfile         = registrarDirectoryDept.newRegistrar(regPerson);
+regProfile.setDepartment(department);
+regPerson.setProfile(regProfile);
 // ③ 联系方式：若 Profile 没有 setter，就改设置到 person 上
 // 如果有 regProfile.setEmail / setPhone 就用下面两行：
 // regProfile.setEmail("registrar@example.edu");
 // regProfile.setPhone("617-000-0000");
 // 否则用 person：
+regProfile.setEmail("registrar@example.edu");
+regProfile.setPhone("617-000-0000");
 regProfile.getPerson().setEmail("registrar@example.edu");
 regProfile.getPerson().setPhone("617-000-0000");
+regProfile.getPerson().setAddress(randomAddress());
+regProfile.setDepartment(department);
+regProfile.setOfficeHours("Mon to Fri 10AM to 5PM");
 
 // ④ 账号：不要再次声明 uad，直接复用上面已创建的 uad
-uad.newUserAccount(regProfile, "registrar", "****");
-
+//uad.newUserAccount(regProfile, "registrar", "****");
+regPerson.setAccount(uad.newUserAccount(regProfile, "registrar", "****"));
 // 日志
 System.out.println("Seeded Registrar: " + regPerson.getPersonId()
         + " / " + regProfile.getPerson().getEmail());
@@ -274,5 +220,44 @@ System.out.println("Seeded Registrar: " + regPerson.getPersonId()
                           "Young","Scott","Green","Adams","Hill","Cooper","Ward","Cook","Bell","Gray"};
         return first[(i-1) % first.length] + " " + last[(i-1) % last.length];
     }
+    
+private static final String[] STREET_NAMES = {
+    "Commonwealth", "Huntington", "Massachusetts", "Boylston", "Beacon",
+    "Cambridge", "Tremont", "Summer", "Washington", "Columbus",
+    "Dorchester", "Blue Hill", "Centre", "Harvard", "Main", "River",
+    "Prospect", "Albany", "Western", "Broadway"
+};
+private static final String[] STREET_TYPES = {
+    "St", "Ave", "Rd", "Blvd", "Ln", "Dr", "Ct", "Way", "Ter", "Pl"
+};
+private static final String[] CITIES_MA = {
+    "Boston", "Cambridge", "Somerville", "Brookline", "Medford",
+    "Quincy", "Newton", "Malden", "Everett", "Chelsea"
+};
+// Some real Boston/Cambridge zip codes
+private static final String[] ZIPS_MA = {
+    "02108","02109","02110","02111","02114","02115","02116","02118","02119",
+    "02120","02121","02122","02124","02125","02127","02128","02129","02134",
+    "02135","02139","02140","02141","02142","02445","02446","02155","02169"
+};
+
+private static String randomAddress() {
+    ThreadLocalRandom r = ThreadLocalRandom.current();
+
+    int number = r.nextInt(1, 9999); // house number
+    String street = STREET_NAMES[r.nextInt(STREET_NAMES.length)];
+    String type   = STREET_TYPES[r.nextInt(STREET_TYPES.length)];
+    String city   = CITIES_MA[r.nextInt(CITIES_MA.length)];
+    String zip    = ZIPS_MA[r.nextInt(ZIPS_MA.length)];
+
+    // ~30% chance to include an apartment/suite
+    String apt = (r.nextDouble() < 0.30)
+            ? " Apt " + r.nextInt(1, 200)
+            : "";
+
+    return String.format("%d %s %s%s, %s, MA %s",
+            number, street, type, apt, city, zip);
+}
+
 }
 

@@ -97,6 +97,12 @@ public class CourseOffer {
     public void setCourse(Course course) {
         this.course = course;
     }
+
+    public ArrayList<Seat> getSeatlist() {
+        return seatlist;
+    }
+    
+    
     
     
     

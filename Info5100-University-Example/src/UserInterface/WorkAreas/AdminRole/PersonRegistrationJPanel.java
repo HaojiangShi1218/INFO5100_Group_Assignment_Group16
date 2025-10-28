@@ -14,6 +14,7 @@ import info5100.university.example.Persona.Faculty.FacultyProfile;
 import info5100.university.example.Persona.Faculty.UserAccountDirectory;
 import info5100.university.example.Persona.Person;
 import info5100.university.example.Persona.PersonDirectory;
+import info5100.university.example.Persona.Registrar.RegistrarProfile;
 import info5100.university.example.Persona.StudentDirectory;
 import info5100.university.example.Persona.StudentProfile;
 import info5100.university.example.Persona.UserAccount;
@@ -32,14 +33,16 @@ public class PersonRegistrationJPanel extends javax.swing.JPanel {
      */
     JPanel CardSequencePanel;
     Department department;
+    Person selectedPerson;
 
-
-    public PersonRegistrationJPanel(Department dd, JPanel jp) {
+    public PersonRegistrationJPanel(Department dd, Person pp, JPanel jp) {
         CardSequencePanel = jp;
         department = dd;
+        selectedPerson = pp;
         initComponents();
         populateRoleCombo();
-        //refreshTable();
+        populateTextFields();
+        setViewMode();
 
     }
 
@@ -56,7 +59,6 @@ public class PersonRegistrationJPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         btnBack = new javax.swing.JButton();
-        btnCreate = new javax.swing.JButton();
         fieldName = new javax.swing.JTextField();
         lblUsername1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -68,6 +70,15 @@ public class PersonRegistrationJPanel extends javax.swing.JPanel {
         cmbRole = new javax.swing.JComboBox<>();
         fieldEmail = new javax.swing.JTextField();
         lblPassword1 = new javax.swing.JLabel();
+        fieldID = new javax.swing.JTextField();
+        lblUsername2 = new javax.swing.JLabel();
+        lblPassword2 = new javax.swing.JLabel();
+        fieldAccount = new javax.swing.JTextField();
+        btnUpdate = new javax.swing.JButton();
+        btnSave = new javax.swing.JButton();
+        lblPassword3 = new javax.swing.JLabel();
+        fieldRole = new javax.swing.JTextField();
+        btnNewRole = new javax.swing.JButton();
 
         setLayout(null);
 
@@ -80,35 +91,26 @@ public class PersonRegistrationJPanel extends javax.swing.JPanel {
         add(btnBack);
         btnBack.setBounds(40, 20, 80, 23);
 
-        btnCreate.setText("Create");
-        btnCreate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCreateActionPerformed(evt);
-            }
-        });
-        add(btnCreate);
-        btnCreate.setBounds(330, 280, 72, 23);
-
         fieldName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 fieldNameActionPerformed(evt);
             }
         });
         add(fieldName);
-        fieldName.setBounds(330, 60, 180, 23);
+        fieldName.setBounds(250, 100, 250, 23);
 
         lblUsername1.setText("Name");
         add(lblUsername1);
-        lblUsername1.setBounds(250, 60, 34, 17);
+        lblUsername1.setBounds(170, 100, 34, 17);
 
         jLabel3.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
-        jLabel3.setText("Register ");
+        jLabel3.setText("View or Update");
         add(jLabel3);
-        jLabel3.setBounds(250, 20, 96, 29);
+        jLabel3.setBounds(250, 20, 190, 29);
 
         lblUsername.setText("Phone");
         add(lblUsername);
-        lblUsername.setBounds(250, 100, 36, 17);
+        lblUsername.setBounds(170, 140, 36, 17);
 
         fieldPhone.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -116,11 +118,11 @@ public class PersonRegistrationJPanel extends javax.swing.JPanel {
             }
         });
         add(fieldPhone);
-        fieldPhone.setBounds(330, 100, 180, 23);
+        fieldPhone.setBounds(250, 140, 250, 23);
 
         lblPassword.setText("Address");
         add(lblPassword);
-        lblPassword.setBounds(250, 180, 60, 17);
+        lblPassword.setBounds(170, 220, 60, 17);
 
         fieldAddress.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -128,15 +130,15 @@ public class PersonRegistrationJPanel extends javax.swing.JPanel {
             }
         });
         add(fieldAddress);
-        fieldAddress.setBounds(330, 180, 180, 23);
+        fieldAddress.setBounds(250, 220, 250, 23);
 
-        jLabel4.setText("Role");
+        jLabel4.setText("New Role");
         add(jLabel4);
-        jLabel4.setBounds(250, 220, 49, 17);
+        jLabel4.setBounds(540, 260, 70, 17);
 
         cmbRole.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         add(cmbRole);
-        cmbRole.setBounds(330, 220, 180, 23);
+        cmbRole.setBounds(620, 260, 250, 23);
 
         fieldEmail.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -144,11 +146,77 @@ public class PersonRegistrationJPanel extends javax.swing.JPanel {
             }
         });
         add(fieldEmail);
-        fieldEmail.setBounds(330, 140, 180, 23);
+        fieldEmail.setBounds(250, 180, 250, 23);
 
         lblPassword1.setText("Email");
         add(lblPassword1);
-        lblPassword1.setBounds(250, 140, 32, 17);
+        lblPassword1.setBounds(170, 180, 32, 17);
+
+        fieldID.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fieldIDActionPerformed(evt);
+            }
+        });
+        add(fieldID);
+        fieldID.setBounds(250, 60, 250, 23);
+
+        lblUsername2.setText("ID");
+        add(lblUsername2);
+        lblUsername2.setBounds(170, 60, 12, 17);
+
+        lblPassword2.setText("Account");
+        add(lblPassword2);
+        lblPassword2.setBounds(170, 300, 60, 17);
+
+        fieldAccount.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fieldAccountActionPerformed(evt);
+            }
+        });
+        add(fieldAccount);
+        fieldAccount.setBounds(250, 300, 250, 23);
+
+        btnUpdate.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
+        btnUpdate.setText("Update");
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
+        add(btnUpdate);
+        btnUpdate.setBounds(250, 370, 109, 35);
+
+        btnSave.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
+        btnSave.setText("Save");
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveActionPerformed(evt);
+            }
+        });
+        add(btnSave);
+        btnSave.setBounds(420, 370, 84, 35);
+
+        lblPassword3.setText("Role");
+        add(lblPassword3);
+        lblPassword3.setBounds(170, 260, 60, 17);
+
+        fieldRole.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fieldRoleActionPerformed(evt);
+            }
+        });
+        add(fieldRole);
+        fieldRole.setBounds(250, 260, 250, 23);
+
+        btnNewRole.setFont(new java.awt.Font("Helvetica Neue", 0, 14)); // NOI18N
+        btnNewRole.setText("Assign new role");
+        btnNewRole.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNewRoleActionPerformed(evt);
+            }
+        });
+        add(btnNewRole);
+        btnNewRole.setBounds(730, 380, 140, 24);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
@@ -156,73 +224,10 @@ public class PersonRegistrationJPanel extends javax.swing.JPanel {
         //CardSequencePanel.remove(this);
         //((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
  //       ((java.awt.CardLayout)CardSequencePanel.getLayout()).show(CardSequencePanel, "IdentifyEventTypes");
-        ((java.awt.CardLayout) CardSequencePanel.getLayout()).show(CardSequencePanel, "Admin");
+        ((java.awt.CardLayout) CardSequencePanel.getLayout()).show(CardSequencePanel, "ManagePeopleJPanel");
         CardSequencePanel.revalidate();
         CardSequencePanel.repaint();
-
     }//GEN-LAST:event_btnBackActionPerformed
-
-    private void btnCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
-        // TODO add your handling code here:
-        String name = fieldName.getText();
-        String phone = fieldPhone.getText();
-        String address = fieldAddress.getText();
-        String email = fieldEmail.getText();
-        String role = String.valueOf(cmbRole.getSelectedItem());
-        
-        PersonDirectory pd = department.getPersonDirectory();
-        FacultyDirectory facultyDirectory = department.getFacultydirectory();
-        StudentDirectory studentDirectory = department.getStudentDirectory();
-        AdminDirectory adminDirectory = department.getAdminDirectory();
-        //UserAccountDirectory uadirectory = department.getUseraccountdirectory();
-        
-        if (name.isBlank() || phone.isBlank() || email.isBlank() || address.isBlank()) {
-            JOptionPane.showMessageDialog(null, "Please fill out all fields");
-            return;
-        }
-        
-        Person newPerson = new Person();
-        String id = newPerson.getPersonId();
-        newPerson.setName(name);
-        newPerson.setPhone(phone);
-        newPerson.setAddress(address);
-        pd.getPersonlist().add(newPerson);
-        
-        
-        if (pd.findPersonEmail(email) != null) {
-            System.out.println(email);
-            JOptionPane.showMessageDialog(null, pd.findPersonEmail(email).getName() + "has already registered with this email, try another email.");
-            fieldName.setText("");
-            fieldPhone.setText("");
-            fieldEmail.setText("");
-            fieldAddress.setText("");
-            return;
-        }
-        newPerson.setEmail(email);
-        
-        if (role == "Student") {
-            StudentProfile studentProfile0 = studentDirectory.newStudentProfile(newPerson);
-            //UserAccount newUser = uadirectory.newUserAccount(studentProfile0, username, password);
-        } else if (role == "Faculty") {
-            pd.getPersonlist().add(newPerson);
-            FacultyProfile facultyProfile0 = facultyDirectory.newFacultyProfile(newPerson);
-            //UserAccount newUser = uadirectory.newUserAccount(facultyProfile0, username, password);
-        } else if (role == "Admin") {
-            pd.getPersonlist().add(newPerson);
-            AdminProfile adminProfile0 = adminDirectory.newAdminProfile(newPerson);
-            //UserAccount newUser = uadirectory.newUserAccount(adminProfile0, username, password);
-        }
-        
-        
-        
-        JOptionPane.showMessageDialog(this, "New person registered! Your ID is " + id + "and your email is " + email, "Success", JOptionPane.INFORMATION_MESSAGE);
-        
-        fieldName.setText("");
-        fieldPhone.setText("");
-        fieldEmail.setText("");
-        fieldAddress.setText("");
-        
-    }//GEN-LAST:event_btnCreateActionPerformed
 
     private void fieldNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldNameActionPerformed
         // TODO add your handling code here:
@@ -240,27 +245,236 @@ public class PersonRegistrationJPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_fieldEmailActionPerformed
 
+    private void fieldIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldIDActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_fieldIDActionPerformed
+
+    private void fieldAccountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldAccountActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_fieldAccountActionPerformed
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        // TODO add your handling code here:
+        setEditMode();
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+        // TODO add your handling code here:
+        String id = fieldID.getText();
+        String name = fieldName.getText();
+        String email = fieldEmail.getText();
+        String phone = fieldPhone.getText();
+        String address = fieldAddress.getText();
+
+        if (id.isBlank() || name.isBlank() || email.isBlank() || phone.isBlank() || address.isBlank()) {
+            JOptionPane.showMessageDialog(null, "Please fill out all fields");
+            return;
+        }
+        
+        selectedPerson.setName(name);
+        selectedPerson.setEmail(email);
+        selectedPerson.setPhone(phone);
+        selectedPerson.setAddress(address);
+        
+
+        JOptionPane.showMessageDialog(this, "Person information updated!", "Success", JOptionPane.INFORMATION_MESSAGE);
+
+        fieldID.setText("");
+        fieldName.setText("");
+        fieldEmail.setText("");
+        fieldPhone.setText("");
+        fieldAddress.setText("");
+        fieldRole.setText("");
+        fieldAccount.setText("");
+
+        setViewMode();
+    }//GEN-LAST:event_btnSaveActionPerformed
+
+    private void fieldRoleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldRoleActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_fieldRoleActionPerformed
+
+    private void btnNewRoleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewRoleActionPerformed
+        // TODO add your handling code here:
+        String newRole = String.valueOf(cmbRole.getSelectedItem());
+        String oldRole;
+        if (selectedPerson.getProfile() == null) {
+            oldRole = "No role assigned";
+        }
+        else {
+            oldRole = selectedPerson.getProfile().getRole();
+        }
+        if (newRole.equals(oldRole)) {
+            JOptionPane.showMessageDialog(null, "This person has already been assigned as " + newRole);
+            return;
+        }
+        
+        if ("Student".equals(newRole)) {
+            StudentProfile studentProfile0 = department.getStudentDirectory().newStudentProfile(selectedPerson);
+            if (selectedPerson.getAccount() != null) {
+                selectedPerson.getAccount().setProfile(studentProfile0);
+            }
+            
+            if (selectedPerson.getProfile() instanceof AdminProfile) {
+                AdminProfile temp = (AdminProfile) selectedPerson.getProfile();
+                department.getAdminDirectory().deleteAdmin(temp);
+                
+            }
+            else if (selectedPerson.getProfile() instanceof FacultyProfile) {
+                FacultyProfile temp = (FacultyProfile) selectedPerson.getProfile();
+                department.getFacultydirectory().deleteFaculty(temp);
+            }
+            else if (selectedPerson.getProfile() instanceof RegistrarProfile) {
+                RegistrarProfile temp = (RegistrarProfile) selectedPerson.getProfile();
+                department.getRegistrarDirectory().deleteRegistrar(temp);
+            }
+            selectedPerson.setProfile(studentProfile0);
+        } 
+        else if ("Faculty".equals(newRole)) {
+            FacultyProfile facultyProfile0 = department.getFacultydirectory().newFacultyProfile(selectedPerson);
+            if (selectedPerson.getAccount() != null) {
+                selectedPerson.getAccount().setProfile(facultyProfile0);
+            }
+            
+            if (selectedPerson.getProfile() instanceof AdminProfile) {
+                AdminProfile temp = (AdminProfile) selectedPerson.getProfile();
+                department.getAdminDirectory().deleteAdmin(temp);
+            }
+            else if (selectedPerson.getProfile() instanceof StudentProfile) {
+                StudentProfile temp = (StudentProfile) selectedPerson.getProfile();
+                department.getStudentDirectory().deleteStudent(temp);
+            }
+            else if (selectedPerson.getProfile() instanceof RegistrarProfile) {
+                RegistrarProfile temp = (RegistrarProfile) selectedPerson.getProfile();
+                department.getRegistrarDirectory().deleteRegistrar(temp);
+            }
+            selectedPerson.setProfile(facultyProfile0);
+        } 
+        else if ("Admin".equals(newRole)) {
+            AdminProfile adminProfile0 = department.getAdminDirectory().newAdminProfile(selectedPerson);
+            if (selectedPerson.getAccount() != null) {
+                selectedPerson.getAccount().setProfile(adminProfile0);
+            }
+            
+            if (selectedPerson.getProfile() instanceof FacultyProfile) {
+                FacultyProfile temp = (FacultyProfile) selectedPerson.getProfile();
+                department.getFacultydirectory().deleteFaculty(temp);
+            }
+            else if (selectedPerson.getProfile() instanceof StudentProfile) {
+                StudentProfile temp = (StudentProfile) selectedPerson.getProfile();
+                department.getStudentDirectory().deleteStudent(temp);
+            }
+            else if (selectedPerson.getProfile() instanceof RegistrarProfile) {
+                RegistrarProfile temp = (RegistrarProfile) selectedPerson.getProfile();
+                department.getRegistrarDirectory().deleteRegistrar(temp);
+            }
+            selectedPerson.setProfile(adminProfile0);
+        }
+        else if ("Registrar".equals(newRole)) {
+            RegistrarProfile registrarProfile0 = department.getRegistrarDirectory().newRegistrar(selectedPerson);
+            if (selectedPerson.getAccount() != null) {
+                selectedPerson.getAccount().setProfile(registrarProfile0);
+            }
+            
+            if (selectedPerson.getProfile() instanceof FacultyProfile) {
+                FacultyProfile temp = (FacultyProfile) selectedPerson.getProfile();
+                department.getFacultydirectory().deleteFaculty(temp);
+            }
+            else if (selectedPerson.getProfile() instanceof StudentProfile) {
+                StudentProfile temp = (StudentProfile) selectedPerson.getProfile();
+                department.getStudentDirectory().deleteStudent(temp);
+            }
+            else if (selectedPerson.getProfile() instanceof AdminProfile) {
+                AdminProfile temp = (AdminProfile) selectedPerson.getProfile();
+                department.getAdminDirectory().deleteAdmin(temp);
+            }
+            selectedPerson.setProfile(registrarProfile0);
+        }
+        JOptionPane.showMessageDialog(this, "Person role updated!", "Success", JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_btnNewRoleActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack;
-    private javax.swing.JButton btnCreate;
+    private javax.swing.JButton btnNewRole;
+    private javax.swing.JButton btnSave;
+    private javax.swing.JButton btnUpdate;
     private javax.swing.JComboBox<String> cmbRole;
+    private javax.swing.JTextField fieldAccount;
     private javax.swing.JTextField fieldAddress;
     private javax.swing.JTextField fieldEmail;
+    private javax.swing.JTextField fieldID;
     private javax.swing.JTextField fieldName;
     private javax.swing.JTextField fieldPhone;
+    private javax.swing.JTextField fieldRole;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel lblPassword;
     private javax.swing.JLabel lblPassword1;
+    private javax.swing.JLabel lblPassword2;
+    private javax.swing.JLabel lblPassword3;
     private javax.swing.JLabel lblUsername;
     private javax.swing.JLabel lblUsername1;
+    private javax.swing.JLabel lblUsername2;
     // End of variables declaration//GEN-END:variables
+    
+    private void populateTextFields() {
+        fieldID.setText(selectedPerson.getPersonId());
+        fieldName.setText(selectedPerson.getName());
+        fieldEmail.setText(selectedPerson.getEmail());
+        fieldPhone.setText(selectedPerson.getPhone());
+        fieldAddress.setText(selectedPerson.getAddress());
+        
+        String setRole;
+        if (selectedPerson.getProfile() == null) {
+            setRole = "No role assigned";
+        }
+        else {
+            setRole = selectedPerson.getProfile().getRole();
+        }
+        fieldRole.setText(setRole);
+        
+        String setAccount;
+        if (selectedPerson.getAccount() == null) {
+            setAccount = "No Account";
+        }
+        else {
+            setAccount = selectedPerson.getAccount().getUserLoginName();
+        }
+        fieldAccount.setText(setAccount);
+    }
     
     private void populateRoleCombo() {
         cmbRole.removeAllItems();
         cmbRole.addItem("Student");
         cmbRole.addItem("Faculty");
         cmbRole.addItem("Admin");
+        cmbRole.addItem("Registrar");
+    }
+    
+    private void setViewMode() {
+        fieldID.setEnabled(false);
+        fieldName.setEnabled(false);
+        fieldEmail.setEnabled(false);
+        fieldPhone.setEnabled(false);
+        fieldAddress.setEnabled(false);
+        fieldRole.setEnabled(false);
+        fieldAccount.setEnabled(false);
+        btnSave.setEnabled(false);
+        btnNewRole.setEnabled(false);
+        btnUpdate.setEnabled(true);
+    }
+    
+    private void setEditMode() {
+        fieldID.setEnabled(false);
+        fieldName.setEnabled(true);
+        fieldEmail.setEnabled(true);
+        fieldPhone.setEnabled(true);
+        fieldAddress.setEnabled(true);
+        fieldRole.setEnabled(false);
+        fieldAccount.setEnabled(false);
+        btnSave.setEnabled(true);
+        btnNewRole.setEnabled(true);
+        btnUpdate.setEnabled(false);
     }
 }
 

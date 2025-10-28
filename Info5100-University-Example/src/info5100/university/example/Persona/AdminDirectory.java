@@ -28,7 +28,11 @@ public class AdminDirectory {
         adminlist.add(ap);
         return ap;
     }
-
+    
+    public void deleteAdmin(AdminProfile ap) {
+        adminlist.remove(ap);
+    }
+    
     public AdminProfile findAdmin(String id) {
 
         for (AdminProfile ap : adminlist) {

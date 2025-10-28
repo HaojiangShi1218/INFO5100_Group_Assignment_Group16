@@ -45,6 +45,17 @@ public class PersonDirectory {
             return null; //not found after going through the whole list
          }
     
+    public Person findPersonName(String name) {
+        for (Person p : personlist) {
+
+            if (p.getName().equals(name)) {
+                return p;
+            }
+        }
+            return null; //not found after going through the whole list
+        
+    }
+    
     public Person findPersonEmail(String email) {
 
         for (Person p : personlist) {
@@ -56,4 +67,7 @@ public class PersonDirectory {
             return null; //not found after going through the whole list
          }
     
+    public void deletePerson(Person p) {
+        personlist.remove(p);
+    }
 }
