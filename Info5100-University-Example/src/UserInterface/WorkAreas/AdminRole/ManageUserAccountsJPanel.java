@@ -14,6 +14,8 @@ import info5100.university.example.Persona.Faculty.FacultyProfile;
 import info5100.university.example.Persona.Faculty.UserAccountDirectory;
 import info5100.university.example.Persona.Person;
 import info5100.university.example.Persona.PersonDirectory;
+import info5100.university.example.Persona.Registrar.RegistrarDirectory;
+import info5100.university.example.Persona.Registrar.RegistrarProfile;
 import info5100.university.example.Persona.StudentDirectory;
 import info5100.university.example.Persona.StudentProfile;
 import info5100.university.example.Persona.UserAccount;
@@ -39,7 +41,7 @@ public class ManageUserAccountsJPanel extends javax.swing.JPanel {
         CardSequencePanel = jp;
         department = dd;
         initComponents();
-        populateRoleCombo();
+        populateProfileCombo();
         refreshTable();
 
     }
@@ -89,15 +91,13 @@ public class ManageUserAccountsJPanel extends javax.swing.JPanel {
         UserAccountTable = new javax.swing.JTable();
         btnView = new javax.swing.JButton();
         btnCreate = new javax.swing.JButton();
-        fieldName = new javax.swing.JTextField();
         lblUsername1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         lblUsername = new javax.swing.JLabel();
         fieldUsername = new javax.swing.JTextField();
         lblPassword = new javax.swing.JLabel();
         fieldPassword = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
-        cmbRole = new javax.swing.JComboBox<>();
+        cmbProfile = new javax.swing.JComboBox<>();
 
         setLayout(null);
 
@@ -117,7 +117,7 @@ public class ManageUserAccountsJPanel extends javax.swing.JPanel {
             }
         });
         add(btnDelete);
-        btnDelete.setBounds(650, 510, 80, 23);
+        btnDelete.setBounds(560, 510, 80, 23);
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel1.setText("User Accounts");
@@ -156,7 +156,7 @@ public class ManageUserAccountsJPanel extends javax.swing.JPanel {
         jScrollPane1.setViewportView(UserAccountTable);
 
         add(jScrollPane1);
-        jScrollPane1.setBounds(30, 70, 700, 420);
+        jScrollPane1.setBounds(30, 70, 610, 420);
 
         btnView.setText("View");
         btnView.addActionListener(new java.awt.event.ActionListener() {
@@ -174,28 +174,20 @@ public class ManageUserAccountsJPanel extends javax.swing.JPanel {
             }
         });
         add(btnCreate);
-        btnCreate.setBounds(230, 510, 72, 23);
+        btnCreate.setBounds(740, 230, 72, 23);
 
-        fieldName.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                fieldNameActionPerformed(evt);
-            }
-        });
-        add(fieldName);
-        fieldName.setBounds(120, 580, 180, 23);
-
-        lblUsername1.setText("Name");
+        lblUsername1.setText("Profile");
         add(lblUsername1);
-        lblUsername1.setBounds(40, 580, 34, 17);
+        lblUsername1.setBounds(660, 110, 60, 17);
 
         jLabel3.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
         jLabel3.setText("Create an Account ");
         add(jLabel3);
-        jLabel3.setBounds(40, 540, 209, 29);
+        jLabel3.setBounds(660, 70, 209, 29);
 
         lblUsername.setText("Username");
         add(lblUsername);
-        lblUsername.setBounds(40, 620, 59, 17);
+        lblUsername.setBounds(660, 150, 59, 17);
 
         fieldUsername.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -203,11 +195,11 @@ public class ManageUserAccountsJPanel extends javax.swing.JPanel {
             }
         });
         add(fieldUsername);
-        fieldUsername.setBounds(120, 620, 180, 23);
+        fieldUsername.setBounds(740, 150, 180, 23);
 
         lblPassword.setText("Password");
         add(lblPassword);
-        lblPassword.setBounds(40, 660, 58, 17);
+        lblPassword.setBounds(660, 190, 58, 17);
 
         fieldPassword.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -215,15 +207,11 @@ public class ManageUserAccountsJPanel extends javax.swing.JPanel {
             }
         });
         add(fieldPassword);
-        fieldPassword.setBounds(120, 660, 180, 23);
+        fieldPassword.setBounds(740, 190, 180, 23);
 
-        jLabel4.setText("Role");
-        add(jLabel4);
-        jLabel4.setBounds(50, 700, 26, 17);
-
-        cmbRole.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        add(cmbRole);
-        cmbRole.setBounds(120, 700, 180, 23);
+        cmbProfile.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        add(cmbProfile);
+        cmbProfile.setBounds(740, 110, 180, 23);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
@@ -293,49 +281,29 @@ public class ManageUserAccountsJPanel extends javax.swing.JPanel {
 
     private void btnCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
         // TODO add your handling code here:
-        String name = fieldName.getText();
+        //String name = fieldName.getText();
         String username = fieldUsername.getText();
         String password = fieldPassword.getText();
-        String role = String.valueOf(cmbRole.getSelectedItem());
-        PersonDirectory pd = department.getPersonDirectory();
-        FacultyDirectory facultyDirectory = department.getFacultydirectory();
-        StudentDirectory studentDirectory = department.getStudentDirectory();
-        AdminDirectory adminDirectory = department.getAdminDirectory();
         UserAccountDirectory uadirectory = department.getUseraccountdirectory();
-        
-        if (name.isBlank() || username.isBlank() || password.isBlank()) {
+
+        if (username.isBlank() || password.isBlank()) {
             JOptionPane.showMessageDialog(null, "Please fill out all fields");
             return;
         }
         
-        if (role == "Student") {
-            Person newPerson = pd.newPerson(name);
-            StudentProfile studentProfile0 = studentDirectory.newStudentProfile(newPerson);
-            UserAccount newUser = uadirectory.newUserAccount(studentProfile0, username, password);
-        } else if (role == "Faculty") {
-            Person newPerson = pd.newPerson(name);
-            FacultyProfile facultyProfile0 = facultyDirectory.newFacultyProfile(newPerson);
-            UserAccount newUser = uadirectory.newUserAccount(facultyProfile0, username, password);
-        } else if (role == "Admin") {
-            Person newPerson = pd.newPerson(name);
-            AdminProfile adminProfile0 = adminDirectory.newAdminProfile(newPerson);
-            UserAccount newUser = uadirectory.newUserAccount(adminProfile0, username, password);
-        }
+        Person selectedPerson = department.getPersonDirectory().findPersonName(String.valueOf(cmbProfile.getSelectedItem()));
         
-        
-        
+        UserAccount newUser = uadirectory.newUserAccount(selectedPerson.getProfile(), username, password);
+        selectedPerson.setAccount(newUser);
+
         JOptionPane.showMessageDialog(this, "New account created!", "Success", JOptionPane.INFORMATION_MESSAGE);
         
-        fieldName.setText("");
         fieldUsername.setText("");
         fieldPassword.setText("");
         
         refreshTable();
+        populateProfileCombo();
     }//GEN-LAST:event_btnCreateActionPerformed
-
-    private void fieldNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldNameActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_fieldNameActionPerformed
 
     private void fieldUsernameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldUsernameActionPerformed
         // TODO add your handling code here:
@@ -351,25 +319,27 @@ public class ManageUserAccountsJPanel extends javax.swing.JPanel {
     private javax.swing.JButton btnCreate;
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnView;
-    private javax.swing.JComboBox<String> cmbRole;
-    private javax.swing.JTextField fieldName;
+    private javax.swing.JComboBox<String> cmbProfile;
     private javax.swing.JTextField fieldPassword;
     private javax.swing.JTextField fieldUsername;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblPassword;
     private javax.swing.JLabel lblUsername;
     private javax.swing.JLabel lblUsername1;
     // End of variables declaration//GEN-END:variables
     
-    private void populateRoleCombo() {
-        cmbRole.removeAllItems();
-        cmbRole.addItem("Student");
-        cmbRole.addItem("Faculty");
-        cmbRole.addItem("Admin");
+    
+    private void populateProfileCombo() {
+        cmbProfile.removeAllItems();
+        for (Person pp: department.getPersonDirectory().getPersonlist()) {
+            if (pp.getAccount() == null && pp.getProfile() != null) {
+                cmbProfile.addItem(pp.getName());
+                
+            }
+        }
     }
 }
 

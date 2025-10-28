@@ -16,6 +16,7 @@ import info5100.university.example.Persona.AdminDirectory;
 import info5100.university.example.Persona.Faculty.FacultyDirectory;
 import info5100.university.example.Persona.Faculty.UserAccountDirectory;
 import info5100.university.example.Persona.PersonDirectory;
+import info5100.university.example.Persona.Registrar.RegistrarDirectory;
 import info5100.university.example.Persona.StudentDirectory;
 import info5100.university.example.Persona.StudentProfile;
 import java.util.HashMap;
@@ -34,6 +35,7 @@ public class Department {
     EmployerDirectory employerdirectory;
     AdminDirectory adminDirectory;
     UserAccountDirectory useraccountdirectory;
+    RegistrarDirectory registrarDirectory;
     Degree degree;
 
     HashMap<String, CourseSchedule> mastercoursecatalog;
@@ -47,6 +49,7 @@ public class Department {
         persondirectory = new PersonDirectory();
         adminDirectory = new AdminDirectory();
         useraccountdirectory = new UserAccountDirectory();
+        registrarDirectory = new RegistrarDirectory();
         degree = new Degree("MSIS");
         
     }
@@ -150,6 +153,12 @@ public void addElectiveCourse(Course c){
     public boolean isMatch(String name) {
         return name.equals(name);
     }
+
+    public RegistrarDirectory getRegistrarDirectory() {
+        return registrarDirectory;
+    }
+    
+    
     
     @Override
     public String toString() {

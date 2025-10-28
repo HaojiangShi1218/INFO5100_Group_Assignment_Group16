@@ -23,14 +23,29 @@ public class RegistrarDirectory {
         list.add(rp);
         return rp;
     }
-
+    
+    public void deleteRegistrar (RegistrarProfile rp) {
+        list.remove(rp);
+    }
+    
     public RegistrarProfile findByEmail(String email) {
         if (email == null) return null;
         for (RegistrarProfile r : list) {
-            if (email.equalsIgnoreCase(r.getEmail())) return r;
+            if (email.equalsIgnoreCase(r.getPerson().getEmail())) return r;
         }
         return null;
     }
+    
+    public RegistrarProfile findRegistrarID(String id) {
+
+        for (RegistrarProfile sp : list) {
+
+            if (sp.isMatch(id)) {
+                return sp;
+            }
+        }
+            return null; //not found after going through the whole list
+         }
 
     public List<RegistrarProfile> getRegistrarList() {
         return Collections.unmodifiableList(list);
