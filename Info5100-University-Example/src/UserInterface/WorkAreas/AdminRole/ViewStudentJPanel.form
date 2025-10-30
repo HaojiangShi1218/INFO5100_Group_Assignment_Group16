@@ -46,7 +46,7 @@
                               <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="32767" attributes="0"/>
                               <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="70" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" attributes="0">
                               <EmptySpace min="59" pref="59" max="-2" attributes="0"/>
@@ -77,10 +77,15 @@
                                           <Component id="lblPassword2" alignment="0" min="-2" max="-2" attributes="0"/>
                                           <Component id="lblPassword5" alignment="0" min="-2" max="-2" attributes="0"/>
                                           <Component id="lblPassword6" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Component id="lblPassword7" alignment="0" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                       <EmptySpace min="-2" pref="48" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="cmbCourse1" alignment="0" min="-2" pref="251" max="-2" attributes="0"/>
+                                          <Component id="fieldAddress" alignment="0" max="32767" attributes="0"/>
+                                          <Group type="102" alignment="0" attributes="0">
+                                              <Component id="cmbCourse1" min="-2" pref="251" max="-2" attributes="0"/>
+                                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                          </Group>
                                           <Component id="fieldDepartment" alignment="0" max="32767" attributes="0"/>
                                           <Component id="fieldPhone" max="32767" attributes="0"/>
                                       </Group>
@@ -95,13 +100,13 @@
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
                                       <Component id="lblPassword3" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace pref="74" max="32767" attributes="0"/>
+                                      <EmptySpace pref="113" max="32767" attributes="0"/>
                                       <Component id="cmbDepartment" min="-2" pref="189" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
                       </Group>
-                      <EmptySpace min="-2" pref="164" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="125" max="-2" attributes="0"/>
                   </Group>
               </Group>
           </Group>
@@ -157,17 +162,22 @@
                   <Component id="lblPassword5" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="fieldDepartment" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
+              <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="lblPassword7" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="fieldAddress" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="lblPassword6" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="cmbCourse1" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="56" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="53" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="btnUpdate" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                   <Component id="btnSave" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="334" max="32767" attributes="0"/>
+              <EmptySpace pref="296" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -328,6 +338,16 @@
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
       </AuxValues>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lblPassword7">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Address"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="fieldAddress">
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="fieldAddressActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

@@ -62,6 +62,9 @@ public class CourseSchedule {
         return schedule;
     }
     
+    public String getSemester() {
+        return semester;
+    }
     
 
 }

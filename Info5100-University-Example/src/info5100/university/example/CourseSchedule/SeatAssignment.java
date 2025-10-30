@@ -29,6 +29,10 @@ public class SeatAssignment {
         courseload = cl;
     }
     
+    public info5100.university.example.Persona.StudentProfile getStudentProfile() {
+        return courseload.getStudentProfile();
+    }
+    
     public int getCreditHours(){
         return seat.getCourseCredits();
        

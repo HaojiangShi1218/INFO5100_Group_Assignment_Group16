@@ -18,6 +18,7 @@ import info5100.university.example.Persona.PersonDirectory;
 import info5100.university.example.Persona.StudentDirectory;
 import info5100.university.example.Persona.StudentProfile;
 import info5100.university.example.Persona.UserAccount;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
@@ -64,13 +65,15 @@ public class ManageStudentJPanel extends javax.swing.JPanel {
 
         for (StudentProfile sp : sd.getStudentlist()) {
             Person student = sp.getPerson();
-            Object[] row = new Object[5];
+            Object[] row = new Object[7];
             row[0] = student;
             row[1] = student.getName();
             row[2] = sp.getDepartment();
             row[3] = student.getEmail();
             row[4] = student.getPhone();
-
+            row[5] = student.getAddress();
+            row[6] = sp.getCurrentCourseLoad() == null ? "Not enrolled" : "Enrolled";
+            
             ((DefaultTableModel) tblStudent.getModel()).addRow(row);
         }
 
@@ -94,6 +97,15 @@ public class ManageStudentJPanel extends javax.swing.JPanel {
         tblStudent = new javax.swing.JTable();
         btnView = new javax.swing.JButton();
         btnRefresh = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        searchBoxID = new javax.swing.JTextField();
+        btnSearchID = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        searchBoxName = new javax.swing.JTextField();
+        btnSearchName = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
+        searchBoxDepartment = new javax.swing.JTextField();
+        btnSearchDepartment = new javax.swing.JButton();
 
         setLayout(null);
 
@@ -113,7 +125,7 @@ public class ManageStudentJPanel extends javax.swing.JPanel {
             }
         });
         add(btnDelete);
-        btnDelete.setBounds(650, 640, 80, 23);
+        btnDelete.setBounds(260, 540, 80, 23);
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel1.setText("Student Records");
@@ -127,17 +139,17 @@ public class ManageStudentJPanel extends javax.swing.JPanel {
 
         tblStudent.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
             },
             new String [] {
-                "ID", "Name", "Department", "Email", "Phone"
+                "ID", "Name", "Department", "Email", "Phone", "Address", "Academic Status"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -152,7 +164,7 @@ public class ManageStudentJPanel extends javax.swing.JPanel {
         jScrollPane1.setViewportView(tblStudent);
 
         add(jScrollPane1);
-        jScrollPane1.setBounds(30, 80, 920, 540);
+        jScrollPane1.setBounds(30, 80, 1120, 440);
 
         btnView.setText("View");
         btnView.addActionListener(new java.awt.event.ActionListener() {
@@ -161,7 +173,7 @@ public class ManageStudentJPanel extends javax.swing.JPanel {
             }
         });
         add(btnView);
-        btnView.setBounds(30, 640, 78, 23);
+        btnView.setBounds(30, 540, 78, 23);
 
         btnRefresh.setText("Refresh");
         btnRefresh.addActionListener(new java.awt.event.ActionListener() {
@@ -170,14 +182,74 @@ public class ManageStudentJPanel extends javax.swing.JPanel {
             }
         });
         add(btnRefresh);
-        btnRefresh.setBounds(180, 640, 75, 23);
+        btnRefresh.setBounds(140, 540, 75, 23);
+
+        jLabel3.setText("Seach by ID");
+        add(jLabel3);
+        jLabel3.setBounds(30, 580, 71, 17);
+
+        searchBoxID.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchBoxIDActionPerformed(evt);
+            }
+        });
+        add(searchBoxID);
+        searchBoxID.setBounds(210, 580, 270, 23);
+
+        btnSearchID.setText("Search ID");
+        btnSearchID.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchIDActionPerformed(evt);
+            }
+        });
+        add(btnSearchID);
+        btnSearchID.setBounds(510, 580, 110, 23);
+
+        jLabel4.setText("Seach by Name");
+        add(jLabel4);
+        jLabel4.setBounds(30, 620, 93, 17);
+
+        searchBoxName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchBoxNameActionPerformed(evt);
+            }
+        });
+        add(searchBoxName);
+        searchBoxName.setBounds(210, 620, 270, 23);
+
+        btnSearchName.setText("Search Name");
+        btnSearchName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchNameActionPerformed(evt);
+            }
+        });
+        add(btnSearchName);
+        btnSearchName.setBounds(510, 620, 108, 23);
+
+        jLabel5.setText("Seach by Department");
+        add(jLabel5);
+        jLabel5.setBounds(30, 660, 150, 17);
+
+        searchBoxDepartment.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchBoxDepartmentActionPerformed(evt);
+            }
+        });
+        add(searchBoxDepartment);
+        searchBoxDepartment.setBounds(210, 660, 270, 23);
+
+        btnSearchDepartment.setText("Search Department");
+        btnSearchDepartment.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchDepartmentActionPerformed(evt);
+            }
+        });
+        add(btnSearchDepartment);
+        btnSearchDepartment.setBounds(510, 660, 150, 23);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         // TODO add your handling code here:
-        //CardSequencePanel.remove(this);
-        //((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
- //       ((java.awt.CardLayout)CardSequencePanel.getLayout()).show(CardSequencePanel, "IdentifyEventTypes");
         ((java.awt.CardLayout) CardSequencePanel.getLayout()).show(CardSequencePanel, "Admin");
         CardSequencePanel.revalidate();
         CardSequencePanel.repaint();
@@ -192,7 +264,7 @@ public class ManageStudentJPanel extends javax.swing.JPanel {
             int dialogResult = JOptionPane.showConfirmDialog(null, "You sure you want to delete this student?", "Warning", dialogButton);
             if (dialogResult == JOptionPane.YES_OPTION) {
                 Person selectedStudent = (Person) tblStudent.getValueAt(selectedRow, 0);
-                StudentProfile selectedStudentProfile = department.getStudentDirectory().findStudent(selectedStudent.getPersonId());
+                StudentProfile selectedStudentProfile = department.getStudentDirectory().findStudentID(selectedStudent.getPersonId());
                 department.getStudentDirectory().deleteStudent(selectedStudentProfile);
                 JOptionPane.showMessageDialog(null, "Student successfully deleted!", "Information", JOptionPane.INFORMATION_MESSAGE);
             }
@@ -205,18 +277,7 @@ public class ManageStudentJPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void tblStudentMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblStudentMousePressed
-        // Extracts the row (uaser account) in the table that is selected by the user
-//        int siztblFacultyable.getRowCount();
-//        int selectedrotblFacultyable.getSelectionModel().getLeadSelectionIndex();
-//
-//        if (selectedrow < 0 || selectedrow > size - 1) {
-//            return;
-//        }
-//        selecteduseraccount = (UserAccoutblFacultyable.getValueAt(selectedrow, 0);
-//        if (selecteduseraccount == null) {
-//            return;
-//        }
-        
+
             
     }//GEN-LAST:event_tblStudentMousePressed
 
@@ -225,7 +286,7 @@ public class ManageStudentJPanel extends javax.swing.JPanel {
         int selectedRow = tblStudent.getSelectedRow();
         if (selectedRow >= 0) {
             Person selectedStudent = (Person) tblStudent.getValueAt(selectedRow, 0);
-            StudentProfile selectedStudentProfile = department.getStudentDirectory().findStudent(selectedStudent.getPersonId());
+            StudentProfile selectedStudentProfile = department.getStudentDirectory().findStudentID(selectedStudent.getPersonId());
             ViewStudentJPanel vs = new ViewStudentJPanel(CardSequencePanel, college, department, selectedStudentProfile);
 
             CardSequencePanel.add("ViewStudentJPanel", vs);
@@ -245,23 +306,151 @@ public class ManageStudentJPanel extends javax.swing.JPanel {
         refreshTable();
     }//GEN-LAST:event_btnRefreshActionPerformed
 
+    private void searchBoxIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBoxIDActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_searchBoxIDActionPerformed
+
+    private void btnSearchIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchIDActionPerformed
+        // TODO add your handling code here:
+        if (!searchBoxID.getText().isBlank()){
+            String studentID = searchBoxID.getText();
+            StudentProfile foundStudent = department.getStudentDirectory().findStudentID(studentID);
+            if (foundStudent != null) {
+                populateStudentByID(foundStudent);
+            }
+            else {
+                JOptionPane.showMessageDialog(null, "Student not found! Please try again!", "Warning", JOptionPane.WARNING_MESSAGE);
+                clearTable();
+            }
+        }
+        else {
+            JOptionPane.showMessageDialog(null, "Please type in the ID of the student.", "Warning", JOptionPane.WARNING_MESSAGE);
+            clearTable();
+        }
+    }//GEN-LAST:event_btnSearchIDActionPerformed
+
+    private void searchBoxNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBoxNameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_searchBoxNameActionPerformed
+
+    private void btnSearchNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchNameActionPerformed
+        // TODO add your handling code here:
+        if (!searchBoxName.getText().isBlank()){
+            String studentName = searchBoxName.getText();
+            ArrayList<StudentProfile> foundStudents = department.getStudentDirectory().searchStudentByName(studentName);
+            if (foundStudents != null) {
+                populateStudentByName(foundStudents);
+            }
+            else {
+                JOptionPane.showMessageDialog(null, "Student not found! Please try again!", "Warning", JOptionPane.WARNING_MESSAGE);
+                clearTable();
+            }
+        }
+        else {
+            JOptionPane.showMessageDialog(null, "Please type in a student's name", "Warning", JOptionPane.WARNING_MESSAGE);
+            clearTable();
+        }
+    }//GEN-LAST:event_btnSearchNameActionPerformed
+
+    private void searchBoxDepartmentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBoxDepartmentActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_searchBoxDepartmentActionPerformed
+
+    private void btnSearchDepartmentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchDepartmentActionPerformed
+        // TODO add your handling code here:
+        if (!searchBoxDepartment.getText().isBlank()){
+            String departmentName = searchBoxDepartment.getText();
+            Department foundDepartment = college.findDepartment(departmentName);
+            if (foundDepartment != null) {
+                //System.out.println("Department found! " + departmentName);
+                populateStudentByDepartment(foundDepartment);
+            }
+            else {
+                JOptionPane.showMessageDialog(null, "Department not found! Please try again!", "Warning", JOptionPane.WARNING_MESSAGE);
+                clearTable();
+            }
+        }
+        else {
+            JOptionPane.showMessageDialog(null, "Please type in a department", "Warning", JOptionPane.WARNING_MESSAGE);
+            clearTable();
+        }
+    }//GEN-LAST:event_btnSearchDepartmentActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack;
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnRefresh;
+    private javax.swing.JButton btnSearchDepartment;
+    private javax.swing.JButton btnSearchID;
+    private javax.swing.JButton btnSearchName;
     private javax.swing.JButton btnView;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextField searchBoxDepartment;
+    private javax.swing.JTextField searchBoxID;
+    private javax.swing.JTextField searchBoxName;
     private javax.swing.JTable tblStudent;
     // End of variables declaration//GEN-END:variables
     
-//    private void populateRoleCombo() {
-//        cmbRole.removeAllItems();
-//        cmbRole.addItem("Student");
-//        cmbRole.addItem("Faculty");
-//        cmbRole.addItem("Admin");
-//    }
+    public void populateStudentByID(StudentProfile student) {
+        DefaultTableModel model1 = (DefaultTableModel) tblStudent.getModel();
+        model1.setRowCount(0);
+        Object[] row = new Object[6];
+        Person studentID = student.getPerson();
+        row[0] = studentID;
+        row[1] = studentID.getName();
+        row[2] = student.getDepartment();
+        row[3] = studentID.getEmail();
+        row[4] = studentID.getPhone();
+        row[5] = studentID.getAddress();
+        row[6] = student.getCurrentCourseLoad() == null ? "Not enrolled" : "Enrolled";
+        model1.addRow(row);
+    }
     
+    public void populateStudentByName(ArrayList<StudentProfile> foundStudents) {
+        DefaultTableModel model1 = (DefaultTableModel) tblStudent.getModel();
+        model1.setRowCount(0);
+        for (StudentProfile sp: foundStudents) {
+            Object[] row = new Object[6];
+            Person student = sp.getPerson();
+            row[0] = student;
+            row[1] = student.getName();
+            row[2] = sp.getDepartment();
+            row[3] = student.getEmail();
+            row[4] = student.getPhone();
+            row[5] = student.getAddress();
+            row[6] = sp.getCurrentCourseLoad() == null ? "Not enrolled" : "Enrolled";
+            model1.addRow(row);
+        }         
+    }
+    
+    public void populateStudentByDepartment(Department foundDepartment) {
+        DefaultTableModel model1 = (DefaultTableModel) tblStudent.getModel();
+        model1.setRowCount(0);
+        
+        for (StudentProfile sp: foundDepartment.getStudentDirectory().getStudentlist()) {
+            Object[] row = new Object[6];
+            Person student = sp.getPerson();
+            row[0] = student;
+            row[1] = student.getName();
+            row[2] = sp.getDepartment();
+            row[3] = student.getEmail();
+            row[4] = student.getPhone();
+            row[5] = student.getAddress();
+            row[6] = sp.getCurrentCourseLoad() == null ? "Not enrolled" : "Enrolled";
+            
+            model1.addRow(row);
+        }
+    }
+    
+    public void clearTable() {
+        DefaultTableModel model1 = (DefaultTableModel) tblStudent.getModel();
+        model1.setRowCount(0);
+    }
 }
 

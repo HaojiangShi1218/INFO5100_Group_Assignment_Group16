@@ -122,11 +122,13 @@ public class ConfigureAUniversity {
         for (int s = 0; s < students.size(); s++) {
             StudentProfile st = students.get(s);
             CourseLoad cl = st.newCourseLoad(SEM);
+            cl.setStudentProfile(st);
 
             // Enroll in 3 different courses (wrap around)
             for (int k = 0; k < 3; k++) {
                 CourseOffer offer = offers[(idx + k) % offers.length];
                 cl.newSeatAssignment(offer);
+                
             }
             idx++;
         }
@@ -136,7 +138,8 @@ public class ConfigureAUniversity {
         // ----- Accounts (admin + faculties; add more as needed) -----
         UserAccountDirectory uad = department.getUseraccountdirectory();
         //uad.newUserAccount(adminProfile, "admin", "****");
-        adminProfile.getPerson().setAccount(uad.newUserAccount(adminProfile, "admin", "****"));
+        adminProfile.getPerson().setAccount(uad.newUserAccount(adminProfile, "admin", "4321"));
+        System.out.println("Created Admin login: username=admin, password=4321");
         
         //  Create a student login for testing
         StudentProfile testStudent = students.get(0);
@@ -147,6 +150,9 @@ public class ConfigureAUniversity {
         for (int i = 0; i < faculties.size(); i++) {
             FacultyProfile fp = faculties.get(i);
             fp.getPerson().setAccount(uad.newUserAccount(fp, "fac" + (i+1), "pass" + (i+1)));
+            if (i == 0) {
+                System.out.println("Created facluty login: username=fac" + (i+1) + ", password=" + "pass" + (i+1));
+            }
         }
 
         // If you created registrarProfile above, you can also:
@@ -186,6 +192,7 @@ regProfile.setOfficeHours("Mon to Fri 10AM to 5PM");
 // ④ 账号：不要再次声明 uad，直接复用上面已创建的 uad
 //uad.newUserAccount(regProfile, "registrar", "****");
 regPerson.setAccount(uad.newUserAccount(regProfile, "registrar", "****"));
+System.out.println("Created registrar login: username=registrar, password=****");
 // 日志
 System.out.println("Seeded Registrar: " + regPerson.getPersonId()
         + " / " + regProfile.getPerson().getEmail());

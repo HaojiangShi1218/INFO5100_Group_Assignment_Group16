@@ -19,10 +19,18 @@ public class CourseOffer {
     Course course;
     ArrayList<Seat> seatlist;
     FacultyAssignment facultyassignment;
+    ArrayList<Assignment> assignments;
+    ArrayList<AssignmentGrade> assignmentGrades;
+    String syllabusPath;
+    boolean enrollmentOpen;
 
     public CourseOffer(Course c) {
         course = c;
         seatlist = new ArrayList();
+        assignments = new ArrayList();
+        assignmentGrades = new ArrayList();
+        syllabusPath = "";
+        enrollmentOpen = true; // Default: enrollment is open
     }
      
     public void AssignAsTeacher(FacultyProfile fp) {
@@ -31,7 +39,8 @@ public class CourseOffer {
     }
 
     public FacultyProfile getFacultyProfile() {
-        return facultyassignment.getFacultyProfile();
+        return (facultyassignment == null) ? null : facultyassignment.getFacultyProfile();
+        //return facultyassignment.getFacultyProfile();
     }
 
     public String getCourseNumber() {
@@ -102,7 +111,86 @@ public class CourseOffer {
         return seatlist;
     }
     
+    public void setSyllabusPath(String path) {
+        this.syllabusPath = path;
+    }
     
+    // Enrollment management
+    public boolean isEnrollmentOpen() {
+        return enrollmentOpen;
+    }
+    
+    public void setEnrollmentOpen(boolean open) {
+        this.enrollmentOpen = open;
+    }
+    
+    public void openEnrollment() {
+        this.enrollmentOpen = true;
+    }
+    
+    public void closeEnrollment() {
+        this.enrollmentOpen = false;
+    }
+    
+    // Get enrolled students count
+    public int getEnrolledCount() {
+        int count = 0;
+        for (Seat s : seatlist) {
+            if (s.isOccupied()) {
+                count++;
+            }
+        }
+        return count;
+    }
+    
+    // Get total seats
+    public int getTotalSeats() {
+        return seatlist.size();
+    }
+    
+    // Assignment management
+    public Assignment addAssignment(String assignmentId, String title, String description, int maxPoints, java.util.Date dueDate) {
+        Assignment assignment = new Assignment(assignmentId, title, description, maxPoints, dueDate, this);
+        assignments.add(assignment);
+        
+        // Create assignment grades for all enrolled students
+        for (Seat seat : seatlist) {
+            if (seat.isOccupied()) {
+                assignmentGrades.add(new AssignmentGrade(assignment, seat));
+            }
+        }
+        return assignment;
+    }
+    
+    public ArrayList<Assignment> getAssignments() {
+        return assignments;
+    }
+    
+    public ArrayList<AssignmentGrade> getAssignmentGrades() {
+        return assignmentGrades;
+    }
+    
+    public ArrayList<AssignmentGrade> getStudentGrades(Seat seat) {
+        ArrayList<AssignmentGrade> grades = new ArrayList();
+        for (AssignmentGrade grade : assignmentGrades) {
+            if (grade.getSeat() == seat) {
+                grades.add(grade);
+            }
+        }
+        return grades;
+    }
+    
+    public AssignmentGrade getAssignmentGrade(Assignment assignment, Seat seat) {
+        for (AssignmentGrade grade : assignmentGrades) {
+            if (grade.getAssignment() == assignment && grade.getSeat() == seat) {
+                return grade;
+            }
+        }
+        // If not found, create a new one
+        AssignmentGrade newGrade = new AssignmentGrade(assignment, seat);
+        assignmentGrades.add(newGrade);
+        return newGrade;
+    }
     
     
     
