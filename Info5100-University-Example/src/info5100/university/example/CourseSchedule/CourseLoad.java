@@ -5,6 +5,7 @@
  */
 package info5100.university.example.CourseSchedule;
 
+import info5100.university.example.Persona.StudentProfile;
 import java.util.ArrayList;
 
 /**
@@ -14,11 +15,21 @@ import java.util.ArrayList;
 public class CourseLoad {
     String semester;
     ArrayList<SeatAssignment> seatassignments;
+    StudentProfile studentProfile;
     
     public CourseLoad(String s){
         seatassignments = new ArrayList();
         semester = s;
     }
+    
+    public void setStudentProfile(StudentProfile sp) {
+        this.studentProfile = sp;
+    }
+    
+    public StudentProfile getStudentProfile() {
+        return studentProfile;
+    }
+    
     public SeatAssignment newSeatAssignment(CourseOffer co){
         
         Seat seat = co.getEmptySeat(); // seat linked to courseoffer

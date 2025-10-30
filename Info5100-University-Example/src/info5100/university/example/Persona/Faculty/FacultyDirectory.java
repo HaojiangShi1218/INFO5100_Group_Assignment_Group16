@@ -48,6 +48,23 @@ public class FacultyDirectory {
         return BestProfSofar;
         
     }
+    
+    public ArrayList<FacultyProfile> searchFacultyByName(String facultyName) {
+        if (facultyName == null) {
+            return null;
+        }
+        ArrayList<FacultyProfile> results = new ArrayList<>();
+        for (FacultyProfile fp: teacherlist) {
+            if (fp == null) {
+                continue;
+            }
+            String name = fp.getPerson().getName();
+            if (name != null && name.contains(facultyName)) {
+                results.add(fp);
+            }
+        }
+        return results;
+    }
 
     public FacultyProfile findTeachingFaculty(String id) {
 

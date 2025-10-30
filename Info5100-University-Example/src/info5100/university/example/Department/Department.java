@@ -19,6 +19,7 @@ import info5100.university.example.Persona.PersonDirectory;
 import info5100.university.example.Persona.Registrar.RegistrarDirectory;
 import info5100.university.example.Persona.StudentDirectory;
 import info5100.university.example.Persona.StudentProfile;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -99,6 +100,10 @@ public void addElectiveCourse(Course c){
         return mastercoursecatalog.get(semester);
 
     }
+    
+    public ArrayList<CourseSchedule> getCourseSchedules() {
+        return new ArrayList<>(mastercoursecatalog.values());
+    }
 
     public CourseCatalog getCourseCatalog() {
 
@@ -122,7 +127,7 @@ public void addElectiveCourse(Course c){
 
     public void RegisterForAClass(String studentid, String cn, String semester) {
 
-        StudentProfile sp = studentdirectory.findStudent(studentid);
+        StudentProfile sp = studentdirectory.findStudentID(studentid);
 
         CourseLoad cl = sp.getCurrentCourseLoad();
 
@@ -151,7 +156,7 @@ public void addElectiveCourse(Course c){
     }
     
     public boolean isMatch(String name) {
-        return name.equals(name);
+        return this.name.equals(name);
     }
 
     public RegistrarDirectory getRegistrarDirectory() {

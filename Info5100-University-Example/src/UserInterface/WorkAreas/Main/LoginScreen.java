@@ -7,10 +7,12 @@ package UserInterface.WorkAreas.Main;
 import UserInterface.WorkAreas.StudentRole.StudentWorkAreaJPanel;
 import ConfigU.ConfigureAUniversity;
 import UserInterface.WorkAreas.AdminRole.AdminRoleWorkAreaJPanel;
+import UserInterface.WorkAreas.FacultyRole.FacultyWorkAreaJPanel;
 import info5100.university.example.College.College;
 import info5100.university.example.Department.Department;
 import info5100.university.example.Employer.EmployerProfile;
 import info5100.university.example.Persona.AdminProfile;
+import info5100.university.example.Persona.Faculty.FacultyProfile;
 import info5100.university.example.Persona.Faculty.UserAccountDirectory;
 import info5100.university.example.Persona.Profile;
 import info5100.university.example.Persona.StudentProfile;
@@ -181,18 +183,15 @@ public class LoginScreen extends javax.swing.JPanel {
             mainWorkArea.repaint();
         }
         
-//        mainWorkArea.add("WorkAreaJPnael", selectedPanel);
-//        CardLayout layout = (CardLayout) mainWorkArea.getLayout();
-//        layout.next(mainWorkArea);
 
- /*      if (profile instanceof FacultyProfile) {
-            facultyworkarea = new FacultyWorkAreaJPanel(business, CardSequencePanel);
-            CardSequencePanel.removeAll();
-            CardSequencePanel.add("faculty", facultyworkarea);
-            ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
-
+       if (profile instanceof FacultyProfile) {
+            FacultyWorkAreaJPanel facultyworkarea= new FacultyWorkAreaJPanel(department, useraccount, mainWorkArea);
+            mainWorkArea.add("faculty", facultyworkarea);
+            ((java.awt.CardLayout) mainWorkArea.getLayout()).show(mainWorkArea, "faculty");
+            mainWorkArea.revalidate();
+            mainWorkArea.repaint();
         }
-*/
+
 
         
     }//GEN-LAST:event_btnLoginActionPerformed

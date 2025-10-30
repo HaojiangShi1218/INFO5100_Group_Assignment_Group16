@@ -23,7 +23,7 @@ import javax.swing.table.DefaultTableModel;
 public class TranscriptReviewJPanel extends javax.swing.JPanel {
     private JPanel mainWorkArea;
     private StudentProfile student;
-    private JComboBox<String> termComboBox;
+    //private JComboBox<String> termComboBox;
     private JTable transcriptable;
 
     /**
@@ -38,17 +38,17 @@ public class TranscriptReviewJPanel extends javax.swing.JPanel {
     }
     
     private void populateTermComboBox() {
-        termComboBox.removeAllItems();
+        jComboBox1.removeAllItems();
         for (String term : student.getAllTerms()) {
-            termComboBox.addItem(term);
+            jComboBox1.addItem(term);
         }
     }
     
     private void addListeners() {
-        termComboBox.addActionListener(new ActionListener() {
+        jComboBox1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String selectedTerm = (String) termComboBox.getSelectedItem();
+                String selectedTerm = (String) jComboBox1.getSelectedItem();
                 if (selectedTerm != null) {
                     populateTranscriptTable(selectedTerm);
                 }
@@ -159,6 +159,11 @@ public class TranscriptReviewJPanel extends javax.swing.JPanel {
         jLabel2.setText("Term:");
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
 
         tblTranscript.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -261,6 +266,10 @@ public class TranscriptReviewJPanel extends javax.swing.JPanel {
         mainWorkArea.remove(this);
         layout.previous(mainWorkArea);
     }//GEN-LAST:event_btnBackActionPerformed
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBox1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

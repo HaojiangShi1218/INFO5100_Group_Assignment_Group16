@@ -34,8 +34,25 @@ public class StudentDirectory {
     public void deleteStudent(StudentProfile sp) {
         studentlist.remove(sp);
     }
+    
+    public ArrayList<StudentProfile> searchStudentByName(String studentName) {
+        if (studentName == null) {
+            return null;
+        }
+        ArrayList<StudentProfile> results = new ArrayList<>();
+        for (StudentProfile sp: studentlist) {
+            if (sp == null) {
+                continue;
+            }
+            String name = sp.getPerson().getName();
+            if (name != null && name.contains(studentName)) {
+                results.add(sp);
+            }
+        }
+        return results;
+    }
 
-    public StudentProfile findStudent(String id) {
+    public StudentProfile findStudentID(String id) {
 
         for (StudentProfile sp : studentlist) {
 
